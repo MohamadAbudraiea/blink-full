@@ -6,6 +6,7 @@ import {
   getDetailerSchedule,
   getDetailerScheduleByDate,
   getDetailerStock,
+  getAllDetailersSchedules,
 } from "@/api/admin";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
@@ -148,6 +149,19 @@ export const useGetDetailerStock = ({
     stocks: data?.data,
     isGettingDetailerStock,
     refetch,
+  };
+};
+
+export const useGetAllDetailersSchedules = () => {
+  const { data, isPending: isGettingSchedules } = useQuery({
+    queryKey: ["allDetailersSchedules"],
+    queryFn: getAllDetailersSchedules,
+    retry: false,
+  });
+
+  return {
+    detailersSchedules: data?.data,
+    isGettingSchedules,
   };
 };
 

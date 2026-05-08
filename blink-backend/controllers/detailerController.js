@@ -16,6 +16,46 @@ const formatSchedule = (tickets) =>
     interval: `${t.start_time} - ${t.end_time}`,
   }));
 
+// Get all detailers with their schedules (for Gantt chart)
+exports.getAllDetailersSchedules = async (req, res) => {
+  try {
+    const detailers = await user.findAll({
+      where: { type: "detailer" },
+      attributes: ["id", "name"],
+    });
+
+    const result = await Promise.all(
+      detailers.map(async (d) => {
+        const detailerTickets = await ticket.findAll({
+          where: { detailer_id: d.id, status: "pending" },
+          attributes: ["id", "date", "start_time", "end_time"],
+          order: [
+            ["date", "ASC"],
+            ["start_time", "ASC"],
+          ],
+        });
+
+        return {
+          detailer_id: d.id,
+          detailer_name: d.name,
+          schedule: formatSchedule(detailerTickets),
+        };
+      })
+    );
+
+    return res.status(200).json({
+      status: "success",
+      data: result,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      status: "failed",
+      message: "Server error",
+    });
+  }
+};
+
 // Get all detailers
 exports.getAlldetailers = async (req, res) => {
   try {

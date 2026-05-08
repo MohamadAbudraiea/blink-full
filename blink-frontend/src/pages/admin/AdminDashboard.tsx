@@ -5,6 +5,7 @@ import { SecretaryForm } from "@/components/admin/SecretaryForm";
 import { DetailerForm } from "@/components/admin/DetailerForm";
 import { BookingsTable } from "@/components/booking/BookingsTable";
 import { BookingsChart } from "@/components/admin/BookingsChart";
+import { ScheduleGantt } from "@/components/admin/ScheduleGantt";
 import { useGetUsers } from "@/hooks/useAdmin";
 import { useGetFilteredTickets } from "@/hooks/useTicket";
 import { useBookingStore } from "@/stores/useBookingStore";
@@ -65,6 +66,7 @@ export default function AdminDashboard() {
           <TabsTrigger value="detailer">Detailer</TabsTrigger>
           <TabsTrigger value="bookings">Bookings</TabsTrigger>
           <TabsTrigger value="charts">Charts</TabsTrigger>
+          <TabsTrigger value="schedules">Schedules</TabsTrigger>
         </TabsList>
 
         {/* Secretary CRUD */}
@@ -132,6 +134,18 @@ export default function AdminDashboard() {
             </CardHeader>
             <CardContent>
               <BookingsChart />
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Detailer Schedules Gantt */}
+        <TabsContent value="schedules">
+          <Card>
+            <CardHeader>
+              <CardTitle>Detailer Schedules</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ScheduleGantt />
             </CardContent>
           </Card>
         </TabsContent>

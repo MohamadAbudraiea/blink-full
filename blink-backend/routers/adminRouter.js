@@ -13,6 +13,7 @@ router.delete("/user", adminController.deleteUser);
 // to edit users(shouldn't validate)
 router.put("/user", adminController.editUser);
 // detailer scheudlue (under testing)
+router.get("/detailer/schedules/all", detailerController.getAllDetailersSchedules);
 router.get("/detailer/:detailer_id", detailerController.getDetailerSchedule);
 router.get(
   "/detailer/:detailer_id/:date",

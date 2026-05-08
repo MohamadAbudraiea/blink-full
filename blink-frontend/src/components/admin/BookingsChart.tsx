@@ -68,7 +68,7 @@ export function BookingsChart() {
 
   const { chartsData, isFetchingTickets } = useGetChartsData(
     filterMonth ? Number(filterMonth) : undefined,
-    filterYear ? Number(filterYear) : undefined
+    filterYear ? Number(filterYear) : undefined,
   );
 
   const {
@@ -135,12 +135,12 @@ export function BookingsChart() {
   const peakDay = nonZeroLineData.length
     ? nonZeroLineData.reduce(
         (max, d) => (d.bookings > max.bookings ? d : max),
-        nonZeroLineData[0]
+        nonZeroLineData[0],
       ).day
     : null;
 
   const serviceColors = serviceData.map(
-    (_, i) => serviceThemeColors[i % serviceThemeColors.length]
+    (_, i) => serviceThemeColors[i % serviceThemeColors.length],
   );
 
   const cancelColors: Record<string, string> = {
@@ -165,7 +165,7 @@ export function BookingsChart() {
                 setFilterYear(filterYear ?? String(now.getFullYear()));
               }}
             >
-              <SelectTrigger className="w-[140px]">
+              <SelectTrigger className="w-35">
                 <SelectValue placeholder="Select Month" />
               </SelectTrigger>
               <SelectContent>
@@ -185,7 +185,7 @@ export function BookingsChart() {
               value={filterYear ?? String(now.getFullYear())}
               onValueChange={(val) => setFilterYear(val === "all" ? null : val)}
             >
-              <SelectTrigger className="w-[100px]">
+              <SelectTrigger className="w-25">
                 <SelectValue placeholder="Year" />
               </SelectTrigger>
               <SelectContent>
@@ -194,7 +194,7 @@ export function BookingsChart() {
                     <SelectItem key={year} value={String(year)}>
                       {year}
                     </SelectItem>
-                  )
+                  ),
                 )}
               </SelectContent>
             </Select>

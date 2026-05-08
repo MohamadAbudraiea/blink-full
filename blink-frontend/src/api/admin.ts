@@ -98,4 +98,8 @@ export async function getDetailerStock({
   );
   return res.data;
 }
+export async function getAllDetailersSchedules() {
+  const res = await axiosInstance.get("/admin/detailer/schedules/all");
+  return res.data;
+}
 // for merge
