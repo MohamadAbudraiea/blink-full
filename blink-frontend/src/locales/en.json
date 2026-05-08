@@ -1,0 +1,615 @@
+{
+  "nav": {
+    "home": "Home",
+    "services": "Services",
+    "about": "About",
+    "contact": "Contact",
+    "login": "Login",
+    "signup": "Sign Up",
+    "my_bookings": "My Bookings",
+    "profile": "My Profile",
+    "logout": "Logout",
+    "logging_out": "Logging Out..."
+  },
+  "signup": {
+    "title": "Join BLINK",
+    "description": "Create your account for premium car wash services",
+    "name": "Full Name",
+    "name_placeholder": "Enter your full name",
+    "email": "Email",
+    "email_placeholder": "Enter your email",
+    "phone": "Phone Number",
+    "phone_placeholder": "Enter your phone number",
+    "password": "Password",
+    "password_placeholder": "Create a password",
+    "confirm_password": "Confirm Password",
+    "confirm_password_placeholder": "Confirm your password",
+    "create_account": "Create Account",
+    "already_have_account": "Already have an account?",
+    "login": "Login",
+    "success": "Signup successfully, welcome.",
+    "error": "Signup failed, please try again."
+  },
+  "login": {
+    "title": "Welcome Back",
+    "description": "Sign in to your BLINK account",
+    "email": "Email",
+    "email_placeholder": "Enter your email",
+    "password": "Password",
+    "password_placeholder": "Enter your password",
+    "forgot_password": "Forgot Password?",
+    "login": "Login",
+    "create_account": "Don't have an account?",
+    "signup": "Sign Up",
+    "success": "logged in successfully, welcome back.",
+    "error": "Failed to login, please try again."
+  },
+  "logout": {
+    "cta": "Logout",
+    "success": "Logged out successfully, see you soon.",
+    "error": "Failed to logout, please try again."
+  },
+  "validations": {
+    "required": "This field is required",
+    "email": "Please enter a valid email address",
+    "otp": "OTP must be 6 characters long",
+    "name": {
+      "min": "Name must be at least 2 characters"
+    },
+    "phone": {
+      "min": "Phone number must be at least 10 characters long",
+      "generic": "Please enter a valid phone number"
+    },
+    "password": {
+      "min": "Password must be at least 6 characters long",
+      "match": "Passwords do not match",
+      "new": "New password is required when changing password"
+    },
+    "subject": {
+      "min": "Subject must be at least 3 characters long"
+    },
+    "message": {
+      "min": "Message must be at least 5 characters long"
+    }
+  },
+  "home": {
+    "hero": {
+      "description": "Experience the ultimate car care with BLINK. Professional detailing services that bring out the best in your vehicle.",
+      "cta": "Book Now",
+      "login": "Login",
+      "acronym": {
+        "B": "Bright Wash",
+        "L": "Lux Polish",
+        "I": "Interior Care",
+        "N": "Nano Ceramic",
+        "K": "Keep Shining"
+      }
+    },
+    "services": {
+      "title": "Our Services",
+      "description": "Professional car care services designed to exceed your expectations",
+      "items": {
+        "wash": {
+          "title": "Wash",
+          "description": "Complete exterior and interior cleaning with premium products and techniques."
+        },
+        "dryclean": {
+          "title": "Dry Clean",
+          "description": "Professional dry cleaning for upholstery and interior fabrics."
+        },
+        "polish": {
+          "title": "Polish",
+          "description": "Paint correction and polishing for a mirror-like finish."
+        },
+        "nano": {
+          "title": "Nano Ceramic & Graphene",
+          "description": "Advanced protection coating for long-lasting shine and durability."
+        }
+      },
+      "book_now": "Book Now",
+      "see_more": "See More"
+    },
+    "reviews": {
+      "title": "What Our Customers Say",
+      "description": "See what our satisfied customers have to say about our premium car care services"
+    }
+  },
+  "about": {
+    "hero": {
+      "title": "About BLINK",
+      "content": "BLINK was founded with a simple mission: to provide the highest quality car care services with unmatched attention to detail. We believe every vehicle deserves royal treatment.",
+      "subtitle": "Elite. Precision. Shine."
+    },
+    "story": {
+      "title": "Our Story",
+      "content": "BLINK was founded with a simple mission: to change the perception and approach to this craft, to provide car enthusiasts with the services they have been missing, and to offer them unparalleled, exceptional quality that exceeds expectations, while building lasting relationships with our customers through trust, quality, and reliability."
+    },
+    "mission": {
+      "title": "Our Mission",
+      "content": "To deliver exceptional car care services that exceed expectations while building lasting relationships with our customers through trust, quality, and reliability."
+    },
+    "values": {
+      "title": "Our Values",
+      "description": "The principles that guide everything we do at BLINK",
+      "items": {
+        "quality": {
+          "title": "Quality Excellence",
+          "desc": "We never compromise on the quality of our services and products."
+        },
+        "customer": {
+          "title": "Customer First",
+          "desc": "Your satisfaction is our top priority in everything we do."
+        },
+        "innovation": {
+          "title": "Innovation",
+          "desc": "We continuously adopt the latest techniques and technologies."
+        }
+      }
+    },
+    "team": {
+      "title": "Our Team",
+      "content1": "Our success is built on the expertise and dedication of our professional team. Each member brings years of experience and a passion for automotive excellence.",
+      "content2": "From our skilled technicians to our customer service representatives, everyone at BLINK is committed to delivering the royal treatment your vehicle deserves."
+    }
+  },
+  "contact": {
+    "hero": {
+      "title": "Get in Touch",
+      "subtitle": "We're here to help with all your car care needs. Reach out to us with any questions or to schedule a service."
+    },
+    "form": {
+      "title": "Send us a Message",
+      "name": "Full Name",
+      "name_placeholder": "Your full name",
+      "email": "Email Address",
+      "email_placeholder": "Your email address",
+      "subject": "Subject",
+      "subject_placeholder": "What is this regarding?",
+      "message": "Message",
+      "message_placeholder": "Tell us how we can help you...",
+      "submit": "Send Message",
+      "success": {
+        "title": "Message Sent Successfully!",
+        "message": "We'll get back to you as soon as possible."
+      }
+    },
+    "info": {
+      "title": "Contact Information",
+      "description": "Our team is ready to assist you with premium car care services. Reach out through any of these channels.",
+      "phone": {
+        "title": "Phone",
+        "link": "tel:+96279 1212 204",
+        "content": "+962 79 1212 204"
+      },
+      "whatsapp": {
+        "title": "WhatsApp",
+        "link": "whatsapp://send?phone=++962791212204",
+        "content": "+962 79 1212 204"
+      },
+      "email": {
+        "title": "Email",
+        "link": "mailto:Technical@blink-cars.com",
+        "content": "Technical@blink-cars.com"
+      },
+      "instagram": {
+        "title": "Instagram",
+        "link": "https://www.instagram.com/blink_cars/",
+        "content": "@blink_cars"
+      }
+    },
+    "response": {
+      "title": "Quick Response Time",
+      "message": "We typically respond to all inquiries within 24 hours during business days."
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "description": "Find quick answers to common questions about our services.",
+      "q1": {
+        "question": "How long does a typical wash service take?",
+        "answer": "Our standard wash takes about 30 minutes, while premium services like nano ceramic coating can take 2-3 hours."
+      },
+      "q2": {
+        "question": "Do I need to book an appointment?",
+        "answer": "Walk-ins are welcome, but we recommend booking an appointment to guarantee your preferred time slot."
+      },
+      "q3": {
+        "question": "What payment methods do you accept?",
+        "answer": "We accept cash, all major credit cards, and mobile payment options like Apple Pay and Google Pay."
+      }
+    }
+  },
+  "services": {
+    "hero": {
+      "title": "Our Premium Services",
+      "subtitle": "Professional car care tailored to your needs"
+    },
+    "items": {
+      "wash": {
+        "title": "Wash",
+        "description": "Complete exterior and interior cleaning service using premium products and professional techniques. Includes hand wash, interior vacuuming, dashboard cleaning, and tire shine.",
+        "features": "Thorough wash, Interior cleaning, Dashboard care, Tire shine",
+        "premium": {
+          "title": "Classic",
+          "desc": "Quick cleaning - light polish - refreshed look",
+          "points": [
+            "• Thorough exterior wash with water or steam.",
+            "• Removal of surface dust and dirt.",
+            "• Wheel polishing.",
+            "• Wiping the car’s inside.",
+            "• Vacuuming the car’s floor.",
+            "• 🎁 Gifts: floor papers,perfumed medal.",
+            "The ideal option for daily routines and cars in excellent condition."
+          ]
+        },
+        "Blink": {
+          "title": "Premium",
+          "desc": "Precise details - luxurious finish - superior shine",
+          "points": [
+            "• Thorough cleaning inside and out with high precision.",
+            "• Special care for the bodywork,Engine room,chrome, and tires.",
+            "• Deep interior detailing.",
+            "• Removing deep stains and vacuuming the floors.",
+            "• Special care for the bodywork, chrome, and tires.",
+            "• Luxurious finish with deep shine and exceptional results.",
+            "• 🎁 Gifts: floor papers,perfumed medal,tissues,steering wheel and gear shifter cover.",
+            "A distinctive service for lovers of detail and luxurious appearance."
+          ]
+        }
+      },
+      "dryclean": {
+        "title": "Dry Clean",
+        "description": "Specialized dry cleaning service for upholstery, carpets, and interior fabrics. Removes stains, odors, and restores the original look of your car's interior.",
+        "features": "Upholstery cleaning, Stain removal, Odor elimination, Fabric protection",
+        "premium": {
+          "title": "Classic",
+          "desc": "Basic cleaning - instant refreshment - quick care",
+          "points": [
+            "• Surface cleaning of seats and carpets.",
+            "• Dusting of dashboard and doors.",
+            "• Refreshing scent for the cabin.",
+            "• 🎁 Gifts: floor papers,perfumed medal,tissues,steering wheel and gear shifter cover.",
+            "Suitable for cars that need a simple interior refresh without deep detailing."
+          ]
+        },
+        "Blink": {
+          "title": "Premium",
+          "desc": "Attention to detail - thorough cleaning - a luxurious interior experience",
+          "points": [
+            "• Thorough interior cleaning with attention to detail.",
+            "• Removal of tough stains and grease from seats and surfaces.",
+            "• Sterilization and softening of leather and fabric materials.",
+            "• Finished with a special fragrance and a luxurious touch from GroupSide.",
+            "• 🎁 Gifts: floor papers,perfumed medal,tissues,steering wheel and gear shifter cover.",
+            "Designed for cars that deserve the highest level of care and interior renewal."
+          ]
+        }
+      },
+      "polish": {
+        "title": "Paint Polish & Correction",
+        "description": "Professional paint correction and polishing service that removes scratches, swirl marks, and oxidation to restore your car's original shine and luster.",
+        "features": "Scratch removal, Swirl mark correction, Paint restoration, Mirror finish",
+        "one_stage": {
+          "title": "Stage 1",
+          "points": [
+            "Light treatment in one step.",
+            "Restores shine and improves the appearance of the bodywork.",
+            "Suitable for new cars or cars in excellent condition.",
+            "🎁 Gifts: floor papers,perfumed medal,tissues,steering wheel and gear shifter cover"
+          ]
+        },
+        "two_stage": {
+          "title": "Stage 2",
+          "points": [
+            "Stage 1: Correcting scratches and moderate imperfections.",
+            "Stage 2: Final polishing and intense shine.",
+            "Perfect balance between time and results."
+          ]
+        },
+        "three_stage": {
+          "title": "Stage 3",
+          "points": [
+            "Stage 1: Deep correction of scratches.",
+            "Stage 2: Medium polishing to refine the bodywork.",
+            "Stage 3: Final polishing with a luxurious glass shine.",
+            "Designed for professional results and distinctive cars.",
+            "🎁 Gifts: floor papers,perfumed medal,tissues,steering wheel and gear shifter cover"
+          ]
+        },
+        "Conclusion": {
+          "title": "Conclusion",
+          "description": "In short, the more stages of polishing, the more accurate and stronger the result, but at the same time, it requires more time and experience. Choosing the right stage depends on the condition of the car and the result you want to achieve."
+        }
+      },
+      "nano": {
+        "title": "Nano Ceramic Coating",
+        "description": "Advanced nano ceramic coating technology that creates a protective layer on your vehicle's paint. Provides excellent hydrophobic properties, UV protection, and chemical resistance.",
+        "features": "Hydrophobic coating, UV protection, Chemical resistance, Enhanced gloss",
+        "points": [
+          "• Transparent protective layer covering the body.",
+          "• Protects against sunlight, dust, and minor scratches.",
+          "• Makes washing easier and maintains shine for a long time.",
+          "• 🎁 Dry cleane.",
+          "• 🎁 Gifts: floor papers,perfumed medal,tissues,steering wheel and gear shifter cover.",
+          "Deep shine and continuous daily protection."
+        ]
+      },
+      "graphene": {
+        "title": "Graphene Coating",
+        "description": "Revolutionary graphene coating technology offering superior protection and performance. Provides exceptional durability, heat dissipation, and anti-static properties.",
+        "features": "Superior durability, Heat dissipation, Anti-static properties, Self-healing technology",
+        "points": [
+          "• Advanced protective layer containing graphene.",
+          "• Higher resistance to water and heat.",
+          "• Provides a deeper shine that lasts longer than nano-ceramic.",
+          "• 🎁 Dry cleane.",
+          "• 🎁 Gifts: floor papers,perfumed medal,tissues,steering wheel and gear shifter cover.",
+          "Advanced technology... Luxury protection that lasts longer."
+        ]
+      }
+    },
+    "cta": {
+      "title": "Ready to Give Your Car Royal Treatment?",
+      "subtitle": "Book your service today and experience the BLINK difference"
+    },
+    "book": "Book Now",
+    "back": "back to services",
+    "see_more": "See More",
+    "contact": "Contact Us",
+    "login": "Login"
+  },
+  "book": {
+    "hero": {
+      "title": "Book Your Service",
+      "subtitle": "Schedule your premium car care service with BLINK"
+    },
+    "form": {
+      "title": "Service Booking",
+      "service": "Select Service",
+      "service_placeholder": "Choose a service",
+      "service_type": "Service Type",
+      "copy_link": "Copy Link",
+      "link_copied": "Link Copied",
+      "preferred_date": "Preferred Date (optional)",
+      "date_placeholder": "Pick a date",
+      "options": {
+        "wash": "Premium Wash",
+        "dryclean": "Professional Dry Clean",
+        "polish": "Paint Polish & Correction",
+        "nano": "Nano Ceramic Coating",
+        "graphene": "Graphene Coating"
+      },
+      "name": "Full Name",
+      "name_placeholder": "Enter your full name",
+      "email": "Email Address",
+      "email_placeholder": "Enter your email address",
+      "phone": "Phone Number",
+      "phone_placeholder": "Enter your phone number",
+      "address": "Vehicle Location",
+      "address_placeholder": "Enter your address",
+      "notes": "Additional Notes (optional)",
+      "notes_placeholder": "Any special requests or notes",
+      "submit": "Book Service",
+      "submitting": "Booking..."
+    },
+    "serviceTypes": {
+      "wash": {
+        "premium": {
+          "label": "Premium",
+          "desc": "Ultimate premium service"
+        },
+        "elite": {
+          "label": "Elite",
+          "desc": "Superior wash experience"
+        },
+        "Classic": {
+          "label": "Classic",
+          "desc": "Standard quality wash"
+        }
+      },
+      "dryclean": {
+        "premium": {
+          "label": "Premium",
+          "desc": "Premium dry cleaning service"
+        },
+        "elite": {
+          "label": "Elite",
+          "desc": "Advanced dry cleaning"
+        },
+        "Classic": {
+          "label": "Classic",
+          "desc": "Basic dry cleaning"
+        }
+      },
+      "polish": {
+        "oneStage": {
+          "label": "One Stage",
+          "desc": "Standard polish treatment"
+        },
+        "twoStage": {
+          "label": "Two Stages",
+          "desc": "Advanced polish treatment"
+        },
+        "threeStage": {
+          "label": "Three Stages",
+          "desc": "Premium polish service"
+        }
+      }
+    },
+    "success": {
+      "title": "Booking Submitted!",
+      "message": "Your service request has been submitted successfully. Our team will contact you within 24 hours to confirm your appointment.",
+      "status": "Status: Requested",
+      "back": "Back to Home"
+    },
+    "myBookings": {
+      "title": "My Bookings",
+      "subtitle": "View and manage your service appointments",
+      "noBookings": "You don't have any bookings yet.",
+      "bookNow": "Book a Service"
+    },
+    "status": {
+      "requested": "Requested",
+      "pending": "Pending",
+      "finished": "Finished",
+      "canceled": "Canceled"
+    },
+    "cancel": {
+      "button": "Cancel Booking",
+      "title": "Cancel Booking",
+      "description": "Are you sure you want to cancel this booking? This action cannot be undone.",
+      "reason": "Reason for cancellation",
+      "reason_placeholder": "Select a reason",
+      "custom_reason": "Custom reason",
+      "custom_reason_placeholder": "Please specify your reason",
+      "reasons": {
+        "high_price": "High Price",
+        "not_suitable_time": "Not Suitable Time",
+        "other": "Other"
+      },
+      "no": "No, Keep Booking",
+      "yes": "Yes, Cancel",
+      "cancelling": "Cancelling..."
+    },
+    "rate": {
+      "button": "Rate Service",
+      "title": "Rate Your Service",
+      "description": "How was your experience with this service?",
+      "rating": "Rating",
+      "comment": "Comment",
+      "comment_placeholder": "Tell us about your experience...",
+      "cancel": "Cancel",
+      "submit": "Submit Rating",
+      "submitting": "Submitting..."
+    }
+  },
+  "errors": {
+    "service_required": "Please select a service",
+    "service_type_required": "Please select a service type",
+    "address_required": "Please enter a valid address",
+    "location_permission_denied": "Location permission denied",
+    "location_unavailable": "Location unavailable",
+    "location_timeout": "Location request timed out",
+    "location_unknown": "Unknown error occurred while getting location",
+    "geolocation_not_supported": "Your browser does not support geolocation",
+    "location_error": "Error occurred while getting location"
+  },
+  "footer": {
+    "company": "BLINK",
+    "tagline": "Elite. Precision. Shine.",
+    "rights": "All rights reserved.",
+    "services": "Services",
+    "company_info": "Company",
+    "contact": "Contact",
+    "built_by": "Built by",
+    "AIO": "AIO Solutions"
+  },
+  "notfound": {
+    "title": "Page Not Found",
+    "description": "Sorry, we couldn't find the page you're looking for. Perhaps you've mistyped the URL? Be sure to check your spelling.",
+    "actions": {
+      "home": "Go Home",
+      "services": "Browse Services"
+    },
+    "help": {
+      "title": "Need Help Finding Something?",
+      "description": "Here are some helpful links instead:",
+      "items": {
+        "0": {
+          "title": "Double-check the URL",
+          "description": "Make sure you've entered the correct web address in your browser's address bar."
+        },
+        "1": {
+          "title": "Visit our homepage",
+          "description": "Navigate to our main page to explore all our services and offerings."
+        },
+        "2": {
+          "title": "Report a problem",
+          "description": "If you believe this is an error, please contact our support team."
+        }
+      }
+    },
+    "contact": {
+      "title": "Still Can't Find What You Need?",
+      "description": "Our team is here to help you find exactly what you're looking for.",
+      "cta": "Contact Support"
+    }
+  },
+  "forgotPassword": {
+    "title": "Reset Your Password",
+    "subtitle": "Enter your email to receive a verification code",
+    "otpSubtitle": "Enter the code sent to your email and set a new password",
+    "enterEmail": "Enter Your Email",
+    "resetPassword": "Reset Password",
+    "emailInstructions": "We'll send a verification code to this email",
+    "otpInstructions": "Enter the 6-digit code sent to {{email}}",
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "your.email@example.com",
+    "sendOtp": "Send Verification Code",
+    "sending": "Sending...",
+    "otpLabel": "Verification Code",
+    "otpPlaceholder": "Enter 6-digit code",
+    "newPasswordLabel": "New Password",
+    "newPasswordPlaceholder": "Enter your new password",
+    "confirmPasswordLabel": "Confirm Password",
+    "confirmPasswordPlaceholder": "Confirm your new password",
+    "resetButton": "Reset Password",
+    "resetting": "Resetting...",
+    "backToEmail": "Back to email entry",
+    "rememberPassword": "Remember your password?",
+    "backToLogin": "Back to login",
+    "send": {
+      "success": "OTP sent successfully",
+      "error": "Failed to send OTP"
+    },
+    "reset": {
+      "success": "Password reset successfully",
+      "error": "Failed to reset password"
+    }
+  },
+  "profile": {
+    "title": "Profile Settings",
+    "description": "Manage your account settings",
+    "joined_on": "Member since",
+    "tabs": {
+      "profile": "Profile Information",
+      "security": "Security"
+    },
+    "form": {
+      "name": "Full Name",
+      "namePlaceholder": "Enter your full name",
+      "email": "Email Address",
+      "emailPlaceholder": "Enter your email address",
+      "phone": "Phone Number",
+      "phonePlaceholder": "Enter your phone number",
+      "currentPassword": "Current Password",
+      "currentPasswordPlaceholder": "Enter your current password",
+      "newPassword": "New Password",
+      "newPasswordPlaceholder": "Enter your new password",
+      "confirmPassword": "Confirm Password",
+      "confirmPasswordPlaceholder": "Confirm your new password"
+    },
+    "save": "Save Changes",
+    "saving": "Saving",
+    "saved": "Changes saved successfully",
+    "error": "Failed to save changes"
+  },
+  "booking": {
+    "booked_on": "Booked on",
+    "service_date": "Service Date",
+    "time_slot": "Time Slot",
+    "total_cost": "Total Cost",
+    "detailer": "Detailer",
+    "view_location": "View Location on Maps",
+    "cancellation_reason": "Cancellation Reason",
+    "your_review": "Your Review",
+    "service_details": "Service Details"
+  },
+  "booking_filters": {
+    "status": "Status",
+    "year": "Year",
+    "month": "Month",
+    "day": "Day",
+    "all": "All",
+    "clear_filters": "Clear Filters"
+  }
+}

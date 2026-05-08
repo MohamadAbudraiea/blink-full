@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /blink-admin-dashboard/
+Disallow: /blink-secretary-dashboard/
+Disallow: /blink-detailer-dashboard/
+
+Sitemap: https://blink-cars.com/sitemap.xml

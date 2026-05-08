@@ -1,0 +1,171 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: oklch(1 0 0); /* White background #FFFFFF */
+  --foreground: oklch(0.18 0.01 240); /* Dark Gunmetal #1C262E for text */
+  --card: oklch(0.98 0.005 240); /* Very light gray for cards */
+  --card-foreground: oklch(0.18 0.01 240); /* Dark Gunmetal for card text */
+  --popover: oklch(1 0 0); /* White for popovers */
+  --popover-foreground: oklch(
+    0.18 0.01 240
+  ); /* Dark Gunmetal for popover text */
+  --primary: oklch(0.8 0.12 180); /* Waterspout #9AFFFE as primary */
+  --primary-foreground: oklch(
+    0.18 0.01 240
+  ); /* Dark Gunmetal text on primary */
+  --secondary: oklch(0.18 0.01 240); /* Dark Gunmetal for secondary elements */
+  --secondary-foreground: oklch(1 0 0); /* White text on secondary */
+  --muted: oklch(0.95 0.005 240); /* Light gray for muted elements */
+  --muted-foreground: oklch(0.4 0.01 240); /* Medium gray for muted text */
+  --accent: oklch(0.85 0.15 180); /* Lighter Waterspout for accent */
+  --accent-foreground: oklch(0.18 0.01 240); /* Dark Gunmetal text on accent */
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.9 0.01 240); /* Light gray borders */
+  --input: oklch(1 0 0); /* White input backgrounds */
+  --ring: oklch(
+    0.8 0.12 180 / 0.5
+  ); /* Waterspout with opacity for focus rings */
+  --chart-1: oklch(0.8 0.12 180); /* Waterspout */
+  --chart-2: oklch(0.85 0.15 180); /* Lighter Waterspout */
+  --chart-3: oklch(0.18 0.01 240); /* Dark Gunmetal */
+  --chart-4: oklch(0.6 0.15 200); /* Complementary blue */
+  --chart-5: oklch(0.7 0.1 160); /* Complementary cyan */
+  --radius: 0.5rem; /* Reduced radius for cleaner look */
+  --sidebar: oklch(1 0 0);
+  --sidebar-foreground: oklch(0.18 0.01 240);
+  --sidebar-primary: oklch(0.8 0.12 180);
+  --sidebar-primary-foreground: oklch(0.18 0.01 240);
+  --sidebar-accent: oklch(0.85 0.15 180);
+  --sidebar-accent-foreground: oklch(0.18 0.01 240);
+  --sidebar-border: oklch(0.9 0.01 240);
+  --sidebar-ring: oklch(0.8 0.12 180 / 0.5);
+}
+
+.dark {
+  --background: oklch(0.18 0.01 240); /* Dark Gunmetal #1C262E background */
+  --foreground: oklch(1 0 0); /* White text */
+  --card: oklch(0.22 0.01 240); /* Slightly lighter Dark Gunmetal for cards */
+  --card-foreground: oklch(1 0 0); /* White card text */
+  --popover: oklch(0.18 0.01 240);
+  --popover-foreground: oklch(1 0 0);
+  --primary: oklch(0.8 0.12 180); /* Waterspout #9AFFFE as primary */
+  --primary-foreground: oklch(
+    0.18 0.01 240
+  ); /* Dark Gunmetal text on primary */
+  --secondary: oklch(0.3 0.01 240); /* Lighter Dark Gunmetal for secondary */
+  --secondary-foreground: oklch(1 0 0); /* White text on secondary */
+  --muted: oklch(0.25 0.01 240); /* Medium Dark Gunmetal for muted */
+  --muted-foreground: oklch(0.7 0.01 240); /* Light gray for muted text */
+  --accent: oklch(0.85 0.15 180); /* Lighter Waterspout for accent */
+  --accent-foreground: oklch(0.18 0.01 240); /* Dark Gunmetal text on accent */
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --border: oklch(0.3 0.01 240); /* Medium Dark Gunmetal borders */
+  --input: oklch(0.22 0.01 240); /* Dark Gunmetal input backgrounds */
+  --ring: oklch(
+    0.8 0.12 180 / 0.5
+  ); /* Waterspout with opacity for focus rings */
+  --chart-1: oklch(0.8 0.12 180); /* Waterspout */
+  --chart-2: oklch(0.85 0.15 180); /* Lighter Waterspout */
+  --chart-3: oklch(1 0 0); /* White */
+  --chart-4: oklch(0.6 0.15 200); /* Complementary blue */
+  --chart-5: oklch(0.7 0.1 160); /* Complementary cyan */
+  --sidebar: oklch(0.18 0.01 240);
+  --sidebar-foreground: oklch(1 0 0);
+  --sidebar-primary: oklch(0.8 0.12 180);
+  --sidebar-primary-foreground: oklch(0.18 0.01 240);
+  --sidebar-accent: oklch(0.85 0.15 180);
+  --sidebar-accent-foreground: oklch(0.18 0.01 240);
+  --sidebar-border: oklch(0.3 0.01 240);
+  --sidebar-ring: oklch(0.8 0.12 180 / 0.5);
+}
+
+@theme inline {
+  --font-sans: "Roboto", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Roboto Mono", ui-monospace, "Cascadia Code", "Source Code Pro",
+    Menlo, Consolas, "DejaVu Sans Mono", monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Roboto", ui-sans-serif, system-ui, sans-serif;
+  }
+}
+
+[data-sonner-toast] {
+  background: var(--background) !important;
+  color: var(--foreground) !important;
+  border: 1px solid var(--border) !important;
+}
+
+/* ✅ Success (Green) */
+[data-sonner-toast][data-type="success"] {
+  background: #22c55e !important; /* Tailwind green-500 */
+  color: #ffffff !important;
+  border-color: #22c55e !important;
+}
+
+/* ❌ Error (Red) */
+[data-sonner-toast][data-type="error"] {
+  background: #ef4444 !important; /* Tailwind red-500 */
+  color: #ffffff !important;
+  border-color: #ef4444 !important;
+}
+
+/* ⚠️ Warning (Yellow) */
+[data-sonner-toast][data-type="warning"] {
+  background: #facc15 !important; /* Tailwind yellow-400 */
+  color: #000000 !important; /* Black text for contrast */
+  border-color: #facc15 !important;
+}
+
+/* ℹ️ Info (Blue / neutral) */
+[data-sonner-toast][data-type="info"] {
+  background: #3b82f6 !important; /* Tailwind blue-500 */
+  color: #ffffff !important;
+  border-color: #3b82f6 !important;
+}
