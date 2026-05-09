@@ -14,7 +14,9 @@ export interface User {
 export interface Ticket {
   id: string;
   created_at: Date;
-  user: User;
+  user: User | null;
+  customer_name?: string | null;
+  customer_phone?: string | null;
   date: string | null;
   start_time: string | null;
   end_time: string | null;

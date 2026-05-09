@@ -12,7 +12,8 @@ router.post("/user", adminController.addUser);
 router.delete("/user", adminController.deleteUser);
 // to edit users(shouldn't validate)
 router.put("/user", adminController.editUser);
-// detailer scheudlue (under testing)
+// search users (for ticket creation)
+router.get("/user/search", adminController.searchUsers);
 router.get("/detailer/schedules/all", detailerController.getAllDetailersSchedules);
 router.get("/detailer/:detailer_id", detailerController.getDetailerSchedule);
 router.get(
@@ -39,6 +40,7 @@ router.get("/ticket/type/pending", ticketController.getPendingTickets);
 router.get("/ticket/type/finished", ticketController.getFinishedTickets);
 router.get("/ticket/type/canceled", ticketController.getCanceldTickets);
 // tickets functionalites
+router.post("/ticket/pending", ticketController.addPendingTicket);
 router.post("/ticket/accept/:ticket_id", ticketController.acceptTicket);
 router.post("/ticket/cancel/:ticket_id", ticketController.cancelticket);
 router.post("/ticket/finish/:ticket_id", ticketController.finishTicket);

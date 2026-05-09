@@ -180,12 +180,12 @@ export function RequestedBooking({
         {/* User Info */}
         <div className="space-y-2">
           <p className="text-sm text-muted-foreground">
-            User: <span className="font-medium">{ticket.user.name}</span>
+            User: <span className="font-medium">{ticket.user?.name || ticket.customer_name || "-"}</span>
           </p>
           <p className="text-sm text-muted-foreground">
             Phone:{" "}
-            <a href={`tel:${ticket.user.phone}`} className="font-medium">
-              {ticket.user.phone}
+            <a href={`tel:${ticket.user?.phone || ticket.customer_phone || ""}`} className="font-medium">
+              {ticket.user?.phone || ticket.customer_phone || "-"}
             </a>
           </p>
         </div>

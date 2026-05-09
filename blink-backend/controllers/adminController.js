@@ -157,3 +157,32 @@ exports.editUser = async (req, res) => {
     });
   }
 };
+exports.searchUsers = async (req, res) => {
+  try {
+    const { q } = req.query;
+    if (!q || q.length < 2) {
+      return res.status(200).json({ status: "success", data: [] });
+    }
+
+    const results = await user.findAll({
+      where: {
+        type: "user",
+        [Op.or]: [
+          { name: { [Op.iLike]: `%${q}%` } },
+          { phone: { [Op.iLike]: `%${q}%` } },
+          { email: { [Op.iLike]: `%${q}%` } },
+        ],
+      },
+      attributes: ["id", "name", "phone", "email"],
+      limit: 10,
+    });
+
+    return res.status(200).json({ status: "success", data: results });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      status: "error",
+      message: error.message || "Something went wrong",
+    });
+  }
+};

@@ -12,12 +12,12 @@ export function CanceledBooking({ ticket }: CanceledBookingProps) {
         <DialogTitle>Cancelled Booking</DialogTitle>
       </DialogHeader>
       <p className="text-sm text-muted-foreground">
-        User: <span className="font-medium">{ticket.user.name}</span>
+        User: <span className="font-medium">{ticket.user?.name || ticket.customer_name || "-"}</span>
       </p>
       <p className="text-sm text-muted-foreground">
         Phone:{" "}
-        <a href={`tel:${ticket.user.phone}`} className="font-medium">
-          {ticket.user.phone}
+        <a href={`tel:${ticket.user?.phone || ticket.customer_phone || ""}`} className="font-medium">
+          {ticket.user?.phone || ticket.customer_phone || "-"}
         </a>
       </p>
       <p className="font-medium">Reason: {ticket.cancel_reason || "Other"}</p>

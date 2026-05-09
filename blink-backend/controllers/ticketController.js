@@ -37,6 +37,86 @@ exports.addticket = async (req, res) => {
     });
   }
 };
+exports.addPendingTicket = async (req, res) => {
+  try {
+    const {
+      isAnonymous,
+      user_id,
+      customer_name,
+      customer_phone,
+      detailer_id,
+      date,
+      start_time,
+      end_time,
+      location,
+      service,
+      typeOfService,
+      note,
+      price
+    } = req.body || {};
+
+    // Validate required fields
+    if (!detailer_id) {
+      return res.status(400).json({ status: "failed", message: "Detailer is required" });
+    }
+    if (!date || !start_time || !end_time) {
+      return res.status(400).json({ status: "failed", message: "Date, start time, and end time are required" });
+    }
+
+    // Check if detailer is free at this time
+    const free = await isDetailerFree(detailer_id, date, start_time, end_time);
+    if (!free) {
+      return res.status(400).json({
+        status: "failed",
+        message: "Detailer is busy at this time",
+      });
+    }
+
+    const status = "pending";
+    const secretary_id = req.user.id;
+
+    // build ticket data dynamically
+    const ticketData = {
+      date,
+      start_time,
+      end_time,
+      service,
+      location,
+      status,
+      typeOfService,
+      secretary_id,
+      detailer_id,
+      ...(note ? { note } : {}),
+      ...(price ? { price } : {}),
+    };
+
+    if (isAnonymous) {
+      if (!customer_name || !customer_phone) {
+         return res.status(400).json({ status: "failed", message: "Customer name and phone are required for anonymous tickets" });
+      }
+      ticketData.customer_name = customer_name;
+      ticketData.customer_phone = customer_phone;
+    } else {
+      if (!user_id) {
+         return res.status(400).json({ status: "failed", message: "User ID is required for non-anonymous tickets" });
+      }
+      ticketData.user_id = user_id;
+    }
+
+    const newTicket = await ticket.create(ticketData);
+
+    return res.status(201).json({
+      status: "success",
+      data: newTicket,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      status: "failed",
+      message: error.message || "Something went wrong while creating the ticket",
+    });
+  }
+};
 exports.getTicketByID = async (req, res) => {
   try {
     const { ticket_id } = req.params;

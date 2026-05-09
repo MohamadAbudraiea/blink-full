@@ -84,3 +84,16 @@ export async function togglePublishTicket({ id }: { id: string }) {
   });
   return res.data;
 }
+
+export async function addPendingTicket(payload: any, role: string = "admin") {
+  const prefix = role === "secretary" ? "/secretary" : "/admin";
+  const res = await axiosInstance.post(`${prefix}/ticket/pending`, payload);
+  return res.data;
+}
+
+export async function searchUsers(query: string) {
+  const res = await axiosInstance.get(`/admin/user/search`, {
+    params: { q: query },
+  });
+  return res.data;
+}

@@ -30,7 +30,7 @@ export function BookingsTableRow({
   return (
     <TableRow>
       <TableCell>{ticket.id}</TableCell>
-      <TableCell>{ticket.user.name || "-"}</TableCell>
+      <TableCell>{ticket.user?.name || ticket.customer_name || "-"}</TableCell>
       <TableCell>
         {ticket.service
           ? ticket.service +
@@ -54,8 +54,8 @@ export function BookingsTableRow({
         </Dialog>
       </TableCell>
       <TableCell>
-        <a href={`tel:${ticket.user.phone || ""}`}>
-          {ticket.user.phone || "-"}
+        <a href={`tel:${ticket.user?.phone || ticket.customer_phone || ""}`}>
+          {ticket.user?.phone || ticket.customer_phone || "-"}
         </a>
       </TableCell>
       <TableCell>{ticket.price || "-"}</TableCell>

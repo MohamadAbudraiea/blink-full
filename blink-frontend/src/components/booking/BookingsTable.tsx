@@ -52,7 +52,7 @@ export function BookingsTable({
   return (
     <>
       {/* Filter options */}
-      <BookingFilters selectItems={selectItems} />
+      <BookingFilters selectItems={selectItems} role={role} detailers={detailers} />
       {/* Table */}
       <Table className="text-center bg-muted/50">
         <TableHeader className="bg-muted/50 font-bold">

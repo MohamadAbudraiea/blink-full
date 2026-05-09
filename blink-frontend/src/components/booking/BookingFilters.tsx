@@ -10,10 +10,16 @@ import { months, monthsArabic, getDaysInMonth, getYears } from "@/shared/utils";
 import { useBookingStore } from "@/stores/useBookingStore";
 import { useTranslation } from "react-i18next";
 
+import { AddTicketDialog } from "./AddTicketDialog";
+
 function BookingFilters({
   selectItems,
+  role,
+  detailers = [],
 }: {
   selectItems: Record<string, string>;
+  role?: string;
+  detailers?: { id: string; name: string }[];
 }) {
   const { t, i18n } = useTranslation();
   const {
@@ -190,6 +196,13 @@ function BookingFilters({
           >
             {t("booking_filters.clear_filters")}
           </Button>
+        </div>
+      )}
+
+      {/* Add Ticket Modal */}
+      {(role === "admin" || role === "secretary") && (
+        <div className="flex items-center gap-2 ml-auto">
+          <AddTicketDialog role={role} detailers={detailers} />
         </div>
       )}
     </div>

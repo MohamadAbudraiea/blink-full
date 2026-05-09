@@ -17,11 +17,19 @@ module.exports = function (sequelize, DataTypes) {
       },
       user_id: {
         type: DataTypes.UUID,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: "user",
           key: "id",
         },
+      },
+      customer_name: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      customer_phone: {
+        type: DataTypes.TEXT,
+        allowNull: true,
       },
       date: {
         type: DataTypes.DATEONLY,
@@ -105,6 +113,20 @@ module.exports = function (sequelize, DataTypes) {
           fields: [{ name: "id" }],
         },
       ],
+      hooks: {
+        afterFind: (results) => {
+          if (!results) return;
+          const instances = Array.isArray(results) ? results : [results];
+          for (const instance of instances) {
+            if (instance.dataValues && instance.dataValues.user === null && instance.dataValues.customer_name) {
+              instance.dataValues.user = {
+                name: instance.dataValues.customer_name,
+                phone: instance.dataValues.customer_phone
+              };
+            }
+          }
+        }
+      }
     }
   );
 };

@@ -127,3 +127,26 @@ export const useTogglePublishTicket = () => {
 
   return { togglePublishTicketMutation, isPublishingTicket };
 };
+
+export const useAddPendingTicket = (role: string = "admin") => {
+  const queryClient = useQueryClient();
+  const { mutate: addPendingTicketMutation, isPending: isAddingPendingTicket } =
+    useMutation({
+      mutationKey: ["addPendingTicket"],
+      mutationFn: async (payload: any) => {
+        const { addPendingTicket } = await import("@/api/ticket");
+        return addPendingTicket(payload, role);
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["filteredTickets"] });
+        queryClient.invalidateQueries({ queryKey: ["ticketsForSecretary"] });
+        toast.success("Pending ticket created successfully");
+      },
+      onError: (error: any) => {
+        const msg = error?.response?.data?.message || "Failed to create pending ticket";
+        toast.error(msg);
+      },
+    });
+
+  return { addPendingTicketMutation, isAddingPendingTicket };
+};

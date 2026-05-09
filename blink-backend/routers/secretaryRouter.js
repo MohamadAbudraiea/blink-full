@@ -20,6 +20,7 @@ router.get(
 );
 //--------------------------------------------------------------
 // accept, cancel and finish ticket
+router.post("/ticket/pending", ticketController.addPendingTicket);
 router.post("/ticket/accept/:ticket_id", ticketController.acceptTicket);
 router.post("/ticket/cancel/:ticket_id", ticketController.cancelticket);
 router.post("/ticket/finish/:ticket_id", ticketController.finishTicket);
