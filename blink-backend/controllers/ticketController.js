@@ -84,8 +84,8 @@ exports.addPendingTicket = async (req, res) => {
       location,
       status,
       typeOfService,
-      secretary_id,
-      detailer_id,
+      secretary_id: secretary_id || null,
+      detailer_id: detailer_id || null,
       ...(note ? { note } : {}),
       ...(price ? { price } : {}),
     };

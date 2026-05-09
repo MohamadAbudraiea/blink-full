@@ -33,6 +33,21 @@ export interface Ticket {
   cancel_reason: string | null;
   rating: Rating | null;
   typeOfService?: string;
+  subscription_id?: string | null;
+}
+
+export interface Subscription {
+  id: string;
+  created_at: Date;
+  user_id: string | null;
+  customer_name: string | null;
+  customer_phone: string | null;
+  plan_type: "2" | "4" | "8";
+  status: StatusType;
+  total_price: number | null;
+  secretary_id: string | null;
+  user?: User;
+  tickets?: Ticket[];
 }
 
 export interface Rating {

@@ -3,6 +3,7 @@ const router = express.Router();
 const ticketController = require("../controllers/ticketController");
 const detailerController = require("../controllers/detailerController.js");
 const ratingController = require("../controllers/ratingController");
+const subscriptionController = require("../controllers/subscriptionController");
 // get tickets then get schedules
 router.get("/tickets/filters", ticketController.getTicketsForStaff);
 
@@ -25,5 +26,10 @@ router.post("/ticket/accept/:ticket_id", ticketController.acceptTicket);
 router.post("/ticket/cancel/:ticket_id", ticketController.cancelticket);
 router.post("/ticket/finish/:ticket_id", ticketController.finishTicket);
 //---------------------------------------------------------------
+
+// subscriptions
+router.post("/subscription", subscriptionController.createSubscription);
+router.get("/subscription", subscriptionController.getSubscriptions);
+router.post("/subscription/cancel/:id", subscriptionController.cancelSubscription);
 
 module.exports = router;

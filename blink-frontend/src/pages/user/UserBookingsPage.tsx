@@ -9,6 +9,10 @@ import BookingFilters from "@/components/booking/BookingFilters";
 import { PaginationControls } from "@/components/booking/PaginationControls";
 import { useEffect } from "react";
 import Loader from "@/components/ui/Loader";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { useGetSubscriptions } from "@/hooks/useSubscription";
+import UserSubscriptionCard from "@/components/user-bookings/UserSubscriptionCard";
+import { AddSubscriptionDialog } from "@/components/subscription/AddSubscriptionDialog";
 
 export default function UserBookingsPage() {
   const { t } = useTranslation();
@@ -50,6 +54,8 @@ export default function UserBookingsPage() {
     pagination,
     isGettingUserTickets,
   } = useGetUserTickets(queryParams);
+
+  const { subscriptions, isGettingSubscriptions } = useGetSubscriptions("user");
 
   useEffect(() => {
     if (tickets.length > 0) {
@@ -110,8 +116,15 @@ export default function UserBookingsPage() {
           </p>
         </motion.div>
 
-        {/* Filter options */}
-        <BookingFilters selectItems={selectItems} />
+        <Tabs defaultValue="bookings" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="bookings">My Bookings</TabsTrigger>
+            <TabsTrigger value="subscriptions">My Subscriptions</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="bookings" className="space-y-6">
+            {/* Filter options */}
+            <BookingFilters selectItems={selectItems} />
 
         {tickets.length === 0 ? (
           <Card>
@@ -148,6 +161,37 @@ export default function UserBookingsPage() {
             )}
           </div>
         )}
+          </TabsContent>
+
+          <TabsContent value="subscriptions" className="space-y-6">
+            {isGettingSubscriptions ? (
+              <Loader />
+            ) : subscriptions.length === 0 ? (
+              <Card>
+                <CardContent className="pt-6 text-center">
+                  <p className="text-muted-foreground mb-4">You have no subscriptions yet.</p>
+                  <AddSubscriptionDialog role="user" />
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="space-y-4">
+                <div className="flex justify-end mb-4">
+                  <AddSubscriptionDialog role="user" />
+                </div>
+                {subscriptions.map((sub) => (
+                  <motion.div
+                    key={sub.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <UserSubscriptionCard subscription={sub} />
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );

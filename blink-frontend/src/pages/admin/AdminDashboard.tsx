@@ -10,6 +10,10 @@ import { useGetUsers } from "@/hooks/useAdmin";
 import { useGetFilteredTickets } from "@/hooks/useTicket";
 import { useBookingStore } from "@/stores/useBookingStore";
 import Loader from "@/components/ui/Loader";
+import { SubscriptionsTable } from "@/components/subscription/SubscriptionsTable";
+import { AddSubscriptionDialog } from "@/components/subscription/AddSubscriptionDialog";
+import { useGetSubscriptions } from "@/hooks/useSubscription";
+import { Loader2 } from "lucide-react";
 
 export default function AdminDashboard() {
   const { users, isGettingUsers } = useGetUsers();
@@ -46,6 +50,8 @@ export default function AdminDashboard() {
   const { tickets, pagination, isFetchingTickets } =
     useGetFilteredTickets(queryParams);
 
+  const { subscriptions, isGettingSubscriptions } = useGetSubscriptions("admin");
+
   const selectItems: Record<string, string> = {
     All: "All",
     requested: "Requested",
@@ -65,6 +71,7 @@ export default function AdminDashboard() {
           <TabsTrigger value="secretary">Secretaries</TabsTrigger>
           <TabsTrigger value="detailer">Detailer</TabsTrigger>
           <TabsTrigger value="bookings">Bookings</TabsTrigger>
+          <TabsTrigger value="subscriptions">Subscriptions</TabsTrigger>
           <TabsTrigger value="charts">Charts</TabsTrigger>
           <TabsTrigger value="schedules">Schedules</TabsTrigger>
         </TabsList>
@@ -122,6 +129,23 @@ export default function AdminDashboard() {
                 detailers={users.detailers}
                 role="admin"
               />
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Subscriptions list */}
+        <TabsContent value="subscriptions">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle>Manage Subscriptions</CardTitle>
+              <AddSubscriptionDialog role="admin" detailers={users.detailers} />
+            </CardHeader>
+            <CardContent>
+              {isGettingSubscriptions ? (
+                <div className="flex justify-center p-8"><Loader2 className="h-8 w-8 animate-spin" /></div>
+              ) : (
+                <SubscriptionsTable subscriptions={subscriptions} role="admin" detailers={users.detailers} />
+              )}
             </CardContent>
           </Card>
         </TabsContent>

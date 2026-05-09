@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 module.exports = function (sequelize, DataTypes) {
   return sequelize.define(
-    "ticket",
+    "subscription",
     {
       id: {
         autoIncrement: true,
@@ -31,50 +31,18 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.TEXT,
         allowNull: true,
       },
-      date: {
-        type: DataTypes.DATEONLY,
-        allowNull: true,
-      },
-      start_time: {
-        type: DataTypes.TIME,
-        allowNull: true,
-      },
-      end_time: {
-        type: DataTypes.TIME,
-        allowNull: true,
-      },
-      price: {
-        type: DataTypes.DECIMAL,
-        allowNull: true,
-      },
-      service: {
-        type: DataTypes.ENUM(
-          "wash",
-          "dryclean",
-          "polish",
-          "gravin",
-          "nanoceramic"
-        ),
+      plan_type: {
+        type: DataTypes.ENUM("2", "4", "8"),
         allowNull: false,
-      },
-      typeOfService: {
-        type: DataTypes.ENUM("Blink", "Elite", "Premium"),
-        allowNull: true,
-      },
-      payment_method: {
-        type: DataTypes.ENUM("cash", "online"),
-        allowNull: true,
-        default: "cash",
       },
       status: {
         type: DataTypes.ENUM("requested", "pending", "finished", "canceled"),
         allowNull: false,
         defaultValue: "requested",
       },
-      location: {
-        type: DataTypes.TEXT,
+      total_price: {
+        type: DataTypes.DECIMAL,
         allowNull: true,
-        default: "blink",
       },
       secretary_id: {
         type: DataTypes.UUID,
@@ -84,39 +52,15 @@ module.exports = function (sequelize, DataTypes) {
           key: "id",
         },
       },
-      detailer_id: {
-        type: DataTypes.UUID,
-        allowNull: true,
-        references: {
-          model: "user",
-          key: "id",
-        },
-      },
-      cancel_reason: {
-        type: DataTypes.TEXT,
-        allowNull: true,
-      },
-      note: {
-        type: DataTypes.TEXT,
-        allowNull: true,
-      },
-      subscription_id: {
-        type: DataTypes.BIGINT,
-        allowNull: true,
-        references: {
-          model: "subscription",
-          key: "id",
-        },
-      },
     },
     {
       sequelize,
-      tableName: "ticket",
+      tableName: "subscription",
       schema: "public",
       timestamps: false,
       indexes: [
         {
-          name: "ticket_pkey",
+          name: "subscription_pkey",
           unique: true,
           fields: [{ name: "id" }],
         },

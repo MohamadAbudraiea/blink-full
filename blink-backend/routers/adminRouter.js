@@ -4,6 +4,7 @@ const adminController = require("../controllers/adminController");
 const ticketController = require("../controllers/ticketController");
 const detailerController = require("../controllers/detailerController");
 const ratingController = require("../controllers/ratingController");
+const subscriptionController = require("../controllers/subscriptionController");
 // to get all the secretaries and detailers
 router.get("/user", adminController.getUsers);
 // the user can be secretary or detailer just
@@ -52,5 +53,10 @@ router.post("/ticket/rating/toggle", ratingController.togglePublishTicket);
 // accept or cancel ticket
 router.post("/ticket/accept/:ticket_id", ticketController.acceptTicket);
 router.post("/ticket/cancel/:ticket_id", ticketController.cancelticket);
+
+// subscriptions
+router.post("/subscription", subscriptionController.createSubscription);
+router.get("/subscription", subscriptionController.getSubscriptions);
+router.post("/subscription/cancel/:id", subscriptionController.cancelSubscription);
 
 module.exports = router;
