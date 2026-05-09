@@ -9,6 +9,7 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { toast } from "sonner";
+import { invalidateTicketRelatedQueries } from "./useTicket";
 
 export const useGetTicketsForSecretary = (params = {}) => {
   const { data, isPending: isFetchingTickets } = useQuery({
@@ -66,7 +67,7 @@ export const useAcceptTicketForSecretary = () => {
       mutationKey: ["acceptTicket"],
       mutationFn: acceptTicket,
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["ticketsForSecretary"] });
+        invalidateTicketRelatedQueries(queryClient);
         toast.success("Ticket accepted successfully");
       },
       onError: () => {
@@ -85,7 +86,7 @@ export const useCancelTicketForSecretary = () => {
       mutationFn: ({ id, reason }: { id: string; reason: string }) =>
         cancelTicket({ id, reason }),
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["ticketsForSecretary"] });
+        invalidateTicketRelatedQueries(queryClient);
         toast.success("Ticket canceled successfully");
       },
       onError: () => {
@@ -103,7 +104,7 @@ export const useFinishTicketForSecretary = () => {
       mutationKey: ["finishTicket"],
       mutationFn: finishTicket,
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["ticketsForSecretary"] });
+        invalidateTicketRelatedQueries(queryClient);
         toast.success("Ticket finished successfully");
       },
       onError: () => {

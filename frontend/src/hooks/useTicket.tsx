@@ -6,10 +6,21 @@ import {
   getChartsData,
   getCanceledTicketsForCharts,
   togglePublishTicket,
+  getTicketById,
 } from "@/api/ticket";
 import type { Ticket } from "@/shared/types";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+
+export const invalidateTicketRelatedQueries = (queryClient: QueryClient) => {
+  queryClient.invalidateQueries({ queryKey: ["filteredTickets"] });
+  queryClient.invalidateQueries({ queryKey: ["subscriptions"] });
+  queryClient.invalidateQueries({ queryKey: ["detailerSchedule"] });
+  queryClient.invalidateQueries({ queryKey: ["allDetailersSchedules"] });
+  queryClient.invalidateQueries({ queryKey: ["ticketsForDetailer"] });
+  queryClient.invalidateQueries({ queryKey: ["ticketsForSecretary"] });
+  queryClient.invalidateQueries({ queryKey: ["userTickets"] });
+};
 
 export const useGetChartsData = (
   month: number | undefined,
@@ -54,6 +65,19 @@ export const useGetFilteredTickets = (params = {}) => {
   };
 };
 
+export const useGetTicketById = (id: string | null) => {
+  const { data, isPending: isFetchingTicket } = useQuery({
+    queryKey: ["ticket", id],
+    queryFn: () => getTicketById(id!),
+    enabled: !!id,
+  });
+
+  return {
+    ticket: data?.data,
+    isFetchingTicket,
+  };
+};
+
 export const useAcceptTicket = () => {
   const queryClient = useQueryClient();
   const { mutate: acceptTicketMutation, isPending: isAcceptingTicket } =
@@ -61,7 +85,7 @@ export const useAcceptTicket = () => {
       mutationKey: ["acceptTicket"],
       mutationFn: acceptTicket,
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["filteredTickets"] });
+        invalidateTicketRelatedQueries(queryClient);
         toast.success("Ticket accepted successfully");
       },
       onError: () => {
@@ -80,7 +104,7 @@ export const useCancelTicket = () => {
       mutationFn: ({ id, reason }: { id: string; reason: string }) =>
         cancelTicket({ id, reason }),
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["filteredTickets"] });
+        invalidateTicketRelatedQueries(queryClient);
         toast.success("Ticket canceled successfully");
       },
       onError: () => {
@@ -98,7 +122,7 @@ export const useFinishTicket = () => {
       mutationKey: ["finishTicket"],
       mutationFn: finishTicket,
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["filteredTickets"] });
+        invalidateTicketRelatedQueries(queryClient);
         toast.success("Ticket finished successfully");
       },
       onError: () => {
@@ -116,7 +140,7 @@ export const useTogglePublishTicket = () => {
       mutationKey: ["togglePublishTicket"],
       mutationFn: togglePublishTicket,
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["filteredTickets"] });
+        invalidateTicketRelatedQueries(queryClient);
         queryClient.invalidateQueries({ queryKey: ["reviewsFoHome"] });
         toast.success("Ticket visibility toggled successfully");
       },
@@ -138,8 +162,7 @@ export const useAddPendingTicket = (role: string = "admin") => {
         return addPendingTicket(payload, role);
       },
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["filteredTickets"] });
-        queryClient.invalidateQueries({ queryKey: ["ticketsForSecretary"] });
+        invalidateTicketRelatedQueries(queryClient);
         toast.success("Pending ticket created successfully");
       },
       onError: (error: any) => {

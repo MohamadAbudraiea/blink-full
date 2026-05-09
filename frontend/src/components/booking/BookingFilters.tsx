@@ -16,10 +16,18 @@ function BookingFilters({
   selectItems,
   role,
   detailers = [],
+  subscriptionId,
+  subscriptionUserId,
+  subscriptionCustomerName,
+  subscriptionCustomerPhone,
 }: {
   selectItems: Record<string, string>;
   role?: string;
   detailers?: { id: string; name: string }[];
+  subscriptionId?: string;
+  subscriptionUserId?: string;
+  subscriptionCustomerName?: string;
+  subscriptionCustomerPhone?: string;
 }) {
   const { t, i18n } = useTranslation();
   const {
@@ -202,7 +210,14 @@ function BookingFilters({
       {/* Add Ticket Modal */}
       {(role === "admin" || role === "secretary") && (
         <div className="flex items-center gap-2 ml-auto">
-          <AddTicketDialog role={role} detailers={detailers} />
+          <AddTicketDialog 
+            role={role} 
+            detailers={detailers} 
+            subscriptionId={subscriptionId}
+            subscriptionUserId={subscriptionUserId}
+            subscriptionCustomerName={subscriptionCustomerName}
+            subscriptionCustomerPhone={subscriptionCustomerPhone}
+          />
         </div>
       )}
     </div>

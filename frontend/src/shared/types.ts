@@ -87,12 +87,12 @@ export interface ScheduleItem {
 
 export interface Booking {
   id: string;
-  created_at: string;
-  user_id: string;
+  created_at: Date;
+  user_id?: string;
   date: string | null;
   start_time: string | null;
   end_time: string | null;
-  price: string | null;
+  price: number | null;
   service: ServiceType;
   typeOfService?: string;
   status: StatusType;
@@ -103,7 +103,7 @@ export interface Booking {
   note: string | null;
   detailer: { name: string } | null;
   secretary: { name: string } | null;
-  ratings: { rating_number: number; description: string | null }[] | null;
+  ratings?: { rating_number: number; description: string | null }[] | null;
 }
 
 export interface AcceptTicketParams {

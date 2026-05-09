@@ -24,6 +24,11 @@ export async function getFilteredTickets(params = {}) {
   return res.data;
 }
 
+export async function getTicketById(id: string) {
+  const res = await axiosInstance.get(`/admin/ticket/${id}`);
+  return res.data;
+}
+
 export async function acceptTicket({
   id,
   detailer_id,

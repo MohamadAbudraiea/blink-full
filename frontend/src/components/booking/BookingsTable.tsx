@@ -24,6 +24,10 @@ export function BookingsTable({
     totalItems: 0,
   },
   role = "admin",
+  subscriptionId,
+  subscriptionUserId,
+  subscriptionCustomerName,
+  subscriptionCustomerPhone,
 }: {
   detailers?: { id: string; name: string }[];
   selectItems: Record<string, string>;
@@ -35,6 +39,10 @@ export function BookingsTable({
     totalItems: number;
   };
   role?: "admin" | "secretary" | "detailer";
+  subscriptionId?: string;
+  subscriptionUserId?: string;
+  subscriptionCustomerName?: string;
+  subscriptionCustomerPhone?: string;
 }) {
   const {
     cancelDialogOpen,
@@ -52,7 +60,15 @@ export function BookingsTable({
   return (
     <>
       {/* Filter options */}
-      <BookingFilters selectItems={selectItems} role={role} detailers={detailers} />
+      <BookingFilters 
+        selectItems={selectItems} 
+        role={role} 
+        detailers={detailers} 
+        subscriptionId={subscriptionId}
+        subscriptionUserId={subscriptionUserId}
+        subscriptionCustomerName={subscriptionCustomerName}
+        subscriptionCustomerPhone={subscriptionCustomerPhone}
+      />
       {/* Table */}
       <Table className="text-center bg-muted/50">
         <TableHeader className="bg-muted/50 font-bold">

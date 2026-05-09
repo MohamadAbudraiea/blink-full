@@ -70,8 +70,8 @@ export default function BookingCard({ booking }: BookingCardProps) {
               <Calendar className="w-3.5 h-3.5" />
               {t("booking.booked_on")}{" "}
               {locale === "ar"
-                ? arabicDate(booking.created_at)
-                : englishDate(booking.created_at)}
+                ? arabicDate(booking.created_at.toString())
+                : englishDate(booking.created_at.toString())}
             </CardDescription>
           </div>
           <StatusBadge status={booking.status} />
@@ -88,7 +88,7 @@ export default function BookingCard({ booking }: BookingCardProps) {
             <AccordionContent className="pt-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {booking.date && (
-                  <div className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-br from-primary/10 via-background to-muted/20 border border-border/50">
+                  <div className="flex items-center gap-3 p-3 rounded-lg bg-linear-to-br from-primary/10 via-background to-muted/20 border border-border/50">
                     <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
                       <Calendar className="w-4 h-4 text-primary" />
                     </div>
@@ -106,7 +106,7 @@ export default function BookingCard({ booking }: BookingCardProps) {
                 )}
 
                 {booking.start_time && booking.end_time && (
-                  <div className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-br from-primary/10 via-background to-muted/20 border border-border/50">
+                  <div className="flex items-center gap-3 p-3 rounded-lg bg-linear-to-br from-primary/10 via-background to-muted/20 border border-border/50">
                     <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
                       <Clock className="w-4 h-4 text-info" />
                     </div>
@@ -123,7 +123,7 @@ export default function BookingCard({ booking }: BookingCardProps) {
                 )}
 
                 {booking.price && (
-                  <div className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-br from-primary/10 via-background to-muted/20 border border-border/50">
+                  <div className="flex items-center gap-3 p-3 rounded-lg bg-linear-to-br from-primary/10 via-background to-muted/20 border border-border/50">
                     <div className="w-8 h-8 rounded-full bg-green-700/10 flex items-center justify-center">
                       <DollarSign className="w-4 h-4 text-green-700" />
                     </div>
@@ -132,14 +132,14 @@ export default function BookingCard({ booking }: BookingCardProps) {
                         {t("booking.total_cost")}
                       </p>
                       <p className="text-sm font-semibold text-green-700">
-                        {formatCurrency(parseInt(booking.price))}
+                        {formatCurrency(parseInt(booking.price.toString()))}
                       </p>
                     </div>
                   </div>
                 )}
 
                 {booking.detailer?.name && (
-                  <div className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-br from-primary/10 via-background to-muted/20 border border-border/50">
+                  <div className="flex items-center gap-3 p-3 rounded-lg bg-linear-to-br from-primary/10 via-background to-muted/20 border border-border/50">
                     <div className="w-8 h-8 rounded-full bg-accent/50 flex items-center justify-center">
                       <User className="w-4 h-4 text-accent-foreground" />
                     </div>
@@ -157,8 +157,8 @@ export default function BookingCard({ booking }: BookingCardProps) {
 
               {/* Location */}
               {booking.location && (
-                <div className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-br from-primary/10 via-background to-muted/20 border border-border/50 mt-4">
-                  <MapPin className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                <div className="flex items-center gap-3 p-3 rounded-lg bg-linear-to-br from-primary/10 via-background to-muted/20 border border-border/50 mt-4">
+                  <MapPin className="w-4 h-4 text-muted-foreground shrink-0" />
                   <a
                     href={booking.location}
                     target="_blank"
@@ -190,9 +190,9 @@ export default function BookingCard({ booking }: BookingCardProps) {
 
               {(booking.status === "finished" ||
                 booking.status === "requested") && (
-                <CardFooter className="py-6 bg-gradient-to-br from-background via-background to-muted/20 rounded-b-xl border-t border-border/30">
+                <CardFooter className="py-6 bg-linear-to-br from-background via-background to-muted/20 rounded-b-xl border-t border-border/30">
                   {/* Existing Rating */}
-                  {booking.status === "finished" && existingRating![0] && (
+                  {booking.status === "finished" && existingRating?.[0] && (
                     <div className="w-full space-y-4">
                       <p className="text-sm font-semibold text-foreground">
                         {t("booking.your_review")}
@@ -202,11 +202,11 @@ export default function BookingCard({ booking }: BookingCardProps) {
                         dir="ltr"
                       >
                         <div className="flex gap-1">
-                          {renderStars(existingRating![0].rating_number)}
+                          {renderStars(existingRating[0].rating_number)}
                         </div>
                         <div className="w-px h-6 bg-muted-foreground"></div>
                         <p className="text-sm text-muted-foreground italic">
-                          {existingRating![0].description}
+                          {existingRating[0].description}
                         </p>
                       </div>
                     </div>
@@ -216,7 +216,7 @@ export default function BookingCard({ booking }: BookingCardProps) {
                     {booking.status === "requested" && (
                       <CancelDialog ticket_id={booking.id} />
                     )}
-                    {booking.status === "finished" && !existingRating![0] && (
+                    {booking.status === "finished" && !existingRating?.[0] && (
                       <RatingDialog ticket_id={booking.id} />
                     )}
                   </div>

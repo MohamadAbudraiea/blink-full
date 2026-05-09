@@ -4,6 +4,9 @@ import { format, addDays, isSameDay, startOfWeek, endOfWeek } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Calendar, Clock, User } from "lucide-react";
 import Loader from "@/components/ui/Loader";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { useGetTicketById } from "@/hooks/useTicket";
+import { BookingDialog } from "../booking/BookingDialog";
 
 interface ScheduleEntry {
   ticket_id: string;
@@ -60,6 +63,11 @@ export function ScheduleGantt() {
     x: number;
     y: number;
   } | null>(null);
+
+  const [selectedTicketId, setSelectedTicketId] = useState<string | null>(null);
+  const { ticket: selectedTicketDetails, isFetchingTicket } =
+    useGetTicketById(selectedTicketId);
+
   const ganttRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to current time on mount
@@ -388,6 +396,7 @@ export function ScheduleGantt() {
                             setHoveredTicket(null);
                             setTooltipInfo(null);
                           }}
+                          onClick={() => setSelectedTicketId(entry.ticket_id)}
                         >
                           <span
                             className="text-[10px] font-semibold px-2 truncate"
@@ -513,6 +522,36 @@ export function ScheduleGantt() {
           );
         })}
       </div>
+
+      {/* Ticket Details Modal */}
+      <Dialog
+        open={!!selectedTicketId}
+        onOpenChange={(v) => !v && setSelectedTicketId(null)}
+      >
+        <DialogContent className="sm:max-w-md max-h-screen overflow-y-auto">
+          {isFetchingTicket ? (
+            <div className="py-12 flex flex-col items-center justify-center space-y-4">
+              <Loader />
+              <p className="text-muted-foreground text-sm font-medium">
+                Loading ticket details...
+              </p>
+            </div>
+          ) : selectedTicketDetails ? (
+            <BookingDialog
+              role="admin"
+              ticket={selectedTicketDetails}
+              detailers={allDetailers.map((d) => ({
+                id: d.detailer_id,
+                name: d.detailer_name,
+              }))}
+            />
+          ) : (
+            <div className="py-8 text-center text-muted-foreground">
+              Failed to load ticket details.
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

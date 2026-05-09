@@ -1,6 +1,7 @@
 import { getTicketsForDetailer, finishTicket } from "@/api/detailer";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { invalidateTicketRelatedQueries } from "./useTicket";
 
 export const useGetTicketsForDetailer = (params = {}) => {
   const { data, isPending: isFetchingTickets } = useQuery({
@@ -21,7 +22,7 @@ export const useFinishTicketForDetailer = () => {
       mutationKey: ["finishTicket"],
       mutationFn: finishTicket,
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["ticketsForDetailer"] });
+        invalidateTicketRelatedQueries(queryClient);
         toast.success("Ticket finished successfully");
       },
       onError: () => {

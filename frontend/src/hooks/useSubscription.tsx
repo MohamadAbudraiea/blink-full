@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createSubscription, getSubscriptions, cancelSubscription } from "@/api/subscription";
 import { toast } from "sonner";
 import type { Subscription } from "@/shared/types";
+import { invalidateTicketRelatedQueries } from "./useTicket";
 
 export const useCreateSubscription = (role: string = "admin") => {
   const queryClient = useQueryClient();
@@ -12,9 +13,7 @@ export const useCreateSubscription = (role: string = "admin") => {
         return createSubscription(payload, role);
       },
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["subscriptions"] });
-        queryClient.invalidateQueries({ queryKey: ["filteredTickets"] });
-        queryClient.invalidateQueries({ queryKey: ["ticketsForSecretary"] });
+        invalidateTicketRelatedQueries(queryClient);
         toast.success("Subscription created successfully");
       },
       onError: (error: any) => {
@@ -48,9 +47,7 @@ export const useCancelSubscription = (role: string = "admin") => {
         return cancelSubscription(id, role);
       },
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["subscriptions"] });
-        queryClient.invalidateQueries({ queryKey: ["filteredTickets"] });
-        queryClient.invalidateQueries({ queryKey: ["ticketsForSecretary"] });
+        invalidateTicketRelatedQueries(queryClient);
         toast.success("Subscription canceled successfully");
       },
       onError: (error: any) => {

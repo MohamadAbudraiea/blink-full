@@ -496,6 +496,7 @@ export default function BookPage() {
                       id="note"
                       placeholder={t("book.form.notes_placeholder")}
                       rows={3}
+                      className="resize-none"
                       {...register("note")}
                     />
                   </div>

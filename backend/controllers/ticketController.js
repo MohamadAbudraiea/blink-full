@@ -52,7 +52,8 @@ exports.addPendingTicket = async (req, res) => {
       service,
       typeOfService,
       note,
-      price
+      price,
+      subscription_id
     } = req.body || {};
 
     // Validate required fields
@@ -88,9 +89,14 @@ exports.addPendingTicket = async (req, res) => {
       detailer_id: detailer_id || null,
       ...(note ? { note } : {}),
       ...(price ? { price } : {}),
+      ...(subscription_id ? { subscription_id } : {}),
     };
 
-    if (isAnonymous) {
+    if (subscription_id) {
+      if (user_id) ticketData.user_id = user_id;
+      if (customer_name) ticketData.customer_name = customer_name;
+      if (customer_phone) ticketData.customer_phone = customer_phone;
+    } else if (isAnonymous) {
       if (!customer_name || !customer_phone) {
          return res.status(400).json({ status: "failed", message: "Customer name and phone are required for anonymous tickets" });
       }
@@ -122,6 +128,11 @@ exports.getTicketByID = async (req, res) => {
     const { ticket_id } = req.params;
     const returendTicket = await ticket.findOne({
       where: { id: ticket_id },
+      include: [
+        { model: user, as: "user", attributes: ["name", "phone"] },
+        { model: user, as: "detailer", attributes: ["name"] },
+        { model: user, as: "secretary", attributes: ["name"] },
+      ],
     });
     res.status(200).json({
       status: "success",

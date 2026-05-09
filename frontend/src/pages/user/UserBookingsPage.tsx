@@ -61,13 +61,13 @@ export default function UserBookingsPage() {
     if (tickets.length > 0) {
       const hasPending = tickets.some((ticket) => ticket.status === "pending");
       const hasFinished = tickets.some(
-        (ticket) => ticket.status === "finished"
+        (ticket) => ticket.status === "finished",
       );
       const hasRequested = tickets.some(
-        (ticket) => ticket.status === "requested"
+        (ticket) => ticket.status === "requested",
       );
       const hasCanceled = tickets.some(
-        (ticket) => ticket.status === "canceled"
+        (ticket) => ticket.status === "canceled",
       );
 
       if (hasPending) {
@@ -82,7 +82,6 @@ export default function UserBookingsPage() {
         setFilter("All");
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handlePageChange = (page: number) => {
@@ -101,7 +100,7 @@ export default function UserBookingsPage() {
   if (isGettingUserTickets) return <Loader />;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 py-8 px-4">
+    <div className="min-h-screen bg-linear-to-br from-background to-muted/20 py-8 px-4">
       <div className="max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -126,41 +125,41 @@ export default function UserBookingsPage() {
             {/* Filter options */}
             <BookingFilters selectItems={selectItems} />
 
-        {tickets.length === 0 ? (
-          <Card>
-            <CardContent className="pt-6 text-center">
-              <p className="text-muted-foreground mb-4">
-                {t("book.myBookings.noBookings")}
-              </p>
-              <Button asChild>
-                <a href="/booking">{t("book.myBookings.bookNow")}</a>
-              </Button>
-            </CardContent>
-          </Card>
-        ) : (
-          <div className="space-y-4">
-            {tickets.map((ticket) => (
-              <motion.div
-                key={ticket.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <BookingCard booking={ticket} />
-              </motion.div>
-            ))}
-            {/* Pagination */}
-            {pagination && pagination.totalPages > 1 && (
-              <div className="mt-4 flex justify-center">
-                <PaginationControls
-                  currentPage={pagination.currentPage}
-                  totalPages={pagination.totalPages}
-                  onPageChange={handlePageChange}
-                />
+            {tickets.length === 0 ? (
+              <Card>
+                <CardContent className="pt-6 text-center">
+                  <p className="text-muted-foreground mb-4">
+                    {t("book.myBookings.noBookings")}
+                  </p>
+                  <Button asChild>
+                    <a href="/booking">{t("book.myBookings.bookNow")}</a>
+                  </Button>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="space-y-4">
+                {tickets.map((ticket) => (
+                  <motion.div
+                    key={ticket.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <BookingCard booking={ticket} />
+                  </motion.div>
+                ))}
+                {/* Pagination */}
+                {pagination && pagination.totalPages > 1 && (
+                  <div className="mt-4 flex justify-center">
+                    <PaginationControls
+                      currentPage={pagination.currentPage}
+                      totalPages={pagination.totalPages}
+                      onPageChange={handlePageChange}
+                    />
+                  </div>
+                )}
               </div>
             )}
-          </div>
-        )}
           </TabsContent>
 
           <TabsContent value="subscriptions" className="space-y-6">
@@ -169,7 +168,9 @@ export default function UserBookingsPage() {
             ) : subscriptions.length === 0 ? (
               <Card>
                 <CardContent className="pt-6 text-center">
-                  <p className="text-muted-foreground mb-4">You have no subscriptions yet.</p>
+                  <p className="text-muted-foreground mb-4">
+                    You have no subscriptions yet.
+                  </p>
                   <AddSubscriptionDialog role="user" />
                 </CardContent>
               </Card>

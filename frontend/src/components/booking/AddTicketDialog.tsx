@@ -35,9 +35,17 @@ interface SearchResult {
 export function AddTicketDialog({
   role,
   detailers = [],
+  subscriptionId,
+  subscriptionUserId,
+  subscriptionCustomerName,
+  subscriptionCustomerPhone,
 }: {
   role?: string;
   detailers?: { id: string; name: string }[];
+  subscriptionId?: string;
+  subscriptionUserId?: string;
+  subscriptionCustomerName?: string;
+  subscriptionCustomerPhone?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [isAnonymous, setIsAnonymous] = useState(true);
@@ -84,6 +92,10 @@ export function AddTicketDialog({
     if (isAnonymous || searchQuery.length < 2) {
       setSearchResults([]);
       setShowDropdown(false);
+      return;
+    }
+    
+    if (selectedUser && searchQuery === `${selectedUser.name} — ${selectedUser.phone}`) {
       return;
     }
 
@@ -140,12 +152,14 @@ export function AddTicketDialog({
   };
 
   const resetForm = () => {
-    setIsAnonymous(true);
-    setSearchQuery("");
-    setSearchResults([]);
-    setSelectedUser(null);
-    setCustomerName("");
-    setCustomerPhone("");
+    if (!subscriptionId) {
+      setIsAnonymous(true);
+      setSearchQuery("");
+      setSearchResults([]);
+      setSelectedUser(null);
+      setCustomerName("");
+      setCustomerPhone("");
+    }
     setService("wash");
     setTypeOfService("Blink");
     setLocation("");
@@ -171,7 +185,12 @@ export function AddTicketDialog({
       ...(price ? { price: Number(price) } : {}),
     };
 
-    if (isAnonymous) {
+    if (subscriptionId) {
+      payload.subscription_id = subscriptionId;
+      if (subscriptionUserId) payload.user_id = subscriptionUserId;
+      if (subscriptionCustomerName) payload.customer_name = subscriptionCustomerName;
+      if (subscriptionCustomerPhone) payload.customer_phone = subscriptionCustomerPhone;
+    } else if (isAnonymous) {
       payload.customer_name = customerName;
       payload.customer_phone = customerPhone;
     } else {
@@ -189,6 +208,7 @@ export function AddTicketDialog({
   const canSubmit = () => {
     if (!detailerId || !selectedDate || !startTime || !endTime) return false;
     if (timeConflict || endBeforeStart) return false;
+    if (subscriptionId) return true;
     if (isAnonymous) return !!customerName && !!customerPhone;
     return !!selectedUser;
   };
@@ -212,10 +232,11 @@ export function AddTicketDialog({
         </DialogHeader>
 
         <div className="space-y-4">
-          {/* Toggle: Anonymous vs Signed User */}
-          <div className="flex gap-2">
-            <Button
-              type="button"
+          {/* Toggle: Anonymous vs Signed User (Hide if in subscription context) */}
+          {!subscriptionId && (
+            <div className="flex gap-2">
+              <Button
+                type="button"
               size="sm"
               variant={isAnonymous ? "default" : "outline"}
               onClick={() => {
@@ -239,11 +260,13 @@ export function AddTicketDialog({
               Signed User
             </Button>
           </div>
+          )}
 
-          {/* Anonymous: Name + Phone */}
-          {isAnonymous ? (
-            <div className="space-y-3">
-              <div className="space-y-1">
+          {/* User Info Section (Hide if in subscription context) */}
+          {!subscriptionId && (
+            isAnonymous ? (
+              <div className="space-y-3">
+                <div className="space-y-1">
                 <Label>Customer Name *</Label>
                 <Input
                   placeholder="Enter customer name"
@@ -310,13 +333,14 @@ export function AddTicketDialog({
                 )}
               </div>
 
-              {selectedUser && (
-                <div className="mt-2 p-2 rounded-md bg-muted/50 text-sm">
-                  Selected: <span className="font-medium">{selectedUser.name}</span>{" "}
-                  — {selectedUser.phone}
-                </div>
-              )}
-            </div>
+                {selectedUser && (
+                  <div className="mt-2 p-2 rounded-md bg-muted/50 text-sm">
+                    Selected: <span className="font-medium">{selectedUser.name}</span>{" "}
+                    — {selectedUser.phone}
+                  </div>
+                )}
+              </div>
+            )
           )}
 
           {/* Detailer Selection */}

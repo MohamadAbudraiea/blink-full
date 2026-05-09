@@ -8,6 +8,7 @@ import {
 import type { Booking } from "@/shared/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { invalidateTicketRelatedQueries } from "./useTicket";
 
 export const useGetUserTickets = (
   params = {}
@@ -39,7 +40,7 @@ export const useAddTicket = () => {
     mutationKey: ["addTicket"],
     mutationFn: addTicket,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["filteredTickets"] });
+      invalidateTicketRelatedQueries(queryClient);
       toast.success("Ticket added successfully");
     },
     onError: () => {
@@ -58,8 +59,7 @@ export const useUserCancelTicket = () => {
       mutationFn: ({ id, reason }: { id: string; reason: string }) =>
         cancelTicket({ id, reason }),
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["filteredTickets"] });
-        queryClient.invalidateQueries({ queryKey: ["userTickets"] });
+        invalidateTicketRelatedQueries(queryClient);
         toast.success("Ticket canceled successfully");
       },
       onError: () => {
@@ -78,8 +78,7 @@ export const useUserRateTicket = () => {
       mutationFn: rateTicket,
       onSuccess: () => {
         toast.success("Ticket rated successfully");
-        queryClient.invalidateQueries({ queryKey: ["userTickets"] });
-        queryClient.invalidateQueries({ queryKey: ["filteredTickets"] });
+        invalidateTicketRelatedQueries(queryClient);
       },
       onError: () => {
         toast.error("Failed to rate ticket");
@@ -98,8 +97,7 @@ export const useSendMessage = () => {
       mutationFn: sendMessage,
       onSuccess: () => {
         toast.success("Message sent successfully");
-        queryClient.invalidateQueries({ queryKey: ["userTickets"] });
-        queryClient.invalidateQueries({ queryKey: ["filteredTickets"] });
+        invalidateTicketRelatedQueries(queryClient);
       },
       onError: () => {
         toast.error("Failed to send message");

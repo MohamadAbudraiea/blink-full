@@ -131,6 +131,7 @@ exports.getSubscriptions = async (req, res) => {
           model: ticket,
           as: "tickets",
           include: [
+            { model: user, as: "user", attributes: ["name", "phone"] },
             { model: user, as: "detailer", attributes: ["name"] },
             { model: user, as: "secretary", attributes: ["name"] }
           ]
