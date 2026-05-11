@@ -2,7 +2,7 @@ const { Op, Sequelize } = require("sequelize");
 const SQL = require("../Drivers/SQL_Driver");
 const initModels = require("../models/init-models");
 const models = initModels(SQL);
-const { user, ticket, rating } = models;
+const { user, ticket, rating, account, transaction } = models;
 const bcrypt = require("bcrypt");
 
 exports.addticket = async (req, res) => {
@@ -1059,6 +1059,16 @@ exports.finishTicket = async (req, res) => {
         status: "failed",
         message: "Please Select Payment method",
       });
+
+    // Get the ticket first to access its price
+    const existingTicket = await ticket.findByPk(ticket_id);
+    if (!existingTicket) {
+      return res.status(404).json({
+        status: "failed",
+        message: "Ticket not found",
+      });
+    }
+
     const updatedTicket = await ticket.update(
       {
         status: "finished",
@@ -1068,6 +1078,29 @@ exports.finishTicket = async (req, res) => {
         where: { id: ticket_id },
       }
     );
+
+    // Auto-create an "in" transaction on the Tickets account
+    if (existingTicket.price) {
+      try {
+        const ticketsAccount = await account.findOne({
+          where: { name: "Tickets", is_default: true },
+        });
+
+        if (ticketsAccount) {
+          await transaction.create({
+            account_id: ticketsAccount.id,
+            type: "in",
+            amount: parseFloat(existingTicket.price),
+            description: `Ticket #${ticket_id} finished - ${existingTicket.service || "service"}`,
+            ticket_id: parseInt(ticket_id),
+          });
+        }
+      } catch (txError) {
+        // Log but don't fail the ticket finish if transaction creation fails
+        console.error("Warning: Failed to create auto-transaction:", txError.message);
+      }
+    }
+
     res.status(201).json({
       status: "success",
       message: "the order has finished",

@@ -4,6 +4,8 @@ var _rating = require("./rating");
 var _ticket = require("./ticket");
 var _user = require("./user");
 var _subscription = require("./subscription");
+var _account = require("./account");
+var _transaction = require("./transaction");
 
 function initModels(sequelize) {
   var OTP = _OTP(sequelize, DataTypes);
@@ -11,6 +13,8 @@ function initModels(sequelize) {
   var ticket = _ticket(sequelize, DataTypes);
   var user = _user(sequelize, DataTypes);
   var subscription = _subscription(sequelize, DataTypes);
+  var account = _account(sequelize, DataTypes);
+  var transaction = _transaction(sequelize, DataTypes);
 
   rating.belongsTo(ticket, { as: "ticket", foreignKey: "ticket_id"});
   ticket.hasMany(rating, { as: "ratings", foreignKey: "ticket_id"});
@@ -34,12 +38,21 @@ function initModels(sequelize) {
   ticket.belongsTo(subscription, { as: "subscription", foreignKey: "subscription_id"});
   subscription.hasMany(ticket, { as: "tickets", foreignKey: "subscription_id", onDelete: "CASCADE"});
 
+  // Finance associations
+  transaction.belongsTo(account, { as: "account", foreignKey: "account_id"});
+  account.hasMany(transaction, { as: "transactions", foreignKey: "account_id"});
+  
+  transaction.belongsTo(ticket, { as: "ticket", foreignKey: "ticket_id"});
+  ticket.hasMany(transaction, { as: "transactions", foreignKey: "ticket_id"});
+
   return {
     OTP,
     rating,
     ticket,
     user,
     subscription,
+    account,
+    transaction,
   };
 }
 module.exports = initModels;

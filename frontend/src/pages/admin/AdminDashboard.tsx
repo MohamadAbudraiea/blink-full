@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { DataTable } from "@/components/admin/DataTable";
@@ -14,6 +15,16 @@ import { SubscriptionsTable } from "@/components/subscription/SubscriptionsTable
 import { AddSubscriptionDialog } from "@/components/subscription/AddSubscriptionDialog";
 import { useGetSubscriptions } from "@/hooks/useSubscription";
 import { Loader2 } from "lucide-react";
+
+// Finance components
+import { AccountsManager } from "@/components/admin/finance/AccountsManager";
+import { TransactionsTable } from "@/components/admin/finance/TransactionsTable";
+import { FinanceReports } from "@/components/admin/finance/FinanceReports";
+
+interface SelectedAccount {
+  id: number;
+  name: string;
+}
 
 export default function AdminDashboard() {
   const { users, isGettingUsers } = useGetUsers();
@@ -52,6 +63,10 @@ export default function AdminDashboard() {
 
   const { subscriptions, isGettingSubscriptions } = useGetSubscriptions("admin");
 
+  // Finance state
+  const [selectedAccount, setSelectedAccount] = useState<SelectedAccount | null>(null);
+  const [financeView, setFinanceView] = useState<"accounts" | "transactions" | "reports">("accounts");
+
   const selectItems: Record<string, string> = {
     All: "All",
     requested: "Requested",
@@ -74,6 +89,7 @@ export default function AdminDashboard() {
           <TabsTrigger value="subscriptions">Subscriptions</TabsTrigger>
           <TabsTrigger value="charts">Charts</TabsTrigger>
           <TabsTrigger value="schedules">Schedules</TabsTrigger>
+          <TabsTrigger value="finance">Finance</TabsTrigger>
         </TabsList>
 
         {/* Secretary CRUD */}
@@ -172,6 +188,60 @@ export default function AdminDashboard() {
               <ScheduleGantt />
             </CardContent>
           </Card>
+        </TabsContent>
+
+        {/* Finance */}
+        <TabsContent value="finance">
+          <div className="space-y-4">
+            {/* Sub-navigation */}
+            <div className="flex gap-2">
+              <button
+                className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                  financeView === "accounts" || financeView === "transactions"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted text-muted-foreground hover:bg-muted/80"
+                }`}
+                onClick={() => {
+                  setFinanceView("accounts");
+                  setSelectedAccount(null);
+                }}
+              >
+                Accounts & Transactions
+              </button>
+              <button
+                className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                  financeView === "reports"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted text-muted-foreground hover:bg-muted/80"
+                }`}
+                onClick={() => setFinanceView("reports")}
+              >
+                Reports & Charts
+              </button>
+            </div>
+
+            {/* Finance Content */}
+            {financeView === "reports" ? (
+              <FinanceReports />
+            ) : selectedAccount ? (
+              <TransactionsTable
+                accountId={selectedAccount.id}
+                accountName={selectedAccount.name}
+                onBack={() => {
+                  setSelectedAccount(null);
+                  setFinanceView("accounts");
+                }}
+              />
+            ) : (
+              <AccountsManager
+                onSelectAccount={(acc) => {
+                  setSelectedAccount({ id: acc.id, name: acc.name });
+                  setFinanceView("transactions");
+                }}
+                selectedAccountId={selectedAccount}
+              />
+            )}
+          </div>
         </TabsContent>
       </Tabs>
     </div>

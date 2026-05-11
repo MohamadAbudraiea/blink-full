@@ -8,10 +8,20 @@ const SQL_DRIVER = require("./Drivers/SQL_Driver");
 
 //----------------------
 const app = require("./app");
+const seedAccounts = require("./seedAccounts");
 const port = process.env.PORT;
-app.listen(port, () => {
-  console.log(`app started in port ${port}`);
-});
+
+// Sync new tables then seed, then start server
+SQL_DRIVER.sync({ alter: false })
+  .then(async () => {
+    await seedAccounts();
+    app.listen(port, () => {
+      console.log(`app started in port ${port}`);
+    });
+  })
+  .catch((err) => {
+    console.error("Failed to sync database:", err);
+  });
 
 // When Shutting Down The Server
 process.on("SIGINT", async () => {
