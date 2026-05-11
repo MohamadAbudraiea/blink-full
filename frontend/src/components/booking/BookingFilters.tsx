@@ -133,18 +133,19 @@ function BookingFilters({
           </SelectContent>
         </Select>
       </div>
-      
-      {/* Ticket ID Filter */}
-      <div className="flex items-center gap-2">
-        <span className="font-medium">{t("booking_filters.ticket_id")}:</span>
-        <Input
-          placeholder={t("booking_filters.ticket_id")}
-          value={localTicketId}
-          onChange={(e) => setLocalTicketId(e.target.value)}
-          className="w-40 rounded-md border-muted-foreground bg-muted/50 h-10"
-        />
-      </div>
 
+      {/* Ticket ID Filter */}
+      {role !== "user" && (
+        <div className="flex items-center gap-2">
+          <span className="font-medium">{t("booking_filters.ticket_id")}:</span>
+          <Input
+            placeholder={t("booking_filters.ticket_id")}
+            value={localTicketId}
+            onChange={(e) => setLocalTicketId(e.target.value)}
+            className="w-40 rounded-md border-muted-foreground bg-muted/50 h-10"
+          />
+        </div>
+      )}
 
       {/* Year Filter */}
       <div className="flex items-center gap-2">
@@ -223,7 +224,11 @@ function BookingFilters({
       </div>
 
       {/* Clear Filters */}
-      {(filterYear || filterMonth || filterDay || filter !== "All" || filterTicketId !== "") && (
+      {(filterYear ||
+        filterMonth ||
+        filterDay ||
+        filter !== "All" ||
+        filterTicketId !== "") && (
         <div className="flex items-center gap-2">
           <Button
             variant="secondary"
@@ -245,9 +250,9 @@ function BookingFilters({
       {/* Add Ticket Modal */}
       {(role === "admin" || role === "secretary") && (
         <div className="flex items-center gap-2 ml-auto">
-          <AddTicketDialog 
-            role={role} 
-            detailers={detailers} 
+          <AddTicketDialog
+            role={role}
+            detailers={detailers}
             subscriptionId={subscriptionId}
             subscriptionUserId={subscriptionUserId}
             subscriptionCustomerName={subscriptionCustomerName}
