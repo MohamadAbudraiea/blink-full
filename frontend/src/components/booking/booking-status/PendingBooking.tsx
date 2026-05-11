@@ -14,6 +14,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { CreditCard, Wallet } from "lucide-react";
+import { formatCurrency } from "@/shared/utils";
 
 interface PendingBookingProps {
   ticket: Ticket;
@@ -79,7 +80,10 @@ export function PendingBooking({
             {ticket.user?.phone || ticket.customer_phone || "-"}
           </a>
         </p>
+        <p className="text-sm text-muted-foreground">
+          price:{formatCurrency(ticket?.price) || "-"}
 
+        </p>
         {(role === "admin" || role === "detailer") && (
           <div className="space-y-3">
             <Label className="text-sm font-semibold tracking-wide">
@@ -95,11 +99,10 @@ export function PendingBooking({
             >
               {/* Cash Option */}
               <Card
-                className={`cursor-pointer transition-all hover:shadow-md border-2 ${
-                  paymentMethod === "cash"
-                    ? "border-primary shadow-sm"
-                    : "border-muted"
-                }`}
+                className={`cursor-pointer transition-all hover:shadow-md border-2 ${paymentMethod === "cash"
+                  ? "border-primary shadow-sm"
+                  : "border-muted"
+                  }`}
                 onClick={() => setPaymentMethod("cash")}
               >
                 <CardContent className="flex items-center justify-center gap-3 p-4">
@@ -123,11 +126,10 @@ export function PendingBooking({
 
               {/* Online Option */}
               <Card
-                className={`cursor-pointer transition-all hover:shadow-md border-2 ${
-                  paymentMethod === "online"
-                    ? "border-primary shadow-sm"
-                    : "border-muted"
-                }`}
+                className={`cursor-pointer transition-all hover:shadow-md border-2 ${paymentMethod === "online"
+                  ? "border-primary shadow-sm"
+                  : "border-muted"
+                  }`}
                 onClick={() => setPaymentMethod("online")}
               >
                 <CardContent className="flex items-center justify-center gap-3 p-4">
