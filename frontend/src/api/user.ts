@@ -12,12 +12,16 @@ export async function addTicket({
   typeOfService,
   location,
   note,
+  start_time,
+  end_time,
 }: {
   typeOfService: string | undefined;
   service: string;
   location: string;
   date: string | undefined;
   note: string | undefined;
+  start_time: string | undefined;
+  end_time: string | undefined;
 }) {
   const res = await axiosInstance.post("/user/ticket", {
     service,
@@ -25,6 +29,8 @@ export async function addTicket({
     location,
     date,
     note,
+    start_time,
+    end_time,
   });
   return res.data;
 }

@@ -371,6 +371,8 @@
       "link_copied": "Link Copied",
       "preferred_date": "Preferred Date (optional)",
       "date_placeholder": "Pick a date",
+      "start_time": "Preferred Start Time (optional)",
+      "end_time": "Preferred End Time (optional)",
       "options": {
         "wash": "Premium Wash",
         "dryclean": "Professional Dry Clean",

@@ -97,6 +97,8 @@ export default function BookPage() {
       location: z.string().min(5, t("errors.address_required")),
       note: z.string().optional(),
       date: z.date().optional(),
+      start_time: z.string().optional(),
+      end_time: z.string().optional(),
     })
     .refine(
       (data) => {
@@ -133,6 +135,8 @@ export default function BookPage() {
       location: "",
       note: "",
       date: undefined,
+      start_time: "",
+      end_time: "",
     },
   });
 
@@ -214,6 +218,8 @@ export default function BookPage() {
       location: data.location,
       note: data.note ?? undefined,
       date: localISO || undefined,
+      start_time: data.start_time || undefined,
+      end_time: data.end_time || undefined,
     });
 
     setValue("service", "");
@@ -221,6 +227,8 @@ export default function BookPage() {
     setValue("location", "");
     setValue("note", "");
     setValue("date", undefined);
+    setValue("start_time", "");
+    setValue("end_time", "");
     setGoogleMapsLink("");
   };
 
@@ -487,6 +495,30 @@ export default function BookPage() {
                         {errors.date.message}
                       </p>
                     )}
+                  </div>
+
+                  {/* Preferred Times */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="start_time">
+                        {t("book.form.start_time")}
+                      </Label>
+                      <Input
+                        id="start_time"
+                        type="time"
+                        {...register("start_time")}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="end_time">
+                        {t("book.form.end_time")}
+                      </Label>
+                      <Input
+                        id="end_time"
+                        type="time"
+                        {...register("end_time")}
+                      />
+                    </div>
                   </div>
 
                   {/* Additional Notes */}

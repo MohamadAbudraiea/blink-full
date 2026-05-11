@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/select";
 import { useBookingStore } from "@/stores/useBookingStore";
 import { Badge } from "@/components/ui/badge";
-import { formatInterval } from "@/shared/utils";
+import { englishDate, formatInterval, formatTime } from "@/shared/utils";
 import type { UseAcceptTicketHook, UseCancelTicketHook } from "@/shared/types";
 
 interface RequestedBookingProps {
@@ -36,7 +36,7 @@ interface RequestedBookingProps {
   detailers?: { id: string; name: string }[];
   useScheduleHook: (
     detailerId: string | undefined,
-    date: Date | undefined
+    date: Date | undefined,
   ) => {
     schedule: ScheduleItem[];
     isGettingDetailerSchedule: boolean;
@@ -72,6 +72,21 @@ export function RequestedBooking({
   const [price, setPrice] = useState(ticket.price);
   const [location, setLocation] = useState(ticket.location || "");
 
+  // Pre-fill store values with user's requested time/date
+  useEffect(() => {
+    if (ticket.date) {
+      setSelectedDate(new Date(ticket.date));
+    }
+    if (ticket.start_time) {
+      // Ensure HH:mm format for time input
+      setStartTime(ticket.start_time.slice(0, 5));
+    }
+    if (ticket.end_time) {
+      // Ensure HH:mm format for time input
+      setEndTime(ticket.end_time.slice(0, 5));
+    }
+  }, [ticket, setSelectedDate, setStartTime, setEndTime]);
+
   // Use the provided hooks
   const { acceptTicketMutation, isAcceptingTicket } = useAcceptTicketHook();
   const { cancelTicketMutation, isCancellingTicket } = useCancelTicketHook();
@@ -79,7 +94,7 @@ export function RequestedBooking({
   // Use the provided schedule hook
   const { schedule, isGettingDetailerSchedule } = useScheduleHook(
     selectedDetailerId || undefined,
-    selectedDate
+    selectedDate,
   );
 
   useEffect(() => {
@@ -115,7 +130,7 @@ export function RequestedBooking({
     }
 
     const selectedStart = new Date(
-      `${selectedDate.toDateString()} ${startTime}`
+      `${selectedDate.toDateString()} ${startTime}`,
     );
     const selectedEnd = new Date(`${selectedDate.toDateString()} ${endTime}`);
 
@@ -180,14 +195,42 @@ export function RequestedBooking({
         {/* User Info */}
         <div className="space-y-2">
           <p className="text-sm text-muted-foreground">
-            User: <span className="font-medium">{ticket.user?.name || ticket.customer_name || "-"}</span>
+            User:{" "}
+            <span className="font-medium">
+              {ticket.user?.name || ticket.customer_name || "-"}
+            </span>
           </p>
           <p className="text-sm text-muted-foreground">
             Phone:{" "}
-            <a href={`tel:${ticket.user?.phone || ticket.customer_phone || ""}`} className="font-medium">
+            <a
+              href={`tel:${ticket.user?.phone || ticket.customer_phone || ""}`}
+              className="font-medium"
+            >
               {ticket.user?.phone || ticket.customer_phone || "-"}
             </a>
           </p>
+          {(ticket.date || ticket.start_time || ticket.end_time) && (
+            <div className="mt-2 p-2 rounded-md bg-primary/10 border border-primary/20">
+              <p className="text-xs font-semibold text-primary mb-1">
+                Requested Schedule:
+              </p>
+              <div className="flex flex-col gap-1">
+                {ticket.date && (
+                  <p className="text-sm flex items-center gap-2">
+                    <span className="font-medium">Date:</span>{" "}
+                    {englishDate(ticket.date)}
+                  </p>
+                )}
+                {(ticket.start_time || ticket.end_time) && (
+                  <p className="text-sm flex items-center gap-2">
+                    <span className="font-medium">Time:</span>{" "}
+                    {formatTime(ticket.start_time) || "??"} -{" "}
+                    {formatTime(ticket.end_time) || "??"}
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Detailer select */}
@@ -291,7 +334,7 @@ export function RequestedBooking({
                 variant="outline"
                 className={cn(
                   "w-full justify-start text-left font-normal",
-                  !selectedDate && "text-muted-foreground"
+                  !selectedDate && "text-muted-foreground",
                 )}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
