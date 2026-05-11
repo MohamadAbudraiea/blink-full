@@ -123,7 +123,7 @@ export default function UserBookingsPage() {
 
           <TabsContent value="bookings" className="space-y-6">
             {/* Filter options */}
-            <BookingFilters selectItems={selectItems} />
+            <BookingFilters role="user" selectItems={selectItems} />
 
             {tickets.length === 0 ? (
               <Card>
