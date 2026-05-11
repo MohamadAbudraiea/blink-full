@@ -122,6 +122,12 @@ export default function UserBookingsPage() {
           </TabsList>
 
           <TabsContent value="bookings" className="space-y-6">
+            <div className="flex justify-end">
+              <Button asChild>
+                <a href="/booking">{t("book.myBookings.bookNow")}</a>
+              </Button>
+            </div>
+
             {/* Filter options */}
             <BookingFilters role="user" selectItems={selectItems} />
 
