@@ -55,15 +55,20 @@ exports.addPendingTicket = async (req, res) => {
       typeOfService,
       note,
       price,
-      subscription_id
+      subscription_id,
     } = req.body || {};
 
     // Validate required fields
     if (!detailer_id) {
-      return res.status(400).json({ status: "failed", message: "Detailer is required" });
+      return res
+        .status(400)
+        .json({ status: "failed", message: "Detailer is required" });
     }
     if (!date || !start_time || !end_time) {
-      return res.status(400).json({ status: "failed", message: "Date, start time, and end time are required" });
+      return res.status(400).json({
+        status: "failed",
+        message: "Date, start time, and end time are required",
+      });
     }
 
     // Check if detailer is free at this time
@@ -121,7 +126,8 @@ exports.addPendingTicket = async (req, res) => {
     console.error(error);
     return res.status(500).json({
       status: "failed",
-      message: error.message || "Something went wrong while creating the ticket",
+      message:
+        error.message || "Something went wrong while creating the ticket",
     });
   }
 };
@@ -235,6 +241,7 @@ exports.getFilteredTickets = async (req, res) => {
       req.query.filterDay === "null" ? null : req.query.filterDay;
     const filterYear =
       req.query.filterYear === "null" ? null : req.query.filterYear;
+    const ticketId = Number(req.query.ticketId) || null;
 
     const offset = (page - 1) * limit;
 
@@ -243,6 +250,10 @@ exports.getFilteredTickets = async (req, res) => {
 
     if (filter !== "All") {
       whereClause.status = filter;
+    }
+
+    if (ticketId) {
+      whereClause.id = ticketId;
     }
 
     // Use current year as default if no year is specified
@@ -427,6 +438,7 @@ exports.getUserTickets = async (req, res) => {
       req.query.filterDay === "null" ? null : req.query.filterDay;
     const filterYear =
       req.query.filterYear === "null" ? null : req.query.filterYear;
+    const ticketId = Number(req.query.ticketId) || null;
 
     const offset = (page - 1) * limit;
 
@@ -435,6 +447,10 @@ exports.getUserTickets = async (req, res) => {
 
     if (filter !== "All") {
       whereClause.status = filter;
+    }
+
+    if (ticketId) {
+      whereClause.id = ticketId;
     }
 
     // Default year
@@ -535,6 +551,7 @@ exports.getTicketsForStaff = async (req, res) => {
       req.query.filterDay === "null" ? null : req.query.filterDay;
     const filterYear =
       req.query.filterYear === "null" ? null : req.query.filterYear;
+    const ticketId = Number(req.query.ticketId) || null;
 
     const offset = (page - 1) * limit;
 
@@ -542,6 +559,10 @@ exports.getTicketsForStaff = async (req, res) => {
 
     if (filter !== "All") {
       whereClause.status = filter;
+    }
+
+    if (ticketId) {
+      whereClause.id = ticketId;
     }
 
     const year = filterYear ? parseInt(filterYear) : new Date().getFullYear();
@@ -980,7 +1001,7 @@ const isDetailerFree = async (detailer_id, date, start_time, end_time) => {
   });
 
   return !existingTickets.some(
-    (t) => start_time < t.end_time && end_time > t.start_time
+    (t) => start_time < t.end_time && end_time > t.start_time,
   );
 };
 // change status functionalites
@@ -1012,7 +1033,7 @@ exports.acceptTicket = async (req, res) => {
         end_time,
         price,
       },
-      { where: { id: ticket_id } }
+      { where: { id: ticket_id } },
     );
 
     res.status(201).json({
@@ -1039,7 +1060,7 @@ exports.cancelticket = async (req, res) => {
       },
       {
         where: { id: ticket_id },
-      }
+      },
     );
     res.status(201).json({
       status: "success",
@@ -1078,7 +1099,7 @@ exports.finishTicket = async (req, res) => {
       },
       {
         where: { id: ticket_id },
-      }
+      },
     );
 
     // Auto-create an "in" transaction on the Tickets account
@@ -1099,7 +1120,10 @@ exports.finishTicket = async (req, res) => {
         }
       } catch (txError) {
         // Log but don't fail the ticket finish if transaction creation fails
-        console.error("Warning: Failed to create auto-transaction:", txError.message);
+        console.error(
+          "Warning: Failed to create auto-transaction:",
+          txError.message,
+        );
       }
     }
 

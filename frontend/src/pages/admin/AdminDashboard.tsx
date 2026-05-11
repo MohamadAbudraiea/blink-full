@@ -35,6 +35,7 @@ export default function AdminDashboard() {
     filterYear,
     currentPage,
     itemsPerPage,
+    filterTicketId,
   } = useBookingStore();
 
   const queryParams: Record<string, string | number> = {
@@ -56,6 +57,9 @@ export default function AdminDashboard() {
 
   if (filterYear) {
     queryParams.filterYear = filterYear;
+  }
+  if (filterTicketId) {
+    queryParams.ticketId = filterTicketId;
   }
 
   const { tickets, pagination, isFetchingTickets } =

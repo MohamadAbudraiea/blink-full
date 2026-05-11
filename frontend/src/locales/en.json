@@ -610,6 +610,7 @@
     "month": "Month",
     "day": "Day",
     "all": "All",
-    "clear_filters": "Clear Filters"
+    "clear_filters": "Clear Filters",
+    "ticket_id": "Ticket ID"
   }
 }

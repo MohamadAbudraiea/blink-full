@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import {
   Select,
   SelectTrigger,
@@ -6,6 +7,8 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
 import { months, monthsArabic, getDaysInMonth, getYears } from "@/shared/utils";
 import { useBookingStore } from "@/stores/useBookingStore";
 import { useTranslation } from "react-i18next";
@@ -35,12 +38,31 @@ function BookingFilters({
     filterMonth,
     filterDay,
     filterYear,
+    filterTicketId,
     setFilter,
     setFilterMonth,
     setFilterDay,
     setFilterYear,
+    setFilterTicketId,
     setCurrentPage,
   } = useBookingStore();
+
+  const [localTicketId, setLocalTicketId] = useState(filterTicketId);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      if (localTicketId !== filterTicketId) {
+        setFilterTicketId(localTicketId);
+      }
+    }, 500);
+
+    return () => clearTimeout(handler);
+  }, [localTicketId, filterTicketId, setFilterTicketId]);
+
+  // Sync local state if filterTicketId is cleared externally
+  useEffect(() => {
+    setLocalTicketId(filterTicketId);
+  }, [filterTicketId]);
 
   // Get current date for default values
   const now = new Date();
@@ -111,6 +133,18 @@ function BookingFilters({
           </SelectContent>
         </Select>
       </div>
+      
+      {/* Ticket ID Filter */}
+      <div className="flex items-center gap-2">
+        <span className="font-medium">{t("booking_filters.ticket_id")}:</span>
+        <Input
+          placeholder={t("booking_filters.ticket_id")}
+          value={localTicketId}
+          onChange={(e) => setLocalTicketId(e.target.value)}
+          className="w-40 rounded-md border-muted-foreground bg-muted/50 h-10"
+        />
+      </div>
+
 
       {/* Year Filter */}
       <div className="flex items-center gap-2">
@@ -189,7 +223,7 @@ function BookingFilters({
       </div>
 
       {/* Clear Filters */}
-      {(filterYear || filterMonth || filterDay || filter !== "All") && (
+      {(filterYear || filterMonth || filterDay || filter !== "All" || filterTicketId !== "") && (
         <div className="flex items-center gap-2">
           <Button
             variant="secondary"
@@ -199,6 +233,7 @@ function BookingFilters({
               setFilterYear(null);
               setFilterMonth(null);
               setFilterDay(null);
+              setFilterTicketId("");
               setCurrentPage(1);
             }}
           >

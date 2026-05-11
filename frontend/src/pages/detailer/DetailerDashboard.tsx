@@ -12,6 +12,7 @@ function DetailerDashboard() {
     filterYear,
     currentPage,
     itemsPerPage,
+    filterTicketId,
   } = useBookingStore();
 
   const queryParams: Record<string, string | number> = {
@@ -33,6 +34,9 @@ function DetailerDashboard() {
 
   if (filterYear) {
     queryParams.filterYear = filterYear;
+  }
+  if (filterTicketId) {
+    queryParams.ticketId = filterTicketId;
   }
 
   const selectItems: Record<string, string> = {
