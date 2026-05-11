@@ -21,6 +21,7 @@ export default function SecretaryDashboard() {
     filterYear,
     currentPage,
     itemsPerPage,
+    filterTicketId,
   } = useBookingStore();
 
   const queryParams: Record<string, string | number> = {
@@ -42,6 +43,9 @@ export default function SecretaryDashboard() {
 
   if (filterYear) {
     queryParams.filterYear = filterYear;
+  }
+  if (filterTicketId) {
+    queryParams.ticketId = filterTicketId;
   }
 
   const selectItems: Record<string, string> = {

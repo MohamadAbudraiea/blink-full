@@ -60,10 +60,10 @@ export function BookingsTable({
   return (
     <>
       {/* Filter options */}
-      <BookingFilters 
-        selectItems={selectItems} 
-        role={role} 
-        detailers={detailers} 
+      <BookingFilters
+        selectItems={selectItems}
+        role={role}
+        detailers={detailers}
         subscriptionId={subscriptionId}
         subscriptionUserId={subscriptionUserId}
         subscriptionCustomerName={subscriptionCustomerName}
@@ -98,7 +98,7 @@ export function BookingsTable({
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={10}>No bookings found.</TableCell>
+              <TableCell colSpan={11}>No bookings found.</TableCell>
             </TableRow>
           )}
         </TableBody>
