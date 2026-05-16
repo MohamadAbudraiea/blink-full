@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { MessageSquare, MessageCircle, Phone, Instagram } from "lucide-react";
+import { MessageCircle, Phone, Instagram } from "lucide-react";
 
 export function HeroContactSection() {
   const { t } = useTranslation();
@@ -11,79 +11,99 @@ export function HeroContactSection() {
       value: "079 12 12 204",
       href: "tel:+962791212204",
       icon: Phone,
-    },
-    {
-      title: t("contact.info.instagram.title"),
-      value: "@blinkcar_",
-      href: "https://www.instagram.com/blinkcar_?igsh=amQxZDBtazhhcXN3",
-      icon: Instagram,
+      glow: "group-hover:shadow-[0_0_30px_rgba(59,130,246,0.4)]",
+      borderColor: "hover:border-blue-500/50",
+      iconColor: "text-blue-500",
     },
     {
       title: t("contact.info.whatsapp.title"),
-      value: "Chat on WhatsApp",
+      value: "WhatsApp",
       href: "https://wa.me/962791212204",
       icon: MessageCircle,
+      glow: "group-hover:shadow-[0_0_30px_rgba(34,197,94,0.4)]",
+      borderColor: "hover:border-green-500/50",
+      iconColor: "text-green-500",
+    },
+    {
+      title: t("contact.info.instagram.title"),
+      value: "Instagram",
+      href: "https://www.instagram.com/blinkcar_?igsh=amQxZDBtazhhcXN3",
+      icon: Instagram,
+      glow: "group-hover:shadow-[0_0_30px_rgba(236,72,153,0.4)]",
+      borderColor: "hover:border-pink-500/50",
+      iconColor: "text-pink-500",
     },
   ];
 
   return (
-    <section className="relative py-20 bg-gradient-to-br from-primary/5 via-background to-muted/30 overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-full opacity-5">
-        <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-primary rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-secondary rounded-full blur-3xl"></div>
+    <section className="relative py-24 bg-background overflow-hidden flex flex-col items-center">
+      {/* Animated Gradient Mesh Background */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        <motion.div
+          animate={{ 
+            scale: [1, 1.2, 1],
+            x: [0, 50, 0],
+            y: [0, 30, 0]
+          }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -top-1/4 -left-1/4 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px]"
+        />
+        <motion.div
+          animate={{ 
+            scale: [1, 1.3, 1],
+            x: [0, -40, 0],
+            y: [0, -60, 0]
+          }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          className="absolute -bottom-1/4 -right-1/4 w-[500px] h-[500px] bg-accent/10 rounded-full blur-[100px]"
+        />
       </div>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="container mx-auto px-4 relative z-10 text-center">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center max-w-3xl mx-auto"
+          transition={{ duration: 0.8 }}
+          className="max-w-3xl mx-auto mb-16"
         >
-          <motion.div
-            initial={{ scale: 0.9 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-            className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-full mb-6"
-          >
-            <MessageSquare className="h-8 w-8 text-primary" />
-          </motion.div>
-
-          <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-6">
+          <h1 className="text-5xl md:text-7xl font-black text-foreground mb-6 tracking-tighter">
             {t("contact.hero.title")}
           </h1>
-
-          <p className="text-xl text-muted-foreground mb-12 leading-relaxed">
+          <p className="text-xl md:text-2xl text-muted-foreground font-medium mb-4">
             {t("contact.hero.subtitle")}
+          </p>
+          <p className="text-muted-foreground max-w-xl mx-auto">
+             {t("contact.hero.description")}
           </p>
         </motion.div>
 
-        {/* Contact Cards */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto">
+        {/* Floating Contact Pills */}
+        <div className="flex flex-wrap justify-center gap-6 max-w-4xl mx-auto">
           {contacts.map((item, index) => {
             const Icon = item.icon;
             return (
               <motion.a
-                key={item.title}
+                key={index}
                 href={item.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 + index * 0.1 }}
-                className="group bg-card border rounded-2xl p-6 text-center hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.2 + index * 0.1, duration: 0.5 }}
+                whileHover={{ y: -5 }}
+                className={`group flex items-center gap-4 bg-muted/50 backdrop-blur-sm border border-border/50 px-8 py-4 rounded-full transition-all duration-500 ${item.borderColor} ${item.glow}`}
               >
-                <div className="flex items-center justify-center mb-4">
-                  <div className="p-3 bg-primary/10 rounded-full group-hover:bg-primary/20 transition">
-                    <Icon className="h-6 w-6 text-primary" />
-                  </div>
+                <div className={`p-2 rounded-full bg-background border border-border group-hover:scale-110 transition-transform duration-300 ${item.iconColor}`}>
+                  <Icon className="w-5 h-5" />
                 </div>
-
-                <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
-
-                <p dir="ltr" className="text-muted-foreground text-sm">
-                  {item.value}
-                </p>
+                <div className="text-left">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground group-hover:text-foreground transition-colors">
+                    {item.title}
+                  </p>
+                  <p className="text-sm font-bold text-foreground">
+                    {item.value}
+                  </p>
+                </div>
               </motion.a>
             );
           })}

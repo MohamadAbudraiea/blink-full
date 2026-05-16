@@ -91,18 +91,21 @@ export const useUserRateTicket = () => {
 
 export const useSendMessage = () => {
   const queryClient = useQueryClient();
-  const { mutate: sendMessageMutation, isPending: isSendingMessage } =
-    useMutation({
-      mutationKey: ["sendMessage"],
-      mutationFn: sendMessage,
-      onSuccess: () => {
-        toast.success("Message sent successfully");
-        invalidateTicketRelatedQueries(queryClient);
-      },
-      onError: () => {
-        toast.error("Failed to send message");
-      },
-    });
+  const {
+    mutate: sendMessageMutation,
+    isPending: isSendingMessage,
+    isSuccess,
+  } = useMutation({
+    mutationKey: ["sendMessage"],
+    mutationFn: sendMessage,
+    onSuccess: () => {
+      toast.success("Message sent successfully");
+      invalidateTicketRelatedQueries(queryClient);
+    },
+    onError: () => {
+      toast.error("Failed to send message");
+    },
+  });
 
-  return { sendMessageMutation, isSendingMessage };
+  return { sendMessageMutation, isSendingMessage, isSuccess };
 };

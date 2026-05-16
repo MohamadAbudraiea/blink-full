@@ -3,10 +3,12 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Zap } from "lucide-react";
 import { useCheckAuth } from "@/hooks/useAuth";
+import { useEffect, useState } from "react";
 
 export function HeroSection() {
   const { isAuthenticated, isUser } = useCheckAuth();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language;
 
   const acronymParts = [
     { letter: "B", explanation: t("home.hero.acronym.B") },
@@ -16,19 +18,63 @@ export function HeroSection() {
     { letter: "K", explanation: t("home.hero.acronym.K") },
   ];
 
+  const tagline = t("home.tagline");
+  const [displayedTagline, setDisplayedTagline] = useState("");
+
+  useEffect(() => {
+    let i = 0;
+    setDisplayedTagline("");
+
+    const interval = setInterval(() => {
+      if (i < tagline.length) {
+        // Use slice to ensure we always get the correct substring from the start
+        setDisplayedTagline(tagline.slice(0, i + 1));
+        i++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [tagline]);
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-background  to-muted/90">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-4xl mx-auto">
+    <section className="relative min-h-screen flex items-center justify-center bg-background overflow-hidden">
+      {/* Animated gradient mesh background */}
+      <div className="absolute inset-0 z-0">
+        <div
+          className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] mix-blend-screen animate-pulse"
+          style={{ animationDuration: "4s" }}
+        ></div>
+        <div
+          className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-accent/20 rounded-full blur-[100px] mix-blend-screen animate-pulse"
+          style={{ animationDuration: "6s", animationDelay: "1s" }}
+        ></div>
+      </div>
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          {/* Left Side: Content */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: locale === "ar" ? 50 : -50 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
-            className="space-y-6"
+            className="space-y-8"
           >
-            <div className="flex flex-col items-center space-y-4" dir="ltr">
+            {/* Floating Badge */}
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium animate-pulse"
+            >
+              {t("home.mobileService")}
+            </motion.div>
+
+            {/* Acronym */}
+            <div className="flex flex-col space-y-4" dir="ltr">
               <h1 className="text-6xl sm:text-7xl lg:text-8xl font-bold tracking-wider">
-                <div className="flex justify-center">
+                <div className="flex justify-start">
                   {acronymParts.map((part, index) => (
                     <motion.div
                       key={index}
@@ -62,20 +108,32 @@ export function HeroSection() {
                 </div>
               </h1>
             </div>
+
+            {/* Typewriter Tagline */}
+            <h2 className="text-2xl w-fit sm:text-3xl font-light text-foreground min-h-[40px]">
+              {displayedTagline}
+              <motion.span
+                animate={{ opacity: [1, 0] }}
+                transition={{ repeat: Infinity, duration: 0.8 }}
+                className="inline-block w-[3px] h-[30px] bg-primary ml-1 align-middle"
+              />
+            </h2>
+
             <motion.p
-              className="text-lg text-muted-foreground max-w-2xl mx-auto text-pretty"
+              className="text-lg text-muted-foreground max-w-xl text-pretty"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.8, duration: 0.5 }}
             >
               {t("home.hero.description")}
             </motion.p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-6">
+
+            <div className="flex flex-col sm:flex-row gap-4 pt-4">
               {isAuthenticated ? (
                 isUser && (
                   <Link
                     to="/booking"
-                    className="bg-primary hover:bg-primary/90 text-foreground px-8 py-3 rounded-full text-lg font-semibold transition-colors duration-300"
+                    className="bg-primary hover:bg-primary/90 text-foreground px-8 py-3 rounded-full text-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/20"
                   >
                     {t("home.hero.cta")}
                   </Link>
@@ -83,12 +141,41 @@ export function HeroSection() {
               ) : (
                 <Link
                   to="/login"
-                  className="bg-primary hover:bg-primary/90 text-foreground px-8 py-3 rounded-full text-lg font-semibold transition-colors duration-300"
+                  className="bg-primary hover:bg-primary/90 text-foreground px-8 py-3 rounded-full text-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/20"
                 >
                   {t("home.hero.login")}
                 </Link>
               )}
             </div>
+          </motion.div>
+
+          {/* Right Side: Car Image */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: 0.2 }}
+            className="relative"
+          >
+            {/* Glowing orb behind car */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-primary/20 rounded-full blur-[80px] z-0 pointer-events-none"></div>
+
+            {/* Car Image */}
+            <motion.img
+              src="/hero_car.png"
+              alt="Premium Car Detailing"
+              className="w-full relative z-10 drop-shadow-2xl"
+              animate={{
+                y: [0, -15, 0],
+              }}
+              transition={{
+                repeat: Infinity,
+                duration: 6,
+                ease: "easeInOut",
+              }}
+            />
+
+            {/* Edge highlights/reflections */}
+            <div className="absolute inset-0 bg-linear-to-tr from-transparent via-primary/5 to-transparent z-20 mix-blend-overlay pointer-events-none"></div>
           </motion.div>
         </div>
       </div>

@@ -4,7 +4,6 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-  CardFooter,
 } from "@/components/ui/card";
 import {
   Accordion,
@@ -12,9 +11,18 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Calendar, Clock, DollarSign, Star, MapPin, User } from "lucide-react";
+import {
+  Calendar,
+  Clock,
+  DollarSign,
+  Star,
+  MapPin,
+  User,
+  Sparkles,
+  CheckCircle2,
+  XCircle,
+} from "lucide-react";
 import type { Booking } from "@/shared/types";
-import StatusBadge from "./StatusBadge";
 import CancelDialog from "./CancelDialog";
 import RatingDialog from "./RatingDialog";
 import {
@@ -22,7 +30,6 @@ import {
   englishDate,
   formatCurrency,
   formatTime,
-  getBorderColorClass,
 } from "@/shared/utils";
 import { useTranslation } from "react-i18next";
 
@@ -58,34 +65,183 @@ export default function BookingCard({ booking }: BookingCardProps) {
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
 
+  const STEPS = ["requested", "pending", "finished"];
+  const currentStepIndex = STEPS.indexOf(booking.status);
+  const isCanceled = booking.status === "canceled";
+
+  // Card styles based on status
+  const getCardStyle = () => {
+    if (isCanceled) return "bg-destructive/5 border-destructive/20";
+    if (booking.status === "finished")
+      return "bg-green-500/5 border-green-500/20";
+    if (booking.status === "pending")
+      return "bg-yellow-500/5 border-yellow-500/20";
+    return "bg-card border-border/50";
+  };
+
+  const getBorderColor = () => {
+    if (booking.service === "wash") return "border-l-blue-500";
+    if (booking.service === "dryclean") return "border-l-purple-500";
+    if (booking.service === "polish") return "border-l-orange-500";
+    return "border-l-primary";
+  };
+
+  const dateObj = booking.date ? new Date(booking.date) : null;
+
   return (
-    <Card className={`bg-muted ${getBorderColorClass(booking.status)}`}>
-      <CardHeader className="pb-4">
-        <div className="flex justify-between items-center">
-          <div className="space-y-1.5">
-            <CardTitle className="text-2xl font-bold text-primary">
-              {booking.service}
-            </CardTitle>
-            <CardDescription className="text-muted-foreground flex items-center gap-1.5">
-              <Calendar className="w-3.5 h-3.5" />
-              {t("booking.booked_on")}{" "}
-              {locale === "ar"
-                ? arabicDate(booking.created_at.toString())
-                : englishDate(booking.created_at.toString())}
-            </CardDescription>
+    <Card
+      className={`relative overflow-hidden transition-all duration-300 hover:shadow-lg border-l-4 ${getBorderColor()} ${getCardStyle()}`}
+    >
+      {/* Background Glow */}
+      {booking.status === "pending" && (
+        <div className="absolute -top-10 -right-10 w-32 h-32 bg-yellow-500/10 rounded-full blur-3xl pointer-events-none" />
+      )}
+      {booking.status === "finished" && (
+        <div className="absolute -top-10 -right-10 w-32 h-32 bg-green-500/10 rounded-full blur-3xl pointer-events-none" />
+      )}
+
+      <CardHeader className="pb-4 pt-5 px-5">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+          <div className="flex items-center gap-4">
+            {/* Calendar Box */}
+            {dateObj ? (
+              <div className="flex flex-col items-center justify-center bg-background rounded-xl border border-border shadow-sm min-w-[60px] p-2">
+                <span className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider">
+                  {dateObj.toLocaleString(locale === "ar" ? "ar-EG" : "en-US", {
+                    month: "short",
+                  })}
+                </span>
+                <span className="text-2xl font-black text-primary leading-none my-1">
+                  {dateObj.getDate()}
+                </span>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center bg-background rounded-xl border border-border shadow-sm min-w-[60px] h-[64px]">
+                <Calendar className="w-6 h-6 text-muted-foreground opacity-50" />
+              </div>
+            )}
+
+            <div className="space-y-1">
+              <CardTitle className="text-xl md:text-2xl font-bold flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-primary" />
+                {t(`book.form.options.${booking.service}`)}
+              </CardTitle>
+              <CardDescription className="text-muted-foreground flex items-center gap-1.5 text-sm">
+                <Clock className="w-3.5 h-3.5" />
+                {t("booking.booked_on")}{" "}
+                {locale === "ar"
+                  ? arabicDate(booking.created_at.toString())
+                  : englishDate(booking.created_at.toString())}
+              </CardDescription>
+            </div>
           </div>
-          <StatusBadge status={booking.status} />
+
+          {/* Stepper */}
+          <div
+            className="w-full md:w-auto relative z-10"
+            dir={locale === "ar" ? "rtl" : "ltr"}
+          >
+            {isCanceled ? (
+              <div className="flex items-center gap-2 px-4 py-2 bg-destructive/10 text-destructive rounded-full font-semibold border border-destructive/20 w-fit">
+                <XCircle className="w-5 h-5" />
+                {t("status.canceled")}
+              </div>
+            ) : (
+              <div className="flex items-center">
+                {STEPS.map((step, index) => {
+                  const isCompleted =
+                    index < currentStepIndex || booking.status === "finished";
+                  const isActive =
+                    index === currentStepIndex && booking.status !== "finished";
+
+                  return (
+                    <div key={step} className="flex items-center">
+                      <div className="flex flex-col items-center gap-1 relative">
+                        <div
+                          className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-500 z-10 ${
+                            isCompleted
+                              ? "bg-green-500 text-white shadow-[0_0_10px_rgba(34,197,94,0.4)]"
+                              : isActive
+                                ? "bg-primary text-primary-foreground shadow-[0_0_15px_rgba(var(--primary),0.6)] ring-2 ring-primary ring-offset-2 ring-offset-background"
+                                : "bg-muted text-muted-foreground border border-border"
+                          }`}
+                        >
+                          {isCompleted ? (
+                            <CheckCircle2 className="w-5 h-5" />
+                          ) : (
+                            index + 1
+                          )}
+                        </div>
+                        <span
+                          className={`absolute -bottom-5 text-[10px] whitespace-nowrap font-medium ${
+                            isActive
+                              ? "text-primary font-bold"
+                              : "text-muted-foreground"
+                          }`}
+                        >
+                          {t(`book.status.${step}`)}
+                        </span>
+                      </div>
+
+                      {index < STEPS.length - 1 && (
+                        <div
+                          className={`w-8 md:w-12 h-0.5 mx-1 transition-all duration-500 ${
+                            isCompleted ? "bg-green-500" : "bg-border"
+                          }`}
+                        />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-4">
-        {/* Service Details Accordion */}
-        <Accordion type="single" collapsible className="w-full">
-          <AccordionItem value="service-details" className="border-0">
-            <AccordionTrigger className="hover:no-underline py-3">
-              <div className="flex items-center gap-2"></div>
+      <CardContent className="px-5 pb-5">
+        {/* Quick Actions (Top Level) */}
+        <div className="flex gap-3 mt-4 mb-2">
+          {booking.status === "requested" && (
+            <CancelDialog ticket_id={booking.id} />
+          )}
+          {booking.status === "finished" && !existingRating?.[0] && (
+            <RatingDialog ticket_id={booking.id} />
+          )}
+        </div>
+
+        {/* Existing Rating */}
+        {booking.status === "finished" && existingRating?.[0] && (
+          <div className="w-full space-y-2 mt-4 mb-2">
+            <p className="text-sm font-semibold text-foreground">
+              {t("booking.your_review")}
+            </p>
+            <div
+              className="flex items-center gap-3 p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-xl"
+              dir="ltr"
+            >
+              <div className="flex gap-1">
+                {renderStars(existingRating[0].rating_number)}
+              </div>
+              <div className="w-px h-6 bg-border"></div>
+              <p className="text-sm text-muted-foreground italic">
+                "{existingRating[0].description}"
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Accordion for Details */}
+        <Accordion
+          type="single"
+          collapsible
+          className="w-full mt-4 bg-background/50 rounded-xl border border-border/50"
+        >
+          <AccordionItem value="details" className="border-0">
+            <AccordionTrigger className="hover:no-underline px-4 py-3 text-sm font-medium">
+              {locale === "ar" ? "عرض التفاصيل" : "View Details"}
             </AccordionTrigger>
-            <AccordionContent className="pt-4">
+            <AccordionContent className="px-4 pb-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {booking.date && (
                   <div className="flex items-center gap-3 p-3 rounded-lg bg-linear-to-br from-primary/10 via-background to-muted/20 border border-border/50">
@@ -186,41 +342,6 @@ export default function BookingCard({ booking }: BookingCardProps) {
                     </span>
                   </p>
                 </div>
-              )}
-
-              {(booking.status === "finished" ||
-                booking.status === "requested") && (
-                <CardFooter className="py-6 bg-linear-to-br from-background via-background to-muted/20 rounded-b-xl border-t border-border/30">
-                  {/* Existing Rating */}
-                  {booking.status === "finished" && existingRating?.[0] && (
-                    <div className="w-full space-y-4">
-                      <p className="text-sm font-semibold text-foreground">
-                        {t("booking.your_review")}
-                      </p>
-                      <div
-                        className="flex items-center gap-3 p-4 bg-yellow-500/20 border border-yellow-200 rounded-lg"
-                        dir="ltr"
-                      >
-                        <div className="flex gap-1">
-                          {renderStars(existingRating[0].rating_number)}
-                        </div>
-                        <div className="w-px h-6 bg-muted-foreground"></div>
-                        <p className="text-sm text-muted-foreground italic">
-                          {existingRating[0].description}
-                        </p>
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="flex gap-3 w-full">
-                    {booking.status === "requested" && (
-                      <CancelDialog ticket_id={booking.id} />
-                    )}
-                    {booking.status === "finished" && !existingRating?.[0] && (
-                      <RatingDialog ticket_id={booking.id} />
-                    )}
-                  </div>
-                </CardFooter>
               )}
             </AccordionContent>
           </AccordionItem>

@@ -112,11 +112,36 @@
     "reviews": {
       "title": "What Our Customers Say",
       "description": "See what our satisfied customers have to say about our premium car care services"
-    }
+    },
+    "howItWorks": {
+      "title": "How It Works",
+      "subtitle": "Your car's royal treatment in 3 simple steps",
+      "steps": {
+        "book": {
+          "title": "Book Online",
+          "description": "Choose your service and preferred time in seconds."
+        },
+        "location": {
+          "title": "We Come To You",
+          "description": "Our mobile team arrives at your location fully equipped."
+        },
+        "shine": {
+          "title": "Enjoy the Shine",
+          "description": "Experience the BLINK standard of automotive perfection."
+        }
+      }
+    },
+    "ctaBanner": {
+      "title": "Ready to make your car shine?",
+      "button": "Book Now"
+    },
+    "tagline": "Your car. Our passion.",
+    "mobileService": "⚡ We Come To You"
   },
   "about": {
     "hero": {
-      "title": "About BLINK",
+      "title": "Our Story",
+      "tagline": "Crafting Excellence in Every Detail",
       "content": "BLINK was founded with a simple mission: to provide the highest quality car care services with unmatched attention to detail. We believe every vehicle deserves royal treatment.",
       "subtitle": "Elite. Precision. Shine."
     },
@@ -144,7 +169,9 @@
           "title": "Innovation",
           "desc": "We continuously adopt the latest techniques and technologies."
         }
-      }
+      },
+      "learn_more": "Learn More",
+      "back": "Back"
     },
     "team": {
       "title": "Our Team",
@@ -154,8 +181,9 @@
   },
   "contact": {
     "hero": {
-      "title": "Get in Touch",
-      "subtitle": "We're here to help with all your car care needs. Reach out to us with any questions or to schedule a service."
+      "title": "Let's Talk",
+      "subtitle": "We usually respond within 2 hours",
+      "description": "We're here to help with all your car care needs. Reach out to us with any questions or to schedule a service."
     },
     "form": {
       "title": "Send us a Message",
@@ -204,18 +232,38 @@
     "faq": {
       "title": "Frequently Asked Questions",
       "description": "Find quick answers to common questions about our services.",
-      "q1": {
-        "question": "How long does a typical wash service take?",
-        "answer": "Our standard wash takes about 30 minutes, while premium services like nano ceramic coating can take 2-3 hours."
+      "categories": {
+        "booking": "Booking",
+        "services": "Services",
+        "pricing": "Pricing",
+        "general": "General"
       },
-      "q2": {
-        "question": "Do I need to book an appointment?",
-        "answer": "Walk-ins are welcome, but we recommend booking an appointment to guarantee your preferred time slot."
-      },
-      "q3": {
-        "question": "What payment methods do you accept?",
-        "answer": "We accept cash, all major credit cards, and mobile payment options like Apple Pay and Google Pay."
+      "questions": {
+        "q1": {
+          "question": "How long does a typical wash service take?",
+          "answer": "Our standard wash takes about 30 minutes, while premium services like nano ceramic coating can take 2-3 hours.",
+          "category": "services"
+        },
+        "q2": {
+          "question": "Do I need to book an appointment?",
+          "answer": "Walk-ins are welcome, but we recommend booking an appointment to guarantee your preferred time slot.",
+          "category": "booking"
+        },
+        "q3": {
+          "question": "What payment methods do you accept?",
+          "answer": "We accept cash, all major credit cards, and mobile payment options like Apple Pay and Google Pay.",
+          "category": "pricing"
+        },
+        "q4": {
+          "question": "Is BLINK a mobile service?",
+          "answer": "Yes! We are a fully mobile service. We bring everything needed to your location.",
+          "category": "general"
+        }
       }
+    },
+    "social": {
+      "title": "Follow us for daily shine content ✨",
+      "cta": "Follow @blinkcar_"
     }
   },
   "services": {
@@ -223,6 +271,8 @@
       "title": "Our Premium Services",
       "subtitle": "Professional car care tailored to your needs"
     },
+    "choose": "Choose Your Package",
+    "packages": "Service Packages",
     "items": {
       "wash": {
         "title": "Wash",
@@ -351,6 +401,43 @@
       "title": "Ready to Give Your Car Royal Treatment?",
       "subtitle": "Book your service today and experience the BLINK difference"
     },
+    "comparison": {
+      "title": "Which service is right for you?",
+      "subtitle": "Compare our premium offerings to find the perfect match for your vehicle",
+      "popular": "Most Popular",
+      "services": {
+        "wash": "Premium Wash",
+        "dryclean": "Dry Clean",
+        "polish": "Paint Polish",
+        "nano": "Nano / Graphene"
+      },
+      "features": {
+        "exterior": "Exterior Hand Wash",
+        "interior": "Interior Vacuum & Detail",
+        "stains": "Upholstery Stain Removal",
+        "correction": "Paint Scratch Correction",
+        "hydrophobic": "Hydrophobic Coating",
+        "duration": "Protection Duration",
+        "time": "Estimated Time"
+      },
+      "values": {
+        "yes": "Yes",
+        "no": "No",
+        "duration_wash": "Up to 1 week",
+        "duration_polish": "1-3 months",
+        "duration_nano": "1-5 years",
+        "duration_na": "N/A",
+        "time_wash": "30-45 mins",
+        "time_dryclean": "1-2 hours",
+        "time_polish": "3-5 hours",
+        "time_nano": "1-2 days"
+      }
+    },
+    "ctaBanner": {
+      "title": "Every vehicle deserves BLINK",
+      "book": "Book Now",
+      "contact": "Contact Us"
+    },
     "book": "Book Now",
     "back": "back to services",
     "see_more": "See More",
@@ -361,6 +448,30 @@
     "hero": {
       "title": "Book Your Service",
       "subtitle": "Schedule your premium car care service with BLINK"
+    },
+    "wizard": {
+      "steps": {
+        "step1": "Choose Service",
+        "step2": "Choose Type",
+        "step3": "Location & Schedule",
+        "step4": "Review & Confirm"
+      },
+      "navigation": {
+        "next": "Next Step",
+        "back": "Back",
+        "confirm": "Confirm Booking"
+      },
+      "summary": {
+        "title": "Booking Summary",
+        "service": "Service Details",
+        "schedule": "Schedule",
+        "location": "Location",
+        "notes": "Notes",
+        "edit": "Edit",
+        "not_provided": "Not provided",
+        "date": "Date",
+        "time": "Time"
+      }
     },
     "form": {
       "title": "Service Booking",
@@ -447,7 +558,25 @@
       "title": "My Bookings",
       "subtitle": "View and manage your service appointments",
       "noBookings": "You don't have any bookings yet.",
-      "bookNow": "Book a Service"
+      "bookNow": "Book a Service",
+      "welcome": "Welcome back, {{name}}! 👋",
+      "quickStats": {
+        "total": "Total Bookings",
+        "active": "Active",
+        "completed": "Completed"
+      },
+      "empty": {
+        "title": "Your garage is empty!",
+        "bookFirst": "Book Your First Service",
+        "services": "View Our Services"
+      },
+      "filters": {
+        "all": "All",
+        "pending": "Pending",
+        "finished": "Finished",
+        "requested": "Requested",
+        "canceled": "Canceled"
+      }
     },
     "status": {
       "requested": "Requested",

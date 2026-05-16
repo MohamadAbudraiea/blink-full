@@ -1,6 +1,6 @@
 import { useCheckAuth } from "@/hooks/useAuth";
 import { motion } from "framer-motion";
-import { Droplets, ArrowLeft } from "lucide-react";
+import { Droplets, ArrowLeft, Check } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
@@ -8,6 +8,7 @@ function WashServicePage() {
   const { isAuthenticated, isUser } = useCheckAuth();
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
+  const isRTL = locale === "ar";
 
   const tiers = [
     {
@@ -17,52 +18,58 @@ function WashServicePage() {
         returnObjects: true,
       }) as string[],
     },
-
     {
       title: t("services.items.wash.Blink.title"),
       desc: t("services.items.wash.Blink.desc"),
       points: t("services.items.wash.Blink.points", {
         returnObjects: true,
       }) as string[],
+      featured: true,
     },
   ];
 
   return (
-    <section className="relative py-20 bg-linear-to-br from-primary/5 via-background to-muted/20">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <Link
-          to="/services"
-          className={`inline-flex items-center text-primary hover:text-primary/80 mb-8 ${
-            locale === "ar" ? "space-x-reverse space-x-2" : "space-x-2"
-          }`}
-        >
-          <ArrowLeft className="h-4 w-4" />
-          <span>{t("services.back")}</span>
-        </Link>
+    <>
+      {/* Immersive Hero */}
+      <section className="relative min-h-[70vh] flex items-center overflow-hidden bg-black">
+        <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-linear-to-r from-black/90 via-black/60 to-transparent z-10" />
+          <img
+            src="/wash.webp"
+            alt={t("services.items.wash.title")}
+            className="w-full h-full object-cover opacity-60"
+          />
+        </div>
 
-        {/* Hero section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
-        >
-          <div>
-            <div
-              className={`flex items-center ${
-                locale === "ar" ? "space-x-reverse space-x-4" : "space-x-4"
-              } mb-6`}
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
+          <Link
+            to="/services"
+            className={`inline-flex items-center gap-2 text-white/50 hover:text-white transition-colors mb-12 text-sm font-bold uppercase tracking-widest ${isRTL ? "flex-row-reverse" : ""}`}
+          >
+            <ArrowLeft className="h-4 w-4" />
+            <span>{t("services.back")}</span>
+          </Link>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="max-w-2xl"
+          >
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", delay: 0.2 }}
+              className="w-20 h-20 rounded-full bg-primary/20 backdrop-blur-xl border border-primary/30 flex items-center justify-center mb-8"
             >
-              <div className="p-4 rounded-full bg-primary/10">
-                <Droplets className="h-8 w-8 text-primary" />
-              </div>
+              <Droplets className="w-10 h-10 text-primary" />
+            </motion.div>
 
-              <h1 className="text-4xl sm:text-5xl font-bold text-foreground">
-                {t("services.items.wash.title")}
-              </h1>
-            </div>
+            <h1 className="text-5xl md:text-7xl font-black text-white tracking-tighter italic uppercase mb-6">
+              {t("services.items.wash.title")}
+            </h1>
 
-            <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
+            <p className="text-xl text-white/60 leading-relaxed font-light mb-10 max-w-xl">
               {t("services.items.wash.description")}
             </p>
 
@@ -70,7 +77,7 @@ function WashServicePage() {
               isUser && (
                 <Link
                   to="/booking"
-                  className="bg-primary hover:bg-primary/90 text-white py-3 px-6 rounded-full"
+                  className="inline-flex items-center gap-3 bg-primary hover:bg-primary/90 text-primary-foreground px-10 py-5 rounded-full font-black uppercase italic tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl shadow-primary/20"
                 >
                   {t("services.book")}
                 </Link>
@@ -78,54 +85,93 @@ function WashServicePage() {
             ) : (
               <Link
                 to="/login"
-                className="bg-primary hover:bg-primary/90 text-white py-3 px-6 rounded-full"
+                className="inline-flex items-center gap-3 bg-primary hover:bg-primary/90 text-primary-foreground px-10 py-5 rounded-full font-black uppercase italic tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl shadow-primary/20"
               >
                 {t("services.login")}
               </Link>
             )}
-          </div>
+          </motion.div>
+        </div>
+      </section>
 
-          <div className="relative">
-            <img
-              src="/wash.webp"
-              alt={t("services.items.wash.title")}
-              className="rounded-lg shadow-lg"
-            />
-          </div>
-        </motion.div>
+      {/* Service Tiers */}
+      <section className="py-24 bg-background relative overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[150px] pointer-events-none" />
 
-        {/* Service Tiers Section */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4, duration: 0.8 }}
-          className="mt-20 flex flex-col lg:flex-row justify-center gap-8"
-        >
-          {tiers.map((tier, index) => (
-            <motion.div
-              key={index}
-              whileHover={{ scale: 1.03 }}
-              transition={{ type: "spring", stiffness: 200 }}
-              className="p-6 bg-white/70 dark:bg-card backdrop-blur-md shadow-lg rounded-2xl border border-border"
-            >
-              <h2 className="text-2xl font-bold text-primary mb-2">
-                {tier.title}
-              </h2>
-              <p className="text-muted-foreground font-semibold mb-4">
-                {tier.desc}
-              </p>
-              <ul className="space-y-2 text-muted-foreground">
-                {tier.points.map((point, i) => (
-                  <li key={i} className="leading-relaxed">
-                    {point}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
-    </section>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <p className="text-sm font-bold tracking-[0.3em] uppercase text-primary mb-4">
+              {t("services.choose")}
+            </p>
+            <h2 className="text-4xl md:text-5xl font-black text-foreground tracking-tighter italic uppercase">
+              {t("services.packages")}
+            </h2>
+          </motion.div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            {tiers.map((tier, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.15 }}
+                className={`relative group rounded-4xl border p-10 transition-all duration-500 ${
+                  tier.featured
+                    ? "bg-primary text-primary-foreground border-primary shadow-2xl shadow-primary/20 scale-[1.02]"
+                    : "bg-muted/30 border-border/50 hover:border-primary/30"
+                }`}
+              >
+                {tier.featured && (
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-foreground text-background text-[10px] font-black uppercase tracking-widest px-6 py-2 rounded-full">
+                    Recommended
+                  </div>
+                )}
+
+                <h3
+                  className={`text-3xl font-black tracking-tight mb-3 ${tier.featured ? "" : "text-foreground"}`}
+                >
+                  {tier.title}
+                </h3>
+                <p
+                  className={`text-lg mb-8 font-light ${tier.featured ? "opacity-80" : "text-muted-foreground"}`}
+                >
+                  {tier.desc}
+                </p>
+
+                <ul className="space-y-4">
+                  {tier.points.map((point, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <div
+                        className={`mt-1 w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${
+                          tier.featured
+                            ? "bg-primary-foreground/20"
+                            : "bg-primary/10"
+                        }`}
+                      >
+                        <Check
+                          className={`w-3 h-3 ${tier.featured ? "text-primary-foreground" : "text-primary"}`}
+                        />
+                      </div>
+                      <span
+                        className={`leading-relaxed ${tier.featured ? "opacity-90" : "text-muted-foreground"}`}
+                      >
+                        {point}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
 

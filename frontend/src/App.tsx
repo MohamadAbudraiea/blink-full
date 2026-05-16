@@ -49,12 +49,14 @@ import ScrollToTop from "./components/ui/ScrollToTop";
 import { useCheckAuth } from "./hooks/useAuth";
 import { Toaster } from "./components/ui/sonner";
 import Loader from "./components/ui/Loader";
+import { BubbleCursor } from "./components/shared/BubbleCursor";
 
 function App() {
   const { isAuthenticated } = useCheckAuth();
 
   return (
     <>
+      <BubbleCursor />
       <ScrollToTop />
       <Layout>
         <Suspense fallback={<Loader />}>

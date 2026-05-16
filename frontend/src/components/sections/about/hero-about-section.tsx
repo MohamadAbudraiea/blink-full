@@ -1,46 +1,88 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { ChevronDown } from "lucide-react";
+import { useRef } from "react";
+import { useTheme } from "@/context/theme-provider";
 
 export function HeroAboutSection() {
-  const { t, i18n } = useTranslation();
-  const locale = i18n.language;
+  const { t } = useTranslation();
+  const { theme } = useTheme();
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
 
   return (
-    <section className="relative bg-gradient-to-br from-background via-background to-muted/20">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+    <section
+      ref={ref}
+      className="relative h-screen flex items-center justify-center overflow-hidden bg-black"
+    >
+      {/* Parallax Background */}
+      <motion.div style={{ y }} className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-linear-to-b from-black/70 via-black/40 to-black/80 z-10" />
+        <img
+          src="/about_hero_bg.png"
+          alt="About Hero"
+          className="w-full h-full object-cover"
+        />
+      </motion.div>
+
+      {/* Content */}
+      <div className="relative z-20 text-center px-4 max-w-4xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+          className="flex flex-col items-center gap-8"
+        >
+          {/* Logo with fade/scale animation */}
           <motion.div
-            initial={{ opacity: 0, x: locale === "ar" ? 50 : -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: 0.2 }}
           >
-            <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-6">
-              {t("about.hero.title")}
+            <img
+              src={theme === "light" ? "/white-logo.png" : "/dark-logo.png"}
+              alt="BLINK Logo"
+              className="h-24 md:h-36 w-auto drop-shadow-[0_0_30px_rgba(255,255,255,0.2)]"
+            />
+          </motion.div>
+
+          {/* Tagline and content */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 1.2 }}
+            className="space-y-6"
+          >
+            <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter uppercase italic drop-shadow-lg">
+              {t("about.hero.tagline")}
             </h1>
-            <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
+            <p className="text-white/80 text-lg md:text-xl font-light leading-relaxed max-w-2xl mx-auto drop-shadow-md">
               {t("about.hero.content")}
             </p>
-            <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-              {t("about.hero.subtitle")}
-            </p>
-            <Link
-              to="/booking"
-              className="bg-primary hover:bg-primary/90 py-3 px-6 rounded-full"
-            >
-              {t("home.hero.cta")}
-            </Link>
           </motion.div>
-          <motion.div
-            initial={{ opacity: 0, x: locale === "ar" ? -50 : 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="relative"
-          >
-            <img src="/phone.png" alt="BLINK Mobile App" className="w-full" />
-          </motion.div>
-        </div>
+        </motion.div>
       </div>
+
+      {/* Scroll Indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1, y: [0, 10, 0] }}
+        transition={{
+          opacity: { delay: 2, duration: 1 },
+          y: { duration: 2, repeat: Infinity, ease: "easeInOut" },
+        }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2"
+      >
+        <span className="text-[10px] text-white/30 uppercase tracking-[0.3em] font-bold">
+          Scroll
+        </span>
+        <ChevronDown className="w-8 h-8 text-white/30" />
+      </motion.div>
     </section>
   );
 }
