@@ -74,7 +74,8 @@ export default function BookingCard({ booking }: BookingCardProps) {
     if (isCanceled) return "bg-destructive/5 border-destructive/20";
     if (booking.status === "finished")
       return "bg-green-500/5 border-green-500/20";
-    if (booking.status === "pending")
+    if (booking.status === "pending") return "bg-blue-500/5 border-blue-500/20";
+    if (booking.status === "requested")
       return "bg-yellow-500/5 border-yellow-500/20";
     return "bg-card border-border/50";
   };
@@ -94,7 +95,7 @@ export default function BookingCard({ booking }: BookingCardProps) {
     >
       {/* Background Glow */}
       {booking.status === "pending" && (
-        <div className="absolute -top-10 -right-10 w-32 h-32 bg-yellow-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-10 -right-10 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
       )}
       {booking.status === "finished" && (
         <div className="absolute -top-10 -right-10 w-32 h-32 bg-green-500/10 rounded-full blur-3xl pointer-events-none" />
