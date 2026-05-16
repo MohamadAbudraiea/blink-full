@@ -14,10 +14,21 @@ import UserSubscriptionCard from "@/components/user-bookings/UserSubscriptionCar
 import { AddSubscriptionDialog } from "@/components/subscription/AddSubscriptionDialog";
 import { useCheckAuth } from "@/hooks/useAuth";
 import { CalendarDays, Car, CheckCircle2, Clock } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
 
 export default function UserBookingsPage() {
   const { t } = useTranslation();
   const { user } = useCheckAuth();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeTab = searchParams.get("tab") === "subscriptions" ? "subscriptions" : "bookings";
+
+  const handleTabChange = (value: string) => {
+    if (value === "subscriptions") {
+      setSearchParams({ tab: "subscriptions" });
+    } else {
+      setSearchParams({});
+    }
+  };
 
   const {
     filter,
@@ -196,7 +207,7 @@ export default function UserBookingsPage() {
           </Card>
         </motion.div>
 
-        <Tabs defaultValue="bookings" className="space-y-6">
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-6">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="bookings">My Bookings</TabsTrigger>
             <TabsTrigger value="subscriptions">My Subscriptions</TabsTrigger>

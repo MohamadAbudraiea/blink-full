@@ -2,6 +2,7 @@
   "nav": {
     "home": "Home",
     "services": "Services",
+    "subscriptions": "Subscriptions",
     "about": "About",
     "contact": "Contact",
     "login": "Login",
@@ -135,8 +136,167 @@
       "title": "Ready to make your car shine?",
       "button": "Book Now"
     },
+    "subscriptions": {
+      "badge": "Subscription Plans",
+      "title": "Subscribe & Save",
+      "description": "Choose the subscription that fits your lifestyle. Pick any combination of services you need — from washes to ceramic coatings, it's your call.",
+      "popular": "Most Popular",
+      "services_label": "Services",
+      "cta": "Get Started",
+      "note": "All subscriptions are flexible — mix and match any of our services to build your perfect car care routine.",
+      "plans": {
+        "starter": {
+          "title": "Starter",
+          "description": "Perfect for keeping your car fresh with essential care. Choose any 2 services from our full menu.",
+          "features": {
+            "0": "Choose any 2 services you want",
+            "1": "Mix & match from our full service menu",
+            "2": "Flexible scheduling at your convenience",
+            "3": "Priority booking access"
+          }
+        },
+        "pro": {
+          "title": "Pro",
+          "description": "The ideal balance of care and convenience. Enjoy 4 services of your choice for complete vehicle maintenance.",
+          "features": {
+            "0": "Choose any 4 services you want",
+            "1": "Full access to all service types",
+            "2": "Priority scheduling & booking",
+            "3": "Extended service validity period",
+            "4": "Dedicated customer support"
+          }
+        },
+        "elite": {
+          "title": "Elite",
+          "description": "The ultimate car care experience. 8 services of your choice for those who demand nothing but the best.",
+          "features": {
+            "0": "Choose any 8 services you want",
+            "1": "Unlimited access to all service types",
+            "2": "VIP priority scheduling",
+            "3": "Maximum validity period",
+            "4": "Exclusive member perks & gifts",
+            "5": "24/7 dedicated support line"
+          }
+        }
+      }
+    },
     "tagline": "Your car. Our passion.",
     "mobileService": "⚡ We Come To You"
+  },
+  "subscriptionsPage": {
+    "hero": {
+      "badge": "Flexible Car Care Plans",
+      "title": "Subscription Plans",
+      "subtitle": "Bundle your favorite services into a flexible plan. Choose 2, 4, or 8 services — any combination you want.",
+      "services_text": "Services",
+      "marquee": {
+        "starter": "Starter Plan",
+        "pro": "Pro Plan",
+        "elite": "Elite Plan",
+        "flexible": "Flexible Services",
+        "any_service": "Any Service You Want"
+      }
+    },
+    "plans": {
+      "badge": "Choose Your Plan",
+      "title": "Plans In Detail",
+      "subtitle": "Every plan gives you full freedom to choose any services from our menu. Here's what makes each tier special.",
+      "flexibility_note": "All plans let you freely choose any combination of services — wash, dry clean, polish, nano ceramic, or graphene.",
+      "starter": {
+        "longDescription": "The Starter plan is designed for car owners who want to maintain their vehicle's appearance with regular, essential care. With 2 services of your choice, you get complete flexibility to pick what your car needs most — whether it's a premium wash, a quick dry clean, or any other service from our menu.",
+        "details": {
+          "0": "Pick any 2 services from our complete service catalog",
+          "1": "Mix & match: combine different service types freely",
+          "2": "Flexible scheduling — book whenever it suits you",
+          "3": "Priority booking over non-subscribers",
+          "4": "Valid for use at your convenience",
+          "5": "Complimentary gifts included with each service visit"
+        }
+      },
+      "pro": {
+        "longDescription": "Our most popular choice. The Pro plan offers the perfect balance between comprehensive care and value. With 4 services at your disposal, you can create a complete maintenance routine — from regular washes to deep interior cleans, or mix in specialized treatments like polishing and ceramic coating.",
+        "details": {
+          "0": "Choose any 4 services from our full menu",
+          "1": "Complete freedom to mix service types as you wish",
+          "2": "Priority scheduling with preferred time slots",
+          "3": "Extended validity period for maximum flexibility",
+          "4": "Dedicated customer support channel",
+          "5": "Premium gifts and accessories with every visit",
+          "6": "Ideal for maintaining a regular car care routine"
+        }
+      },
+      "elite": {
+        "longDescription": "The ultimate package for those who demand the very best for their vehicle. With 8 services, the Elite plan gives you enough flexibility to cover everything — from weekly washes to quarterly polish sessions and annual ceramic coatings. This is the complete car care solution for enthusiasts and luxury vehicle owners.",
+        "details": {
+          "0": "Full access to any 8 services of your choice",
+          "1": "Unlimited mix & match across all service categories",
+          "2": "VIP priority — skip the queue every time",
+          "3": "Maximum validity period for year-round coverage",
+          "4": "Exclusive member-only perks and premium gifts",
+          "5": "24/7 dedicated support line for instant assistance",
+          "6": "Complimentary upgrades when available",
+          "7": "The ultimate choice for car enthusiasts and collectors"
+        }
+      }
+    },
+    "howItWorks": {
+      "title": "How It Works",
+      "subtitle": "Getting started with your subscription is simple",
+      "steps": {
+        "choose": {
+          "title": "Choose Your Plan",
+          "description": "Select from Starter (2), Pro (4), or Elite (8) services based on your needs."
+        },
+        "customize": {
+          "title": "Pick Your Services",
+          "description": "Choose any combination of services from our full menu for each slot."
+        },
+        "schedule": {
+          "title": "Schedule Anytime",
+          "description": "Book each service at your convenience. We come to your location."
+        },
+        "enjoy": {
+          "title": "Enjoy the Results",
+          "description": "Sit back and let our experts deliver the BLINK standard of excellence."
+        }
+      }
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "subtitle": "Everything you need to know about our subscription plans",
+      "items": {
+        "q1": {
+          "question": "Can I choose different services for each slot in my subscription?",
+          "answer": "Absolutely! Every subscription plan gives you complete freedom. You can choose any combination of services — a wash for one slot, a dry clean for another, and a polish for the third. It's entirely up to you."
+        },
+        "q2": {
+          "question": "How long is my subscription valid?",
+          "answer": "Each plan has a generous validity period. Starter plans are valid for a flexible duration, Pro plans have an extended period, and Elite plans offer the maximum validity for year-round coverage. Contact us for specific timeframes."
+        },
+        "q3": {
+          "question": "Can I upgrade my plan later?",
+          "answer": "Yes! You can upgrade from a smaller plan to a larger one at any time. We'll adjust the difference accordingly so you don't lose any unused services."
+        },
+        "q4": {
+          "question": "Do I need to use all services at once?",
+          "answer": "Not at all. You can schedule each service individually at different times. Use them whenever it's convenient for you within your plan's validity period."
+        },
+        "q5": {
+          "question": "Is BLINK a mobile service?",
+          "answer": "Yes! We are a fully mobile service. Our professional team comes to your location — whether it's your home, office, or anywhere else — fully equipped with everything needed."
+        },
+        "q6": {
+          "question": "What if I need more services than my plan includes?",
+          "answer": "You can always book additional services separately, or upgrade to a larger plan. We also offer the flexibility to purchase a new subscription alongside an existing one."
+        }
+      }
+    },
+    "cta": {
+      "badge": "Start Your Journey",
+      "title": "Ready to Subscribe?",
+      "subscribe_button": "Get Started",
+      "contact_button": "Contact Us"
+    }
   },
   "about": {
     "hero": {

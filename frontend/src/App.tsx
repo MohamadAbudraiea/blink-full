@@ -10,6 +10,7 @@ import LoginPage from "@/pages/shared/LoginPage";
 const AboutPage = lazy(() => import("@/pages/shared/AboutPage"));
 const ContactPage = lazy(() => import("@/pages/shared/ContactPage"));
 const ServicesPage = lazy(() => import("@/pages/shared/ServicesPage"));
+const SubscriptionsPage = lazy(() => import("@/pages/shared/SubscriptionsPage"));
 const NotFoundPage = lazy(() => import("@/pages/shared/NotFoundPage"));
 
 const WashServicePage = lazy(
@@ -91,6 +92,7 @@ function App() {
 
             {/* Services */}
             <Route path="/services" element={<ServicesPage />} />
+            <Route path="/subscriptions" element={<SubscriptionsPage />} />
             <Route path="/services/wash" element={<WashServicePage />} />
             <Route
               path="/services/dryclean"

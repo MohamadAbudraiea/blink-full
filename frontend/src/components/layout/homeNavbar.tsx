@@ -16,6 +16,7 @@ import {
   Phone,
   LogIn,
   UserPlus,
+  Repeat,
 } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -30,6 +31,7 @@ export default function HomeNavbar() {
   const navItems = [
     { path: "/", label: t("nav.home"), icon: Home },
     { path: "/services", label: t("nav.services"), icon: Settings },
+    { path: "/subscriptions", label: t("nav.subscriptions"), icon: Repeat },
     { path: "/about", label: t("nav.about"), icon: Info },
     { path: "/contact", label: t("nav.contact"), icon: Phone },
   ];
