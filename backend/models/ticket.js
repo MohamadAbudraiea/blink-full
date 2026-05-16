@@ -52,8 +52,8 @@ module.exports = function (sequelize, DataTypes) {
           "wash",
           "dryclean",
           "polish",
-          "gravin",
-          "nanoceramic"
+          "graphene",
+          "nanoceramic",
         ),
         allowNull: false,
       },
@@ -126,15 +126,19 @@ module.exports = function (sequelize, DataTypes) {
           if (!results) return;
           const instances = Array.isArray(results) ? results : [results];
           for (const instance of instances) {
-            if (instance.dataValues && instance.dataValues.user === null && instance.dataValues.customer_name) {
+            if (
+              instance.dataValues &&
+              instance.dataValues.user === null &&
+              instance.dataValues.customer_name
+            ) {
               instance.dataValues.user = {
                 name: instance.dataValues.customer_name,
-                phone: instance.dataValues.customer_phone
+                phone: instance.dataValues.customer_phone,
               };
             }
           }
-        }
-      }
-    }
+        },
+      },
+    },
   );
 };

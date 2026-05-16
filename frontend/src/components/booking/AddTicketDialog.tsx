@@ -81,10 +81,12 @@ export function AddTicketDialog({
       ? useGetDetailerScheduleByDate
       : useGetDetailerScheduleForSecretary;
 
-  const dateObj = selectedDate ? new Date(selectedDate + "T00:00:00") : undefined;
+  const dateObj = selectedDate
+    ? new Date(selectedDate + "T00:00:00")
+    : undefined;
   const { schedule, isGettingDetailerSchedule } = useScheduleHook(
     detailerId || undefined,
-    dateObj
+    dateObj,
   );
 
   // Debounced user search
@@ -94,8 +96,11 @@ export function AddTicketDialog({
       setShowDropdown(false);
       return;
     }
-    
-    if (selectedUser && searchQuery === `${selectedUser.name} — ${selectedUser.phone}`) {
+
+    if (
+      selectedUser &&
+      searchQuery === `${selectedUser.name} — ${selectedUser.phone}`
+    ) {
       return;
     }
 
@@ -132,7 +137,13 @@ export function AddTicketDialog({
 
   // Time conflict check
   const hasTimeConflict = () => {
-    if (!startTime || !endTime || !selectedDate || !schedule || schedule.length === 0) {
+    if (
+      !startTime ||
+      !endTime ||
+      !selectedDate ||
+      !schedule ||
+      schedule.length === 0
+    ) {
       return false;
     }
     return schedule.some((slot: ScheduleItem) => {
@@ -188,8 +199,10 @@ export function AddTicketDialog({
     if (subscriptionId) {
       payload.subscription_id = subscriptionId;
       if (subscriptionUserId) payload.user_id = subscriptionUserId;
-      if (subscriptionCustomerName) payload.customer_name = subscriptionCustomerName;
-      if (subscriptionCustomerPhone) payload.customer_phone = subscriptionCustomerPhone;
+      if (subscriptionCustomerName)
+        payload.customer_name = subscriptionCustomerName;
+      if (subscriptionCustomerPhone)
+        payload.customer_phone = subscriptionCustomerPhone;
     } else if (isAnonymous) {
       payload.customer_name = customerName;
       payload.customer_phone = customerPhone;
@@ -237,111 +250,114 @@ export function AddTicketDialog({
             <div className="flex gap-2">
               <Button
                 type="button"
-              size="sm"
-              variant={isAnonymous ? "default" : "outline"}
-              onClick={() => {
-                setIsAnonymous(true);
-                setSelectedUser(null);
-                setSearchQuery("");
-              }}
-            >
-              Anonymous
-            </Button>
-            <Button
-              type="button"
-              size="sm"
-              variant={!isAnonymous ? "default" : "outline"}
-              onClick={() => {
-                setIsAnonymous(false);
-                setCustomerName("");
-                setCustomerPhone("");
-              }}
-            >
-              Signed User
-            </Button>
-          </div>
+                size="sm"
+                variant={isAnonymous ? "default" : "outline"}
+                onClick={() => {
+                  setIsAnonymous(true);
+                  setSelectedUser(null);
+                  setSearchQuery("");
+                }}
+              >
+                Anonymous
+              </Button>
+              <Button
+                type="button"
+                size="sm"
+                variant={!isAnonymous ? "default" : "outline"}
+                onClick={() => {
+                  setIsAnonymous(false);
+                  setCustomerName("");
+                  setCustomerPhone("");
+                }}
+              >
+                Signed User
+              </Button>
+            </div>
           )}
 
           {/* User Info Section (Hide if in subscription context) */}
-          {!subscriptionId && (
-            isAnonymous ? (
+          {!subscriptionId &&
+            (isAnonymous ? (
               <div className="space-y-3">
                 <div className="space-y-1">
-                <Label>Customer Name *</Label>
-                <Input
-                  placeholder="Enter customer name"
-                  value={customerName}
-                  onChange={(e) => setCustomerName(e.target.value)}
-                />
-              </div>
-              <div className="space-y-1">
-                <Label>Customer Phone *</Label>
-                <Input
-                  placeholder="Enter phone number"
-                  value={customerPhone}
-                  onChange={(e) => setCustomerPhone(e.target.value)}
-                />
-              </div>
-            </div>
-          ) : (
-            /* Signed User: Debounced search */
-            <div className="space-y-1" ref={searchRef}>
-              <Label>Search User *</Label>
-              <div className="relative">
-                <div className="flex items-center gap-2">
-                  <Search className="h-4 w-4 text-muted-foreground absolute left-3 z-10" />
+                  <Label>Customer Name *</Label>
                   <Input
-                    placeholder="Search by name, phone, or email..."
-                    className="pl-9"
-                    value={searchQuery}
-                    onChange={(e) => {
-                      setSearchQuery(e.target.value);
-                      setSelectedUser(null);
-                    }}
-                    onFocus={() => {
-                      if (searchResults.length > 0) setShowDropdown(true);
-                    }}
+                    placeholder="Enter customer name"
+                    value={customerName}
+                    onChange={(e) => setCustomerName(e.target.value)}
                   />
-                  {isSearching && (
-                    <Loader2 className="h-4 w-4 animate-spin absolute right-3" />
-                  )}
                 </div>
-
-                {/* Search results dropdown */}
-                {showDropdown && searchResults.length > 0 && (
-                  <div className="absolute z-50 w-full mt-1 max-h-48 overflow-y-auto rounded-md border bg-popover shadow-md">
-                    {searchResults.map((u) => (
-                      <button
-                        key={u.id}
-                        type="button"
-                        className="w-full px-3 py-2 text-left text-sm hover:bg-accent transition-colors flex flex-col"
-                        onClick={() => handleUserSelect(u)}
-                      >
-                        <span className="font-medium">{u.name}</span>
-                        <span className="text-muted-foreground text-xs">
-                          {u.phone} · {u.email}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-
-                {showDropdown && searchResults.length === 0 && searchQuery.length >= 2 && !isSearching && (
-                  <div className="absolute z-50 w-full mt-1 rounded-md border bg-popover shadow-md px-3 py-2 text-sm text-muted-foreground">
-                    No users found
-                  </div>
-                )}
+                <div className="space-y-1">
+                  <Label>Customer Phone *</Label>
+                  <Input
+                    placeholder="Enter phone number"
+                    value={customerPhone}
+                    onChange={(e) => setCustomerPhone(e.target.value)}
+                  />
+                </div>
               </div>
+            ) : (
+              /* Signed User: Debounced search */
+              <div className="space-y-1" ref={searchRef}>
+                <Label>Search User *</Label>
+                <div className="relative">
+                  <div className="flex items-center gap-2">
+                    <Search className="h-4 w-4 text-muted-foreground absolute left-3 z-10" />
+                    <Input
+                      placeholder="Search by name, phone, or email..."
+                      className="pl-9"
+                      value={searchQuery}
+                      onChange={(e) => {
+                        setSearchQuery(e.target.value);
+                        setSelectedUser(null);
+                      }}
+                      onFocus={() => {
+                        if (searchResults.length > 0) setShowDropdown(true);
+                      }}
+                    />
+                    {isSearching && (
+                      <Loader2 className="h-4 w-4 animate-spin absolute right-3" />
+                    )}
+                  </div>
+
+                  {/* Search results dropdown */}
+                  {showDropdown && searchResults.length > 0 && (
+                    <div className="absolute z-50 w-full mt-1 max-h-48 overflow-y-auto rounded-md border bg-popover shadow-md">
+                      {searchResults.map((u) => (
+                        <button
+                          key={u.id}
+                          type="button"
+                          className="w-full px-3 py-2 text-left text-sm hover:bg-accent transition-colors flex flex-col"
+                          onClick={() => handleUserSelect(u)}
+                        >
+                          <span className="font-medium">{u.name}</span>
+                          <span className="text-muted-foreground text-xs">
+                            {u.phone} · {u.email}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                  {showDropdown &&
+                    searchResults.length === 0 &&
+                    searchQuery.length >= 2 &&
+                    !isSearching && (
+                      <div className="absolute z-50 w-full mt-1 rounded-md border bg-popover shadow-md px-3 py-2 text-sm text-muted-foreground">
+                        No users found
+                      </div>
+                    )}
+                </div>
 
                 {selectedUser && (
                   <div className="mt-2 p-2 rounded-md bg-muted/50 text-sm">
-                    Selected: <span className="font-medium">{selectedUser.name}</span>{" "}
-                    — {selectedUser.phone}
+                    Selected:{" "}
+                    <span className="font-medium">{selectedUser.name}</span> —{" "}
+                    {selectedUser.phone}
                   </div>
                 )}
               </div>
-            )
-          )}
+            ))}
 
           {/* Detailer Selection */}
           <div className="space-y-1">
@@ -445,7 +461,9 @@ export function AddTicketDialog({
                 onChange={(e) => setEndTime(e.target.value)}
                 min={startTime}
                 disabled={!startTime}
-                className={timeConflict || endBeforeStart ? "border-destructive" : ""}
+                className={
+                  timeConflict || endBeforeStart ? "border-destructive" : ""
+                }
               />
             </div>
           </div>
@@ -475,7 +493,7 @@ export function AddTicketDialog({
                 <SelectItem value="wash">Wash</SelectItem>
                 <SelectItem value="dryclean">Dryclean</SelectItem>
                 <SelectItem value="polish">Polish</SelectItem>
-                <SelectItem value="gravin">Gravin</SelectItem>
+                <SelectItem value="graphene">Graphene</SelectItem>
                 <SelectItem value="nanoceramic">Nanoceramic</SelectItem>
               </SelectContent>
             </Select>
