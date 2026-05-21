@@ -4,7 +4,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, BarChart3, TrendingUp, TrendingDown, Wallet } from "lucide-react";
+import {
+  Loader2,
+  BarChart3,
+  TrendingUp,
+  TrendingDown,
+  Wallet,
+} from "lucide-react";
 import {
   BarChart,
   Bar,
@@ -55,12 +61,12 @@ export function FinanceReports() {
   const { reports, isGettingReports } = useGetFinanceReports(
     startDate || undefined,
     endDate || undefined,
-    selectedAccountIds.length > 0 ? selectedAccountIds : undefined
+    selectedAccountIds.length > 0 ? selectedAccountIds : undefined,
   );
 
   const toggleAccount = (id: number) => {
     setSelectedAccountIds((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
     );
   };
 
@@ -70,7 +76,7 @@ export function FinanceReports() {
     } else {
       setSelectedAccountIds(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        accounts.map((a: any) => a.id)
+        accounts.map((a: any) => a.id),
       );
     }
   };
@@ -332,11 +338,7 @@ export function FinanceReports() {
                     }}
                   />
                   <Legend />
-                  <Bar
-                    dataKey="Income"
-                    fill="#22c55e"
-                    radius={[4, 4, 0, 0]}
-                  />
+                  <Bar dataKey="Income" fill="#22c55e" radius={[4, 4, 0, 0]} />
                   <Bar
                     dataKey="Expenses"
                     fill="#ef4444"
@@ -351,9 +353,7 @@ export function FinanceReports() {
         {/* Pie Chart — Balance Distribution */}
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-base">
-              Balance Distribution
-            </CardTitle>
+            <CardTitle className="text-base">Balance Distribution</CardTitle>
           </CardHeader>
           <CardContent>
             {pieData.length === 0 ? (
@@ -368,7 +368,7 @@ export function FinanceReports() {
                     cx="50%"
                     cy="50%"
                     labelLine={false}
-                    label={({ name, percent }) =>
+                    label={({ name, percent = 0 }) =>
                       `${name} (${(percent * 100).toFixed(0)}%)`
                     }
                     outerRadius={100}
