@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import {
@@ -89,27 +88,24 @@ export function PlansDetailSection() {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
+        <div
+          data-aos="fade-up"
+          data-aos-duration="600"
           className="text-center mb-20"
         >
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+          <p
+            data-aos="fade"
             className="text-primary font-black uppercase tracking-[0.4em] text-xs mb-4"
           >
             {t("subscriptionsPage.plans.badge")}
-          </motion.p>
+          </p>
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-foreground mb-6 tracking-tighter uppercase italic">
             {t("subscriptionsPage.plans.title")}
           </h2>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto font-light leading-relaxed">
             {t("subscriptionsPage.plans.subtitle")}
           </p>
-        </motion.div>
+        </div>
 
         {/* Plans */}
         <div className="space-y-12 max-w-5xl mx-auto">
@@ -118,12 +114,19 @@ export function PlansDetailSection() {
             const isEven = index % 2 === 0;
 
             return (
-              <motion.div
+              <div
                 key={plan.count}
-                initial={{ opacity: 0, x: isEven ? -60 : 60 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.7, delay: 0.1 }}
-                viewport={{ once: true }}
+                data-aos={
+                  isEven
+                    ? isRTL
+                      ? "fade-right"
+                      : "fade-left"
+                    : isRTL
+                      ? "fade-left"
+                      : "fade-right"
+                }
+                data-aos-duration="700"
+                data-aos-delay="100"
                 className="group"
               >
                 <div
@@ -141,7 +144,7 @@ export function PlansDetailSection() {
 
                   {/* Gradient overlay */}
                   <div
-                    className={`absolute inset-0 bg-gradient-to-br ${plan.gradient} opacity-50`}
+                    className={`absolute inset-0 bg-linear-to-br ${plan.gradient} opacity-50`}
                   />
 
                   <div className="relative z-10 p-8 lg:p-12">
@@ -149,12 +152,11 @@ export function PlansDetailSection() {
                       {/* Left side — Plan info */}
                       <div className="lg:w-2/5 flex flex-col">
                         <div className="flex items-center gap-4 mb-6">
-                          <motion.div
-                            className={`p-4 rounded-2xl ${plan.iconBg} border border-white/5`}
-                            whileHover={{ rotate: 10, scale: 1.1 }}
+                          <div
+                            className={`p-4 rounded-2xl ${plan.iconBg} border border-white/5 transition-transform duration-300 hover:rotate-12 hover:scale-110`}
                           >
                             <Icon className={`w-8 h-8 ${plan.iconColor}`} />
-                          </motion.div>
+                          </div>
                           <div>
                             <h3 className="text-3xl font-black text-foreground tracking-tight">
                               {t(plan.titleKey)}
@@ -176,11 +178,12 @@ export function PlansDetailSection() {
                           {t(plan.descriptionKey)}
                         </p>
 
-                        <Link to="/my-bookings?tab=subscriptions" className="mt-auto">
-                          <motion.button
-                            whileHover={{ scale: 1.03 }}
-                            whileTap={{ scale: 0.97 }}
-                            className={`w-full lg:w-auto px-8 py-4 rounded-2xl font-bold text-sm uppercase tracking-wider flex items-center justify-center gap-2 transition-all duration-300 cursor-pointer ${
+                        <Link
+                          to="/my-bookings?tab=subscriptions"
+                          className="mt-auto"
+                        >
+                          <button
+                            className={`w-full lg:w-auto px-8 py-4 rounded-2xl font-bold text-sm uppercase tracking-wider flex items-center justify-center gap-2 transition-all duration-300 cursor-pointer hover:scale-105 active:scale-95 ${
                               plan.popular
                                 ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:shadow-primary/40"
                                 : "bg-muted/50 text-foreground hover:bg-primary/10 border border-border hover:border-primary/30"
@@ -190,7 +193,7 @@ export function PlansDetailSection() {
                             <ArrowRight
                               className={`w-4 h-4 transition-transform group-hover:translate-x-1 ${isRTL ? "rotate-180" : ""}`}
                             />
-                          </motion.button>
+                          </button>
                         </Link>
                       </div>
 
@@ -198,16 +201,14 @@ export function PlansDetailSection() {
                       <div className="lg:w-3/5">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           {plan.featuresKeys.map((featureKey, fi) => (
-                            <motion.div
+                            <div
                               key={fi}
-                              initial={{ opacity: 0, y: 15 }}
-                              whileInView={{ opacity: 1, y: 0 }}
-                              transition={{ delay: 0.2 + fi * 0.06 }}
-                              viewport={{ once: true }}
+                              data-aos="fade-up"
+                              data-aos-delay={200 + fi * 60}
                               className="flex items-start gap-3 p-4 rounded-xl bg-background/50 border border-border/30 hover:border-primary/20 transition-colors"
                             >
                               <div
-                                className={`mt-0.5 w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${plan.iconBg}`}
+                                className={`mt-0.5 w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${plan.iconBg}`}
                               >
                                 <Check
                                   className={`w-3.5 h-3.5 ${plan.iconColor}`}
@@ -216,24 +217,22 @@ export function PlansDetailSection() {
                               <span className="text-sm text-foreground/80 leading-relaxed">
                                 {t(featureKey)}
                               </span>
-                            </motion.div>
+                            </div>
                           ))}
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>
 
         {/* Flexibility note */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          viewport={{ once: true }}
+        <div
+          data-aos="fade-up"
+          data-aos-delay="400"
           className="mt-16 text-center"
         >
           <div className="inline-flex items-center gap-3 bg-muted/30 backdrop-blur-sm px-6 py-3 rounded-full border border-border/50">
@@ -242,7 +241,7 @@ export function PlansDetailSection() {
               {t("subscriptionsPage.plans.flexibility_note")}
             </span>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { Check, Minus } from "lucide-react";
 
@@ -47,11 +46,9 @@ export function ComparisonTableSection() {
   return (
     <section className="py-24 bg-muted/30">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
+        <div
+          data-aos="fade-up"
+          data-aos-duration="600"
           className="text-center mb-16"
         >
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
@@ -60,7 +57,7 @@ export function ComparisonTableSection() {
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             {t("services.comparison.subtitle")}
           </p>
-        </motion.div>
+        </div>
 
         <div className="overflow-x-auto pb-8" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
           <table className="w-full min-w-[800px] border-collapse relative">
@@ -83,12 +80,11 @@ export function ComparisonTableSection() {
             </thead>
             <tbody>
               {features.map((feature, idx) => (
-                <motion.tr 
+                <tr 
                   key={idx}
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: idx * 0.05 }}
-                  viewport={{ once: true }}
+                  data-aos="fade-up"
+                  data-aos-duration="300"
+                  data-aos-delay={idx * 50}
                   className="hover:bg-muted/50 transition-colors border-b border-border/50"
                 >
                   <td className="p-4 font-medium text-foreground text-sm lg:text-base text-start">
@@ -111,7 +107,7 @@ export function ComparisonTableSection() {
                       </td>
                     );
                   })}
-                </motion.tr>
+                </tr>
               ))}
             </tbody>
           </table>

@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useTranslation } from "react-i18next";
@@ -125,9 +124,9 @@ export default function UserBookingsPage() {
       <div className="max-w-4xl mx-auto">
         {/* Dashboard Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+          <div
+            data-aos="fade-down"
+            data-aos-duration="600"
           >
             <h1 className="text-3xl font-bold mb-2">
               {t("book.myBookings.welcome", {
@@ -137,12 +136,12 @@ export default function UserBookingsPage() {
             <p className="text-muted-foreground">
               {t("book.myBookings.subtitle")}
             </p>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.1 }}
+          <div
+            data-aos="zoom-in"
+            data-aos-delay="100"
+            data-aos-duration="600"
           >
             <Button asChild size="lg" className="shadow-lg shadow-primary/20">
               <a href="/booking" className="flex items-center gap-2">
@@ -150,14 +149,14 @@ export default function UserBookingsPage() {
                 {t("book.myBookings.bookNow")}
               </a>
             </Button>
-          </motion.div>
+          </div>
         </div>
 
         {/* Quick Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+        <div
+          data-aos="fade-up"
+          data-aos-delay="200"
+          data-aos-duration="600"
           className="grid grid-cols-3 gap-3 md:gap-4 mb-8"
         >
           <Card className="bg-background/50 backdrop-blur-sm border-border/50 shadow-sm">
@@ -205,7 +204,7 @@ export default function UserBookingsPage() {
               </div>
             </CardContent>
           </Card>
-        </motion.div>
+        </div>
 
         <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-6">
           <TabsList className="grid w-full grid-cols-2">
@@ -239,25 +238,20 @@ export default function UserBookingsPage() {
             </div>
 
             {tickets.length === 0 ? (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
+              <div
+                data-aos="zoom-in"
+                data-aos-duration="600"
                 className="py-16 text-center"
               >
                 <div className="relative w-40 h-40 mx-auto mb-8">
-                  <motion.div
-                    animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.6, 0.3] }}
-                    transition={{ duration: 3, repeat: Infinity }}
-                    className="absolute inset-0 bg-primary/20 rounded-full blur-3xl"
+                  <div
+                    className="absolute inset-0 bg-primary/20 rounded-full blur-3xl animate-[pulse_3s_ease-in-out_infinite]"
                   />
-                  <motion.div
-                    initial={{ y: 20 }}
-                    animate={{ y: 0 }}
-                    transition={{ type: "spring", stiffness: 100, damping: 10 }}
-                    className="relative z-10 w-full h-full flex items-center justify-center bg-muted/50 rounded-full border border-border/50"
+                  <div
+                    className="relative z-10 w-full h-full flex items-center justify-center bg-muted/50 rounded-full border border-border/50 transition-transform duration-500 hover:scale-105"
                   >
                     <Car className="w-20 h-20 text-primary drop-shadow-[0_0_15px_rgba(var(--primary),0.5)]" />
-                  </motion.div>
+                  </div>
                 </div>
                 <h3 className="text-3xl font-bold mb-3">
                   {t("book.myBookings.empty.title")}
@@ -272,18 +266,17 @@ export default function UserBookingsPage() {
                 >
                   <a href="/booking">{t("book.myBookings.bookNow")}</a>
                 </Button>
-              </motion.div>
+              </div>
             ) : (
               <div className="space-y-4">
-                {tickets.map((ticket) => (
-                  <motion.div
+                {tickets.map((ticket, idx) => (
+                  <div
                     key={ticket.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3 }}
+                    data-aos="fade-up"
+                    data-aos-delay={idx * 100}
                   >
                     <BookingCard booking={ticket} />
-                  </motion.div>
+                  </div>
                 ))}
                 {/* Pagination */}
                 {pagination && pagination.totalPages > 1 && (
@@ -316,15 +309,14 @@ export default function UserBookingsPage() {
                 <div className="flex justify-end mb-4">
                   <AddSubscriptionDialog role="user" />
                 </div>
-                {subscriptions.map((sub) => (
-                  <motion.div
+                {subscriptions.map((sub, idx) => (
+                  <div
                     key={sub.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3 }}
+                    data-aos="fade-up"
+                    data-aos-delay={idx * 100}
                   >
                     <UserSubscriptionCard subscription={sub} />
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             )}

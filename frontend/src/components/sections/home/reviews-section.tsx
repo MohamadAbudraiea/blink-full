@@ -1,5 +1,4 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
@@ -44,11 +43,9 @@ export function ReviewsSection() {
   return (
     <section className="py-16 bg-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
+        <div
+          data-aos="fade-up"
+          data-aos-duration="600"
           className="text-center mb-12"
         >
           <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
@@ -57,13 +54,13 @@ export function ReviewsSection() {
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             {t("home.reviews.description")}
           </p>
-        </motion.div>
+        </div>
 
         <Swiper
           modules={[Autoplay]}
           spaceBetween={24}
           slidesPerView="auto"
-          loop={true}
+          loop={(reviews?.length || 0) > 3}
           autoplay={{
             delay: 3000,
             disableOnInteraction: false,
@@ -109,11 +106,9 @@ export function ReviewsSection() {
           {reviews &&
             reviews.map((review) => (
               <SwiperSlide key={review.id} className="w-80!" dir="ltr">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6 }}
-                  viewport={{ once: true }}
+                <div
+                  data-aos="fade-up"
+                  data-aos-duration="600"
                 >
                   <Card className="h-full hover:shadow-lg transition-shadow duration-300">
                     <CardContent className="p-6">
@@ -152,7 +147,7 @@ export function ReviewsSection() {
                       </div>
                     </CardContent>
                   </Card>
-                </motion.div>
+                </div>
               </SwiperSlide>
             ))}
         </Swiper>

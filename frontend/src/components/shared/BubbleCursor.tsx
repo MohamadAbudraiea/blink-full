@@ -14,6 +14,17 @@ interface Bubble {
 }
 
 export const BubbleCursor: React.FC = () => {
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined" ? window.matchMedia("(max-width: 768px)").matches : false
+  );
+
+  useEffect(() => {
+    const mql = window.matchMedia("(max-width: 768px)");
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mql.addEventListener("change", handler);
+    return () => mql.removeEventListener("change", handler);
+  }, []);
+
   const [bubbles, setBubbles] = useState<Bubble[]>([]);
 
   // Motion values for the main cursor bubble
@@ -25,6 +36,8 @@ export const BubbleCursor: React.FC = () => {
   const springY = useSpring(mouseY, { stiffness: 500, damping: 28 });
 
   useEffect(() => {
+    if (isMobile) return;
+
     // Hide default cursor globally
     document.body.style.cursor = "none";
 
@@ -54,7 +67,9 @@ export const BubbleCursor: React.FC = () => {
       window.removeEventListener("mousemove", handleMouseMove);
       document.body.style.cursor = "auto";
     };
-  }, [mouseX, mouseY]);
+  }, [mouseX, mouseY, isMobile]);
+
+  if (isMobile) return null;
 
   return (
     <>

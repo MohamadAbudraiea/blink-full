@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 
 export function TeamSection() {
@@ -10,11 +9,9 @@ export function TeamSection() {
     <section className="py-24 bg-muted/10 relative overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-          <motion.div
-            initial={{ opacity: 0, x: isRTL ? 50 : -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
+          <div
+            data-aos={isRTL ? "fade-left" : "fade-right"}
+            data-aos-duration="800"
           >
             <h2 className="text-sm font-bold tracking-[0.3em] uppercase text-primary mb-6">
               {t("about.team.title")}
@@ -30,12 +27,11 @@ export function TeamSection() {
                 {t("about.team.content2")}
               </p>
             </div>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
+          </div>
+          <div
+            data-aos="zoom-in"
+            data-aos-duration="800"
+            data-aos-delay="200"
             className="relative"
           >
             <div className="absolute inset-0 bg-primary/20 rounded-full blur-[100px] pointer-events-none" />
@@ -44,10 +40,9 @@ export function TeamSection() {
               alt="BLINK Team Uniform"
               className="relative w-full max-w-md mx-auto drop-shadow-2xl"
             />
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>
   );
 }
-

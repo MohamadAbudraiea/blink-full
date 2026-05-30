@@ -72,10 +72,9 @@ function QuestionsSection() {
       <div className="absolute top-1/2 left-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="container mx-auto px-4 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+        <div
+          data-aos="fade-up"
+          data-aos-duration="600"
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-black text-foreground mb-6 tracking-tighter italic uppercase">
@@ -84,7 +83,7 @@ function QuestionsSection() {
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             {t("contact.faq.description")}
           </p>
-        </motion.div>
+        </div>
 
         {/* Category Tabs */}
         <div className="flex flex-wrap justify-center gap-4 mb-16">
@@ -178,16 +177,12 @@ function QuestionsSection() {
           </AnimatePresence>
 
           {filteredQuestions.length === 0 && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-center py-20 bg-muted/20 rounded-3xl border border-dashed border-border"
-            >
+            <div className="text-center py-20 bg-muted/20 rounded-3xl border border-dashed border-border">
               <HelpCircle className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
               <p className="text-muted-foreground">
                 No questions found in this category.
               </p>
-            </motion.div>
+            </div>
           )}
         </div>
       </div>

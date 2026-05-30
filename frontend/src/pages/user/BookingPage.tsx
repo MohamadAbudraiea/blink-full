@@ -318,10 +318,9 @@ export default function BookPage() {
     <>
       <section className="relative pt-20 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+          <div
+            data-aos="fade-down"
+            data-aos-duration="600"
           >
             <h1 className="text-4xl md:text-5xl font-bold mb-6 text-balance">
               {t("book.hero.title")}
@@ -329,7 +328,7 @@ export default function BookPage() {
             <p className="text-xl text-muted-foreground mb-8 text-pretty">
               {t("book.hero.subtitle")}
             </p>
-          </motion.div>
+          </div>
         </div>
       </section>
 
@@ -370,12 +369,12 @@ export default function BookPage() {
 
               {/* Connecting Line */}
               <div className="absolute top-5 left-0 right-0 h-0.5 bg-border -z-10" />
-              <motion.div
-                className="absolute top-5 left-0 h-0.5 bg-primary -z-10 origin-left"
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: (currentStep - 1) / (requiresType ? 3 : 2) }}
-                transition={{ duration: 0.4 }}
-                style={{ transformOrigin: dir === "rtl" ? "right" : "left" }}
+              <div
+                className="absolute top-5 left-0 h-0.5 bg-primary -z-10 transition-transform duration-300 origin-left"
+                style={{ 
+                  transform: `scaleX(${(currentStep - 1) / (requiresType ? 3 : 2)})`,
+                  transformOrigin: dir === "rtl" ? "right" : "left" 
+                }}
               />
             </div>
           </div>
@@ -805,14 +804,19 @@ export default function BookPage() {
                 </Button>
               ) : (
                 <Button
-                  type="button"
-                  onClick={handleSubmit(onSubmit)}
+                  type="submit"
+                  form="booking-form"
                   disabled={isAddingTicket}
-                  className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold px-8 shadow-lg shadow-primary/20"
+                  className="gap-2 px-8"
                 >
-                  {isAddingTicket
-                    ? t("book.form.submitting")
-                    : t("book.wizard.navigation.confirm")}
+                  {isAddingTicket ? (
+                    t("book.wizard.navigation.submitting")
+                  ) : (
+                    <>
+                      <CheckCircle2 className="w-5 h-5" />
+                      {t("book.wizard.navigation.confirm")}
+                    </>
+                  )}
                 </Button>
               )}
             </div>

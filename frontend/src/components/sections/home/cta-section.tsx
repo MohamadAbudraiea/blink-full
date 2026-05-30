@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Sparkles } from "lucide-react";
@@ -22,22 +21,18 @@ export function CtaSection() {
       />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
+        <div
+          data-aos="zoom-in"
+          data-aos-duration="600"
           className="max-w-4xl mx-auto text-center p-8 md:p-12 rounded-3xl bg-background/10 backdrop-blur-md border border-white/10 shadow-2xl"
         >
-          <motion.div
-            initial={{ rotate: -10, scale: 0 }}
-            whileInView={{ rotate: 0, scale: 1 }}
-            transition={{ type: "spring", delay: 0.2 }}
-            viewport={{ once: true }}
+          <div
+            data-aos="zoom-in"
+            data-aos-delay="200"
             className="w-16 h-16 mx-auto mb-6 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-lg"
           >
             <Sparkles className="w-8 h-8 text-white" />
-          </motion.div>
+          </div>
 
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-6 leading-tight">
             {t("home.ctaBanner.title")}
@@ -45,20 +40,18 @@ export function CtaSection() {
 
           <div className="mt-8">
             <Link to="/booking">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-background text-foreground hover:bg-background/90 px-8 py-4 rounded-full text-lg font-bold shadow-xl flex items-center mx-auto gap-2 group cursor-pointer"
+              <button
+                className="bg-background text-foreground hover:bg-background/90 px-8 py-4 rounded-full text-lg font-bold shadow-xl flex items-center mx-auto gap-2 group cursor-pointer transition-transform duration-200 hover:scale-105 active:scale-95"
               >
                 {t("home.ctaBanner.button")}
                 <span className="relative flex h-3 w-3 ml-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
                 </span>
-              </motion.button>
+              </button>
             </Link>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

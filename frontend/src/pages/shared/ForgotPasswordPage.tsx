@@ -124,14 +124,13 @@ export default function ForgotPasswordPage() {
     <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+          <div
+            data-aos="fade-down"
+            data-aos-duration="500"
             className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-full mb-6"
           >
             <KeyRound className="h-8 w-8 text-primary" />
-          </motion.div>
+          </div>
           <h2 className="text-3xl font-bold text-foreground">
             {t("forgotPassword.title")}
           </h2>

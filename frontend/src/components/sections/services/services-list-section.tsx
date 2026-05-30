@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { CheckCircle, ArrowRight } from "lucide-react";
@@ -63,21 +62,18 @@ export function ServicesListSection() {
           const features = splitFeatures(t(service.featuresKey));
 
           return (
-            <motion.div
+            <div
               key={service.id}
               className={`flex flex-col ${isEven ? "lg:flex-row" : "lg:flex-row-reverse"} gap-12 lg:gap-24 items-center`}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8 }}
+              data-aos="fade-up"
+              data-aos-duration="800"
             >
               {/* Image Side */}
-              <motion.div
+              <div
                 className="w-full lg:w-1/2 group relative"
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.2 }}
+                data-aos="zoom-in"
+                data-aos-delay="200"
+                data-aos-duration="800"
               >
                 <div className="absolute -inset-4 bg-primary/10 rounded-[2.5rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                 <div className="relative h-[450px] lg:h-[600px] rounded-4xl overflow-hidden shadow-2xl border border-white/10">
@@ -96,14 +92,13 @@ export function ServicesListSection() {
                     </span>
                   </div>
                 </div>
-              </motion.div>
+              </div>
 
               {/* Content Side */}
               <div className="w-full lg:w-1/2 space-y-8">
-                <motion.div
-                  initial={{ opacity: 0, x: isRTL ? 30 : -30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
+                <div
+                  data-aos={isRTL ? "fade-right" : "fade-left"}
+                  data-aos-duration="800"
                 >
                   <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-foreground tracking-tighter uppercase italic mb-6">
                     {t(service.titleKey)}
@@ -112,16 +107,14 @@ export function ServicesListSection() {
                   <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl font-light">
                     {t(service.descriptionKey)}
                   </p>
-                </motion.div>
+                </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 py-4">
                   {features.map((feature: string, featureIndex: number) => (
-                    <motion.div
+                    <div
                       key={featureIndex}
-                      initial={{ opacity: 0, y: 10 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: 0.4 + featureIndex * 0.1 }}
+                      data-aos="fade-up"
+                      data-aos-delay={400 + featureIndex * 100}
                       className="flex items-center gap-4 group/item"
                     >
                       <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center group-hover/item:bg-primary group-hover/item:text-primary-foreground transition-all duration-300">
@@ -130,26 +123,24 @@ export function ServicesListSection() {
                       <span className="text-foreground font-medium tracking-tight">
                         {feature.trim()}
                       </span>
-                    </motion.div>
+                    </div>
                   ))}
                 </div>
 
                 <div className="pt-6">
                   <Link to={service.href}>
-                    <motion.button
-                      whileHover={{ scale: 1.05, x: isRTL ? -10 : 10 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="group flex items-center gap-4 bg-primary text-primary-foreground px-10 py-5 rounded-full font-black uppercase italic tracking-widest shadow-xl shadow-primary/20 hover:bg-primary/90 transition-all"
+                    <button
+                      className={`group flex items-center gap-4 bg-primary text-primary-foreground px-10 py-5 rounded-full font-black uppercase italic tracking-widest shadow-xl shadow-primary/20 hover:bg-primary/90 transition-transform duration-300 hover:scale-105 active:scale-95 ${isRTL ? "hover:-translate-x-2" : "hover:translate-x-2"}`}
                     >
                       {t("services.see_more")}
                       <ArrowRight
                         className={`w-6 h-6 transition-transform group-hover:translate-x-2 ${isRTL ? "rotate-180 group-hover:-translate-x-2" : ""}`}
                       />
-                    </motion.button>
+                    </button>
                   </Link>
                 </div>
               </div>
-            </motion.div>
+            </div>
           );
         })}
       </div>

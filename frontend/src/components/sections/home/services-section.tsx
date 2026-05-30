@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import {
   Droplets,
   Sparkles,
@@ -56,11 +55,10 @@ export function ServicesSection() {
   const ServiceCard = ({ service, index }: { service: any; index: number }) => {
     const Icon = service.icon;
     return (
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: index * 0.1 }}
-        viewport={{ once: true }}
+      <div
+        data-aos="fade-up"
+        data-aos-delay={index * 100}
+        data-aos-duration="600"
         className="group relative h-[450px] md:h-[400px] rounded-4xl overflow-hidden cursor-pointer shadow-lg"
       >
         {/* Background Image */}
@@ -99,7 +97,7 @@ export function ServicesSection() {
             </Link>
           </div>
         </div>
-      </motion.div>
+      </div>
     );
   };
 
@@ -110,27 +108,24 @@ export function ServicesSection() {
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-[100px] translate-x-1/2 translate-y-1/2" />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
+        <div
+          data-aos="fade-up"
+          data-aos-duration="600"
           className="text-center mb-20"
         >
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+          <p
+            data-aos="fade"
             className="text-primary font-black uppercase tracking-[0.4em] text-xs mb-4"
           >
             Excellence in Motion
-          </motion.p>
+          </p>
           <h2 className="text-5xl sm:text-6xl font-black text-foreground mb-6 tracking-tighter uppercase italic">
             {t("home.services.title")}
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto font-light leading-relaxed">
             {t("home.services.description")}
           </p>
-        </motion.div>
+        </div>
 
         {/* Mobile Carousel (Swiper) */}
         <div className="block lg:hidden">

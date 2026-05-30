@@ -1,11 +1,19 @@
 import { createRoot } from "react-dom/client";
 import "./index.css";
+import "aos/dist/aos.css";
 import "./i18n";
 import App from "./App.tsx";
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "./context/theme-provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import AOS from "aos";
+
+AOS.init({
+  duration: 600,
+  once: true,
+  easing: "ease-out",
+});
 
 const queryClient = new QueryClient({
   defaultOptions: {

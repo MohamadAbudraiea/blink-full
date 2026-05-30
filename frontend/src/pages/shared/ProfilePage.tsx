@@ -172,10 +172,9 @@ export default function ProfilePage() {
 
   return (
     <div className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+      <div
+        data-aos="fade-up"
+        data-aos-duration="500"
         className="max-w-4xl mx-auto"
       >
         <div className="flex flex-col sm:flex-row items-start gap-8">
@@ -485,7 +484,7 @@ export default function ProfilePage() {
             </CardContent>
           </Card>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }

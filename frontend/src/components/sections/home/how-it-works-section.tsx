@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { CalendarCheck, MapPin, Sparkles } from "lucide-react";
 
@@ -31,11 +30,9 @@ export function HowItWorksSection() {
       <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent/5 rounded-full blur-[80px]" />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
+        <div
+          data-aos="fade-up"
+          data-aos-duration="600"
           className="text-center mb-16"
         >
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
@@ -44,7 +41,7 @@ export function HowItWorksSection() {
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             {t("home.howItWorks.subtitle")}
           </p>
-        </motion.div>
+        </div>
 
         <div className="relative">
           {/* Connecting Line (Desktop) */}
@@ -53,12 +50,10 @@ export function HowItWorksSection() {
           />
 
           {/* Animated Dash Line */}
-          <motion.div
-            className={`hidden md:block absolute top-12 ${locale === "ar" ? "right-[15%] left-[15%]" : "left-[15%] right-[15%]"} h-0.5 bg-primary origin-left`}
-            initial={{ scaleX: 0 }}
-            whileInView={{ scaleX: 1 }}
-            transition={{ duration: 1.5, ease: "easeInOut" }}
-            viewport={{ once: true }}
+          <div
+            className={`hidden md:block absolute top-12 ${locale === "ar" ? "right-[15%] left-[15%]" : "left-[15%] right-[15%]"} h-0.5 bg-primary`}
+            data-aos="scale-x"
+            data-aos-duration="1500"
             style={{ transformOrigin: locale === "ar" ? "right" : "left" }}
           />
 
@@ -66,24 +61,17 @@ export function HowItWorksSection() {
             {steps.map((step, index) => {
               const Icon = step.icon;
               return (
-                <motion.div
+                <div
                   key={index}
-                  initial={{ opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.2 }}
-                  viewport={{ once: true }}
+                  data-aos="fade-up"
+                  data-aos-delay={index * 200}
+                  data-aos-duration="600"
                   className="relative text-center"
                 >
                   {/* Floating Icon Container */}
-                  <motion.div
-                    className="w-24 h-24 mx-auto mb-6 rounded-2xl bg-card border border-border flex items-center justify-center relative z-10 shadow-lg"
-                    animate={{ y: [0, -10, 0] }}
-                    transition={{
-                      duration: 4,
-                      repeat: Infinity,
-                      delay: index * 0.5,
-                      ease: "easeInOut",
-                    }}
+                  <div
+                    className="w-24 h-24 mx-auto mb-6 rounded-2xl bg-card border border-border flex items-center justify-center relative z-10 shadow-lg animate-float-gentle"
+                    style={{ animationDelay: `${index * 0.5}s`, animationDuration: "4s" }}
                   >
                     <div className="absolute inset-0 bg-primary/10 rounded-2xl animate-pulse" />
                     <Icon className="w-10 h-10 text-primary" />
@@ -94,7 +82,7 @@ export function HowItWorksSection() {
                     >
                       {index + 1}
                     </div>
-                  </motion.div>
+                  </div>
 
                   <h3 className="text-xl font-bold text-foreground mb-3">
                     {t(step.titleKey)}
@@ -102,7 +90,7 @@ export function HowItWorksSection() {
                   <p className="text-muted-foreground text-sm leading-relaxed max-w-xs mx-auto">
                     {t(step.descriptionKey)}
                   </p>
-                </motion.div>
+                </div>
               );
             })}
           </div>

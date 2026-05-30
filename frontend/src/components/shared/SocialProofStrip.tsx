@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { Instagram, Star, Quote } from "lucide-react";
 
@@ -30,11 +29,10 @@ export function SocialProofStrip() {
           {/* Reviews Slider/Grid */}
           <div className="lg:w-2/3 grid grid-cols-1 md:grid-cols-3 gap-6">
             {reviews.map((review, idx) => (
-              <motion.div
+              <div
                 key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.1 }}
+                data-aos="fade-up"
+                data-aos-delay={idx * 100}
                 className="bg-muted/30 p-8 rounded-4xl border border-border/50 relative group"
               >
                 <Quote className="absolute top-4 right-4 w-8 h-8 text-primary/10 group-hover:text-primary/20 transition-colors" />
@@ -52,15 +50,15 @@ export function SocialProofStrip() {
                 <p className="text-xs font-bold uppercase tracking-widest text-primary">
                   — {review.name}
                 </p>
-              </motion.div>
+              </div>
             ))}
           </div>
 
           {/* Social CTA */}
           <div className="lg:w-1/3 text-center lg:text-left">
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
+            <div
+              data-aos="fade-left"
+              data-aos-duration="600"
               className="space-y-6"
             >
               <div className="inline-flex items-center gap-3 px-4 py-2 bg-pink-500/10 text-pink-500 rounded-full text-xs font-bold uppercase tracking-widest">
@@ -81,7 +79,7 @@ export function SocialProofStrip() {
               >
                 {t("contact.social.cta")}
               </a>
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>

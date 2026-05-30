@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -74,19 +73,18 @@ export function SignupForm() {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+    <div
+      data-aos="fade-up"
+      data-aos-duration="500"
       className="w-full max-w-md mx-auto"
     >
       <Card className="shadow-lg border-0 bg-card">
         {/* Header */}
         <CardHeader className="space-y-6 text-center">
-          <motion.div
-            initial={{ scale: 0.8 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.2, duration: 0.3 }}
+          <div
+            data-aos="zoom-in"
+            data-aos-delay="200"
+            data-aos-duration="300"
             className="flex justify-center"
           >
             <img
@@ -94,7 +92,7 @@ export function SignupForm() {
               alt="BLINK Logo"
               className="h-20 w-auto"
             />
-          </motion.div>
+          </div>
           <div>
             <CardTitle className="text-2xl font-bold text-foreground">
               {t("signup.title")}
@@ -280,15 +278,7 @@ export function SignupForm() {
                 className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold transition-all duration-200 transform hover:scale-[1.02]"
               >
                 {isSigningUp ? (
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{
-                      duration: 1,
-                      repeat: Number.POSITIVE_INFINITY,
-                      ease: "linear",
-                    }}
-                    className="w-5 h-5 border-2 border-primary-foreground border-t-transparent rounded-full"
-                  />
+                  <div className="w-5 h-5 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
                 ) : (
                   t("signup.create_account")
                 )}
@@ -310,6 +300,6 @@ export function SignupForm() {
           </Form>
         </CardContent>
       </Card>
-    </motion.div>
+    </div>
   );
 }

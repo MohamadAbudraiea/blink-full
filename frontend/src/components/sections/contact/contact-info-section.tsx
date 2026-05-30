@@ -102,24 +102,16 @@ function ContactInfoSection() {
     return (
       <section className="py-24 bg-background overflow-hidden">
         <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
+          <div
+            data-aos="zoom-in"
+            data-aos-duration="600"
             className="max-w-xl mx-auto bg-muted/30 backdrop-blur-xl border border-primary/20 rounded-[2.5rem] p-12 text-center"
           >
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{
-                type: "spring",
-                damping: 12,
-                stiffness: 200,
-                delay: 0.2,
-              }}
+            <div
               className="w-24 h-24 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-8"
             >
               <CheckCircle2 className="w-12 h-12 text-primary" />
-            </motion.div>
+            </div>
             <h2 className="text-3xl font-black text-foreground mb-4 tracking-tighter italic uppercase">
               {t("contact.form.success.title")}
             </h2>
@@ -133,7 +125,7 @@ function ContactInfoSection() {
             >
               Send Another Message
             </Button>
-          </motion.div>
+          </div>
         </div>
       </section>
     );
@@ -146,11 +138,9 @@ function ContactInfoSection() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-16 items-start">
           <div className="lg:col-span-2 space-y-12">
-            <motion.div
-              initial={{ opacity: 0, x: isRTL ? 50 : -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
+            <div
+              data-aos={isRTL ? "fade-left" : "fade-right"}
+              data-aos-duration="800"
             >
               <h2 className="text-4xl font-black text-foreground mb-6 tracking-tighter italic uppercase">
                 {t("contact.info.title")}
@@ -163,13 +153,13 @@ function ContactInfoSection() {
                 {contactInfo.map((info, index) => {
                   const Icon = info.icon;
                   return (
-                    <motion.a
+                    <a
                       key={index}
                       href={t(info.linkKey)}
                       target="_blank"
-                      initial={{ opacity: 0, y: 10 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
+                      rel="noopener noreferrer"
+                      data-aos="fade-up"
+                      data-aos-delay={index * 100}
                       className="group flex items-center p-5 rounded-2xl bg-muted/30 border border-border/50 hover:border-primary/30 transition-all duration-300"
                     >
                       <div
@@ -185,15 +175,15 @@ function ContactInfoSection() {
                           {t(info.contentKey)}
                         </p>
                       </div>
-                    </motion.a>
+                    </a>
                   );
                 })}
               </div>
-            </motion.div>
+            </div>
 
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
+            <div
+              data-aos="fade-in"
+              data-aos-duration="600"
               className="p-8 bg-muted/20 rounded-4xl border-l-4 border-primary"
             >
               <p className="text-primary text-[10px] font-bold uppercase tracking-[0.2em] mb-2">
@@ -202,12 +192,12 @@ function ContactInfoSection() {
               <p className="text-foreground/80 font-medium">
                 {t("contact.response.message")}
               </p>
-            </motion.div>
+            </div>
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+          <div
+            data-aos="fade-up"
+            data-aos-duration="600"
             className="lg:col-span-3"
           >
             <div className="relative group">
@@ -389,7 +379,7 @@ function ContactInfoSection() {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

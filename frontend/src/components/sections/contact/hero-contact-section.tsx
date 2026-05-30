@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { MessageCircle, Phone, Instagram } from "lucide-react";
 
@@ -39,31 +38,18 @@ export function HeroContactSection() {
     <section className="relative py-24 bg-background overflow-hidden flex flex-col items-center">
       {/* Animated Gradient Mesh Background */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <motion.div
-          animate={{ 
-            scale: [1, 1.2, 1],
-            x: [0, 50, 0],
-            y: [0, 30, 0]
-          }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute -top-1/4 -left-1/4 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px]"
+        <div
+          className="absolute -top-1/4 -left-1/4 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px] animate-[pulse_10s_ease-in-out_infinite]"
         />
-        <motion.div
-          animate={{ 
-            scale: [1, 1.3, 1],
-            x: [0, -40, 0],
-            y: [0, -60, 0]
-          }}
-          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          className="absolute -bottom-1/4 -right-1/4 w-[500px] h-[500px] bg-accent/10 rounded-full blur-[100px]"
+        <div
+          className="absolute -bottom-1/4 -right-1/4 w-[500px] h-[500px] bg-accent/10 rounded-full blur-[100px] animate-[pulse_12s_ease-in-out_infinite_reverse]"
         />
       </div>
 
       <div className="container mx-auto px-4 relative z-10 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+        <div
+          data-aos="fade-up"
+          data-aos-duration="800"
           className="max-w-3xl mx-auto mb-16"
         >
           <h1 className="text-5xl md:text-7xl font-black text-foreground mb-6 tracking-tighter">
@@ -75,23 +61,22 @@ export function HeroContactSection() {
           <p className="text-muted-foreground max-w-xl mx-auto">
              {t("contact.hero.description")}
           </p>
-        </motion.div>
+        </div>
 
         {/* Floating Contact Pills */}
         <div className="flex flex-wrap justify-center gap-6 max-w-4xl mx-auto">
           {contacts.map((item, index) => {
             const Icon = item.icon;
             return (
-              <motion.a
+              <a
                 key={index}
                 href={item.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.2 + index * 0.1, duration: 0.5 }}
-                whileHover={{ y: -5 }}
-                className={`group flex items-center gap-4 bg-muted/50 backdrop-blur-sm border border-border/50 px-8 py-4 rounded-full transition-all duration-500 ${item.borderColor} ${item.glow}`}
+                data-aos="zoom-in"
+                data-aos-delay={200 + index * 100}
+                data-aos-duration="500"
+                className={`group flex items-center gap-4 bg-muted/50 backdrop-blur-sm border border-border/50 px-8 py-4 rounded-full transition-all duration-500 ${item.borderColor} ${item.glow} hover:-translate-y-1`}
               >
                 <div className={`p-2 rounded-full bg-background border border-border group-hover:scale-110 transition-transform duration-300 ${item.iconColor}`}>
                   <Icon className="w-5 h-5" />
@@ -104,7 +89,7 @@ export function HeroContactSection() {
                     {item.value}
                   </p>
                 </div>
-              </motion.a>
+              </a>
             );
           })}
         </div>
