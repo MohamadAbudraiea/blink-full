@@ -2,7 +2,7 @@ const dotenv = require("dotenv");
 const path = require("path");
 const axios = require("axios");
 
-dotenv.config({ path: path.resolve(__dirname, "../config.env") });
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 async function sendEmail(receiver, subject, htmlContent) {
   try {
@@ -53,7 +53,7 @@ async function sendEmail(receiver, subject, htmlContent) {
           "content-type": "application/json",
           "api-key": apiKey,
         },
-      }
+      },
     );
 
     console.log("✅ Email sent successfully!");

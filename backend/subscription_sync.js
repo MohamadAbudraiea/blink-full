@@ -1,4 +1,4 @@
-require("dotenv").config({ path: "./config.env" });
+require("dotenv").config({ path: "./.env" });
 const SQL_DRIVER = require("./Drivers/SQL_Driver");
 const initModels = require("./models/init-models");
 
@@ -22,11 +22,15 @@ async function runMigrations() {
         "secretary_id" UUID REFERENCES "user" ("id") ON DELETE SET NULL
       );
     `);
-    
-    console.log("2. Adding subscription_id column to ticket table...");
-    await SQL_DRIVER.query(`ALTER TABLE "ticket" ADD COLUMN IF NOT EXISTS "subscription_id" BIGINT REFERENCES "subscription" ("id") ON DELETE CASCADE;`);
 
-    console.log("✅ Database synced successfully! Subscriptions table created.");
+    console.log("2. Adding subscription_id column to ticket table...");
+    await SQL_DRIVER.query(
+      `ALTER TABLE "ticket" ADD COLUMN IF NOT EXISTS "subscription_id" BIGINT REFERENCES "subscription" ("id") ON DELETE CASCADE;`,
+    );
+
+    console.log(
+      "✅ Database synced successfully! Subscriptions table created.",
+    );
     process.exit(0);
   } catch (err) {
     console.error("❌ Error syncing database:", err);
