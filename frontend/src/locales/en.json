@@ -790,9 +790,7 @@
     "rights": "All rights reserved.",
     "services": "Services",
     "company_info": "Company",
-    "contact": "Contact",
-    "built_by": "Built by",
-    "AIO": "AIO Solutions"
+    "contact": "Contact"
   },
   "notfound": {
     "title": "Page Not Found",

@@ -80,18 +80,18 @@ const serviceTypeOptions: Record<
 };
 
 const visualServicesList = [
-  { id: "wash", icon: Sparkles, bgImage: "/wash-service1.jpg" },
-  { id: "dryclean", icon: Star, bgImage: "/drycleaning-service.jpg" },
-  { id: "polish", icon: Zap, bgImage: "/polishing-service.jpg" },
+  { id: "wash", icon: Sparkles, bgImage: "/wash1.webp" },
+  { id: "dryclean", icon: Star, bgImage: "/dryclean1.webp" },
+  { id: "polish", icon: Zap, bgImage: "/polish1.webp" },
   {
     id: "nanoceramic",
     icon: Shield,
-    bgImage: "/nano-ceramic-graphene-service.jpg",
+    bgImage: "/nano1.webp",
   },
   {
     id: "graphene",
     icon: Shield,
-    bgImage: "/nano-ceramic-graphene-service.jpg",
+    bgImage: "/nano1.webp",
   },
 ];
 
@@ -318,10 +318,7 @@ export default function BookPage() {
     <>
       <section className="relative pt-20 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <div
-            data-aos="fade-down"
-            data-aos-duration="600"
-          >
+          <div data-aos="fade-down" data-aos-duration="600">
             <h1 className="text-4xl md:text-5xl font-bold mb-6 text-balance">
               {t("book.hero.title")}
             </h1>
@@ -371,9 +368,9 @@ export default function BookPage() {
               <div className="absolute top-5 left-0 right-0 h-0.5 bg-border -z-10" />
               <div
                 className="absolute top-5 left-0 h-0.5 bg-primary -z-10 transition-transform duration-300 origin-left"
-                style={{ 
+                style={{
                   transform: `scaleX(${(currentStep - 1) / (requiresType ? 3 : 2)})`,
-                  transformOrigin: dir === "rtl" ? "right" : "left" 
+                  transformOrigin: dir === "rtl" ? "right" : "left",
                 }}
               />
             </div>

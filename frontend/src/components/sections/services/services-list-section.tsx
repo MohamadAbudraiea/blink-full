@@ -14,7 +14,7 @@ export function ServicesListSection() {
       descriptionKey: "services.items.wash.description",
       featuresKey: "services.items.wash.features",
       href: "/services/wash",
-      bgImage: "/wash-service1.jpg",
+      bgImage: "/wash1.webp",
     },
     {
       id: "dryclean",
@@ -22,7 +22,7 @@ export function ServicesListSection() {
       descriptionKey: "services.items.dryclean.description",
       featuresKey: "services.items.dryclean.features",
       href: "/services/dryclean",
-      bgImage: "/drycleaning-service.jpg",
+      bgImage: "/dryclean1.webp",
     },
     {
       id: "polish",
@@ -30,7 +30,7 @@ export function ServicesListSection() {
       descriptionKey: "services.items.polish.description",
       featuresKey: "services.items.polish.features",
       href: "/services/polish",
-      bgImage: "/polishing-service.jpg",
+      bgImage: "/polish1.webp",
     },
     {
       id: "nano",
@@ -38,7 +38,7 @@ export function ServicesListSection() {
       descriptionKey: "services.items.nano.description",
       featuresKey: "services.items.nano.features",
       href: "/services/nano-ceramic",
-      bgImage: "/nano-ceramic-graphene-service.jpg",
+      bgImage: "/nano1.webp",
     },
   ];
 

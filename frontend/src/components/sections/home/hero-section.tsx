@@ -109,9 +109,7 @@ export function HeroSection() {
             {/* Typewriter Tagline */}
             <h2 className="text-2xl w-fit sm:text-3xl font-light text-foreground min-h-[40px]">
               {displayedTagline}
-              <span
-                className="inline-block w-[3px] h-[30px] bg-primary ml-1 align-middle animate-blink-cursor"
-              />
+              <span className="inline-block w-[3px] h-[30px] bg-primary ml-1 align-middle animate-blink-cursor" />
             </h2>
 
             <p
@@ -156,7 +154,7 @@ export function HeroSection() {
 
             {/* Car Image */}
             <img
-              src="/hero_car.png"
+              src="/hero.png"
               alt="Premium Car Detailing"
               className="w-full relative z-10 drop-shadow-2xl animate-float-gentle"
             />

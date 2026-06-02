@@ -35,7 +35,7 @@ function PolishServicePage() {
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-linear-to-r from-black/90 via-black/60 to-transparent z-10" />
           <img
-            src="/graphene1.jpeg"
+            src="/nano1.webp"
             alt={t("services.items.polish.title")}
             className="w-full h-full object-cover opacity-60"
           />

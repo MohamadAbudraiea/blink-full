@@ -39,17 +39,6 @@ export default function Footer() {
               © {new Date().getFullYear()} {t("footer.company")}.{" "}
               {t("footer.rights")}
             </p>
-            <p className="text-xs text-muted-foreground mt-2">
-              {t("footer.built_by")}{" "}
-              <a
-                href="http://aio-solutions.tech/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline hover:text-foreground transition-colors"
-              >
-                {t("footer.AIO")}
-              </a>
-            </p>
           </div>
 
           {/* Services */}

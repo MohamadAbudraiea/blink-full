@@ -27,28 +27,28 @@ export function ServicesSection() {
       titleKey: "home.services.items.wash.title",
       descriptionKey: "home.services.items.wash.description",
       href: "/services/wash",
-      bgImage: "/wash-service1.jpg",
+      bgImage: "/wash1.webp",
     },
     {
       icon: Sparkles,
       titleKey: "home.services.items.dryclean.title",
       descriptionKey: "home.services.items.dryclean.description",
       href: "/services/dryclean",
-      bgImage: "/drycleaning-service.jpg",
+      bgImage: "/dryclean1.webp",
     },
     {
       icon: Star,
       titleKey: "home.services.items.polish.title",
       descriptionKey: "home.services.items.polish.description",
       href: "/services/polish",
-      bgImage: "/polishing-service.jpg",
+      bgImage: "/polish1.webp",
     },
     {
       icon: ShieldCheck,
       titleKey: "home.services.items.nano.title",
       descriptionKey: "home.services.items.nano.description",
       href: "/services/nano-ceramic",
-      bgImage: "/nano-ceramic-graphene-service.jpg",
+      bgImage: "/nano1.webp",
     },
   ];
 

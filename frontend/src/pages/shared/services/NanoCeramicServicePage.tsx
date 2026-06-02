@@ -44,7 +44,7 @@ function NanoCeramicServicePage() {
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-linear-to-r from-black/90 via-black/60 to-transparent z-10" />
           <img
-            src="/graphene1.jpeg"
+            src="/nano1.webp"
             alt="Nano Ceramic Coating"
             className="w-full h-full object-cover opacity-60"
           />
@@ -142,7 +142,7 @@ function NanoCeramicServicePage() {
             >
               <div className="absolute -inset-4 bg-primary/5 rounded-[2.5rem] blur-2xl group-hover:bg-primary/10 transition-colors duration-500" />
               <img
-                src="/graphene2.jpeg"
+                src="/nano2.webp"
                 alt="Graphene Coating"
                 className="relative w-full rounded-4xl shadow-2xl border border-border/50"
               />
