@@ -94,10 +94,10 @@ export function HeroSection() {
                           />
                         </div>
                       )}
-                      <span className="text-primary text-6xl sm:text-7xl lg:text-8xl">
+                      <span className="text-primary text-6xl sm:text-7xl lg:text-8xl font-nativera">
                         {part.letter}
                       </span>
-                      <span className="text-xs sm:text-sm font-normal text-muted-foreground mt-1 max-w-[80px] text-center leading-tight">
+                      <span className="text-xs sm:text-sm font-sans font-normal text-muted-foreground mt-1 max-w-[80px] text-center leading-tight">
                         {part.explanation}
                       </span>
                     </div>
