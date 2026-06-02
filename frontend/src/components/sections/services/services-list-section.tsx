@@ -100,7 +100,7 @@ export function ServicesListSection() {
                   data-aos={isRTL ? "fade-right" : "fade-left"}
                   data-aos-duration="800"
                 >
-                  <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-foreground tracking-tighter uppercase italic mb-6">
+                  <h2 className="font-nativera text-4xl sm:text-5xl lg:text-6xl font-black text-foreground tracking-tighter uppercase italic mb-6">
                     {t(service.titleKey)}
                   </h2>
 

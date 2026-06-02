@@ -77,7 +77,7 @@ function QuestionsSection() {
           data-aos-duration="600"
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-black text-foreground mb-6 tracking-tighter italic uppercase">
+          <h2 className="font-nativera text-4xl md:text-5xl font-black text-foreground mb-6 tracking-tighter italic uppercase">
             {t("contact.faq.title")}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">

@@ -48,7 +48,7 @@ export function CtaSubscriptionsSection() {
             </span>
           </div>
 
-          <h2 className="text-4xl sm:text-5xl lg:text-7xl font-black text-white mb-12 tracking-tighter uppercase italic leading-[0.9] drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+          <h2 className="font-nativera text-4xl sm:text-5xl lg:text-7xl font-black text-white mb-12 tracking-tighter uppercase italic leading-[0.9] drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
             {t("subscriptionsPage.cta.title")}
           </h2>
 

@@ -119,7 +119,7 @@ export function ServicesSection() {
           >
             Excellence in Motion
           </p>
-          <h2 className="text-5xl sm:text-6xl font-black text-foreground mb-6 tracking-tighter uppercase italic">
+          <h2 className="font-nativera text-5xl sm:text-6xl font-black text-foreground mb-6 tracking-tighter uppercase italic">
             {t("home.services.title")}
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto font-light leading-relaxed">

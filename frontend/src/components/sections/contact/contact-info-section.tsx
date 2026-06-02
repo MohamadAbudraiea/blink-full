@@ -112,7 +112,7 @@ function ContactInfoSection() {
             >
               <CheckCircle2 className="w-12 h-12 text-primary" />
             </div>
-            <h2 className="text-3xl font-black text-foreground mb-4 tracking-tighter italic uppercase">
+            <h2 className="font-nativera text-3xl font-black text-foreground mb-4 tracking-tighter italic uppercase">
               {t("contact.form.success.title")}
             </h2>
             <p className="text-muted-foreground text-lg mb-8">
@@ -142,7 +142,7 @@ function ContactInfoSection() {
               data-aos={isRTL ? "fade-left" : "fade-right"}
               data-aos-duration="800"
             >
-              <h2 className="text-4xl font-black text-foreground mb-6 tracking-tighter italic uppercase">
+              <h2 className="font-nativera text-4xl font-black text-foreground mb-6 tracking-tighter italic uppercase">
                 {t("contact.info.title")}
               </h2>
               <p className="text-muted-foreground text-lg leading-relaxed mb-8">

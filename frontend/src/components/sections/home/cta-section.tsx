@@ -34,7 +34,7 @@ export function CtaSection() {
             <Sparkles className="w-8 h-8 text-white" />
           </div>
 
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-6 leading-tight">
+          <h2 className="font-nativera text-3xl md:text-5xl font-bold text-white mb-6 leading-tight">
             {t("home.ctaBanner.title")}
           </h2>
 

@@ -44,7 +44,7 @@ export function ValuesSection() {
           data-aos-duration="800"
           className="text-center mb-20"
         >
-          <h2 className="text-sm font-bold tracking-[0.3em] uppercase text-primary mb-4">
+          <h2 className="font-nativera text-sm font-bold tracking-[0.3em] uppercase text-primary mb-4">
             {t("about.values.title")}
           </h2>
           <p className="text-3xl md:text-5xl font-black text-foreground max-w-3xl mx-auto tracking-tighter">

@@ -150,7 +150,7 @@ export function SubscriptionsSection() {
             </span>
           </div>
 
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-foreground mb-6 tracking-tighter uppercase italic">
+          <h2 className="font-nativera text-4xl sm:text-5xl lg:text-6xl font-black text-foreground mb-6 tracking-tighter uppercase italic">
             {t("home.subscriptions.title")}
           </h2>
           <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto font-light leading-relaxed">

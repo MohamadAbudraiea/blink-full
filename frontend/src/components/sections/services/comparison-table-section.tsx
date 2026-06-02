@@ -51,7 +51,7 @@ export function ComparisonTableSection() {
           data-aos-duration="600"
           className="text-center mb-16"
         >
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
+          <h2 className="font-nativera text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
             {t("services.comparison.title")}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">

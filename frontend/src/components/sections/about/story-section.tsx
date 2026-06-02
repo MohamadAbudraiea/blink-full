@@ -27,7 +27,7 @@ export function StorySection() {
             data-aos-delay="200"
             className={isRTL ? "lg:order-1" : ""}
           >
-            <h2 className="text-sm font-bold tracking-[0.3em] uppercase text-primary mb-6">
+            <h2 className="font-nativera text-sm font-bold tracking-[0.3em] uppercase text-primary mb-6">
               {t("about.story.title")}
             </h2>
             <p className="text-3xl md:text-5xl font-black text-foreground mb-8 tracking-tighter italic uppercase">
