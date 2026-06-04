@@ -17,10 +17,10 @@ import { useTheme } from "@/context/theme-provider";
 export function ShowScheduleDialog({ row }: { row: any }) {
   const { theme } = useTheme();
   const { schedule, isGettingDetailerSchedule } = useGetDetailerSchedule(
-    row?.id
+    row?.id,
   );
 
-  const logoSrc = theme === "dark" ? "/icon-logo.png" : "/black-icon-logo.png";
+  const logoSrc = theme === "dark" ? "/cabsola.png" : "/black-cabsola.png";
 
   return (
     <Dialog>

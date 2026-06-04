@@ -17,7 +17,7 @@ import { useTheme } from "@/context/theme-provider";
 
 export function ShowStocksDialog({ row }: { row: any }) {
   const { theme } = useTheme();
-  const logoSrc = theme === "dark" ? "/icon-logo.png" : "/black-icon-logo.png";
+  const logoSrc = theme === "dark" ? "/cabsola.png" : "/black-cabsola.png";
   const [open, setOpen] = useState(false);
   const [dateMode, setDateMode] = useState<"single" | "range">("single");
   const [dateInput, setDateInput] = useState({

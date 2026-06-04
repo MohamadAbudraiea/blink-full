@@ -6,7 +6,7 @@ function Loader() {
   return (
     <div className="flex justify-center items-center h-screen">
       <img
-        src={theme === "dark" ? `/icon-logo.png` : `/black-icon-logo.png`}
+        src={theme === "dark" ? `/cabsola.png` : `/black-cabsola.png`}
         alt="Loading"
         className="h-32 w-32 transform animate-spin"
       />
