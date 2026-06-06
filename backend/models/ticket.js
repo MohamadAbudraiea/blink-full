@@ -58,7 +58,7 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false,
       },
       typeOfService: {
-        type: DataTypes.ENUM("Blink", "Elite", "Premium"),
+        type: DataTypes.TEXT,
         allowNull: true,
       },
       payment_method: {
