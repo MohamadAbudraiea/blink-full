@@ -44,7 +44,7 @@ exports.userLogin = async (req, res) => {
           name: findUser.name,
           created_at: findUser.created_at,
         },
-        process.env.JWT_SECRET
+        process.env.JWT_SECRET,
       );
       res.cookie("token", token, {
         maxAge: 1000 * 60 * 60 * 2,
@@ -174,7 +174,7 @@ exports.userSignup = async (req, res) => {
   </div>
 </body>
 
-`
+`,
     );
   } catch (error) {
     res.status(400).json({
@@ -189,7 +189,6 @@ exports.logout = (req, res) => {
       httpOnly: true,
       sameSite: "none",
       secure: true,
-      maxAge: 0,
     });
     return res.json({
       status: "success",
