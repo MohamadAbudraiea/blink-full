@@ -507,9 +507,8 @@ export function AddTicketDialog({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Blink">Blink</SelectItem>
-                <SelectItem value="Elite">Elite</SelectItem>
-                <SelectItem value="Premium">Premium</SelectItem>
+                <SelectItem value="One Stage">One Stage</SelectItem>
+                <SelectItem value="Three Stages">Three Stages</SelectItem>
               </SelectContent>
             </Select>
           </div>
