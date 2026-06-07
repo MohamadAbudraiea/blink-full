@@ -37,11 +37,10 @@ export function PendingBooking({
   useFinishTicketHook,
   useCancelTicketHook,
 }: PendingBookingProps) {
-  const { cancelReason, customReason, setCancelDialogOpen, selectedTicket } =
-    useBookingStore();
+  const { cancelReason, customReason, setCancelDialogOpen } = useBookingStore();
 
   const [paymentMethod, setPaymentMethod] = useState<"cash" | "online" | "">(
-    ""
+    "",
   );
 
   const { cancelTicketMutation, isCancellingTicket } = useCancelTicketHook();
@@ -54,9 +53,9 @@ export function PendingBooking({
 
   const handleCancelOrder = () => {
     const reason = cancelReason === "other" ? customReason : cancelReason;
-    if (reason && selectedTicket) {
+    if (reason && ticket) {
       cancelTicketMutation({
-        id: selectedTicket.id,
+        id: ticket.id,
         reason: reason,
       });
       setCancelDialogOpen(false);
@@ -72,17 +71,22 @@ export function PendingBooking({
 
       <div className="space-y-3 py-4">
         <p className="text-sm text-muted-foreground">
-          User: <span className="font-medium">{ticket.user?.name || ticket.customer_name || "-"}</span>
+          User:{" "}
+          <span className="font-medium">
+            {ticket.user?.name || ticket.customer_name || "-"}
+          </span>
         </p>
         <p className="text-sm text-muted-foreground">
           Phone:{" "}
-          <a href={`tel:${ticket.user?.phone || ticket.customer_phone || ""}`} className="font-medium">
+          <a
+            href={`tel:${ticket.user?.phone || ticket.customer_phone || ""}`}
+            className="font-medium"
+          >
             {ticket.user?.phone || ticket.customer_phone || "-"}
           </a>
         </p>
         <p className="text-sm text-muted-foreground">
           price:{formatCurrency(ticket?.price) || "-"}
-
         </p>
         {(role === "admin" || role === "detailer") && (
           <div className="space-y-3">
@@ -99,10 +103,11 @@ export function PendingBooking({
             >
               {/* Cash Option */}
               <Card
-                className={`cursor-pointer transition-all hover:shadow-md border-2 ${paymentMethod === "cash"
-                  ? "border-primary shadow-sm"
-                  : "border-muted"
-                  }`}
+                className={`cursor-pointer transition-all hover:shadow-md border-2 ${
+                  paymentMethod === "cash"
+                    ? "border-primary shadow-sm"
+                    : "border-muted"
+                }`}
                 onClick={() => setPaymentMethod("cash")}
               >
                 <CardContent className="flex items-center justify-center gap-3 p-4">
@@ -126,10 +131,11 @@ export function PendingBooking({
 
               {/* Online Option */}
               <Card
-                className={`cursor-pointer transition-all hover:shadow-md border-2 ${paymentMethod === "online"
-                  ? "border-primary shadow-sm"
-                  : "border-muted"
-                  }`}
+                className={`cursor-pointer transition-all hover:shadow-md border-2 ${
+                  paymentMethod === "online"
+                    ? "border-primary shadow-sm"
+                    : "border-muted"
+                }`}
                 onClick={() => setPaymentMethod("online")}
               >
                 <CardContent className="flex items-center justify-center gap-3 p-4">
