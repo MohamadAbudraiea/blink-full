@@ -1,6 +1,7 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { BookingsTable } from "@/components/booking/BookingsTable";
+import { ScheduleGantt } from "@/components/booking/ScheduleGantt";
 import { useBookingStore } from "@/stores/useBookingStore";
 import {
   useGetAllDetailersForSecretary,
@@ -70,6 +71,7 @@ export default function SecretaryDashboard() {
         <TabsList>
           <TabsTrigger value="bookings">Bookings</TabsTrigger>
           <TabsTrigger value="subscriptions">Subscriptions</TabsTrigger>
+          <TabsTrigger value="schedules">Schedules</TabsTrigger>
         </TabsList>
         
         <TabsContent value="bookings">
@@ -99,6 +101,17 @@ export default function SecretaryDashboard() {
               ) : (
                 <SubscriptionsTable subscriptions={subscriptions} role="secretary" detailers={detailers} />
               )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="schedules">
+          <Card>
+            <CardHeader>
+              <CardTitle>Detailer Schedules</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ScheduleGantt role="secretary" />
             </CardContent>
           </Card>
         </TabsContent>

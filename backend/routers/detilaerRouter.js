@@ -5,6 +5,7 @@ const detailerController = require("../controllers/detailerController.js");
 const ratingController = require("../controllers/ratingController");
 // get tickets
 router.get("/tickets/filters", ticketController.getTicketsForStaff);
+router.get("/ticket/:ticket_id", ticketController.getTicketByID);
 // router.get("/tickets/pending", ticketController.getPendingTickets);
 // router.get("/tickets/finished", ticketController.getFinishedTickets);
 router.post("/ticket/finish/:ticket_id", ticketController.finishTicket);

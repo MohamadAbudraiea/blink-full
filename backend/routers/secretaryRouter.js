@@ -13,11 +13,10 @@ router.get("/ticket/rating/:ticket_id", ratingController.getTicketRating);
 //-------------------------
 // use this (in admin we get all the secretaries and detailers here we get just the detailers)
 router.get("/detailer", detailerController.getAlldetailers);
-
 router.get("/detailer/:detailer_id", detailerController.getDetailerSchedule);
 router.get(
   "/detailer/:detailer_id/:date",
-  detailerController.getDetailerScheduleByDate
+  detailerController.getDetailerScheduleByDate,
 );
 //--------------------------------------------------------------
 // accept, cancel and finish ticket
@@ -30,6 +29,9 @@ router.post("/ticket/finish/:ticket_id", ticketController.finishTicket);
 // subscriptions
 router.post("/subscription", subscriptionController.createSubscription);
 router.get("/subscription", subscriptionController.getSubscriptions);
-router.post("/subscription/cancel/:id", subscriptionController.cancelSubscription);
+router.post(
+  "/subscription/cancel/:id",
+  subscriptionController.cancelSubscription,
+);
 
 module.exports = router;

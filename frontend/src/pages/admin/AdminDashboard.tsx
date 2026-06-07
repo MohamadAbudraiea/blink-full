@@ -6,7 +6,7 @@ import { SecretaryForm } from "@/components/admin/SecretaryForm";
 import { DetailerForm } from "@/components/admin/DetailerForm";
 import { BookingsTable } from "@/components/booking/BookingsTable";
 import { BookingsChart } from "@/components/admin/BookingsChart";
-import { ScheduleGantt } from "@/components/admin/ScheduleGantt";
+import { ScheduleGantt } from "@/components/booking/ScheduleGantt";
 import { useGetUsers } from "@/hooks/useAdmin";
 import { useGetFilteredTickets } from "@/hooks/useTicket";
 import { useBookingStore } from "@/stores/useBookingStore";

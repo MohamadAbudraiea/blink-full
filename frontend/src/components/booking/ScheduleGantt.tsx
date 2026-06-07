@@ -1,11 +1,26 @@
-import { useGetAllDetailersSchedules } from "@/hooks/useAdmin";
+import { useQuery } from "@tanstack/react-query";
+import { getAllDetailersSchedules as getAllAdmin } from "@/api/admin";
+import { getTicketById as getTicketAdmin } from "@/api/ticket";
+import { getTicketById as getTicketSec } from "@/api/secretary";
+import { getTicketById as getTicketDet } from "@/api/detailer";
+
+import { useGetAllDetailersForSecretary, useGetDetailerScheduleForSecretary } from "@/hooks/useSecretary";
+import { useGetTicketsForDetailer } from "@/hooks/usedetailer";
+
 import { useMemo, useState, useRef, useEffect } from "react";
 import { format, addDays, isSameDay, startOfWeek, endOfWeek } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Calendar, Clock, User } from "lucide-react";
 import Loader from "@/components/ui/Loader";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { useGetTicketById } from "@/hooks/useTicket";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 import { BookingDialog } from "../booking/BookingDialog";
 
 interface ScheduleEntry {
@@ -22,19 +37,17 @@ interface DetailerSchedule {
   schedule: ScheduleEntry[];
 }
 
-// Vibrant palette for detailer rows
 const DETAILER_COLORS = [
-  { bg: "rgba(99, 102, 241, 0.18)", border: "#6366f1", text: "#818cf8" }, // Indigo
-  { bg: "rgba(16, 185, 129, 0.18)", border: "#10b981", text: "#34d399" }, // Emerald
-  { bg: "rgba(245, 158, 11, 0.18)", border: "#f59e0b", text: "#fbbf24" }, // Amber
-  { bg: "rgba(239, 68, 68, 0.18)", border: "#ef4444", text: "#f87171" }, // Red
-  { bg: "rgba(168, 85, 247, 0.18)", border: "#a855f7", text: "#c084fc" }, // Purple
-  { bg: "rgba(6, 182, 212, 0.18)", border: "#06b6d4", text: "#22d3ee" }, // Cyan
-  { bg: "rgba(236, 72, 153, 0.18)", border: "#ec4899", text: "#f472b6" }, // Pink
-  { bg: "rgba(34, 197, 94, 0.18)", border: "#22c55e", text: "#4ade80" }, // Green
+  { bg: "rgba(99, 102, 241, 0.18)", border: "#6366f1", text: "#818cf8" },
+  { bg: "rgba(16, 185, 129, 0.18)", border: "#10b981", text: "#34d399" },
+  { bg: "rgba(245, 158, 11, 0.18)", border: "#f59e0b", text: "#fbbf24" },
+  { bg: "rgba(239, 68, 68, 0.18)", border: "#ef4444", text: "#f87171" },
+  { bg: "rgba(168, 85, 247, 0.18)", border: "#a855f7", text: "#c084fc" },
+  { bg: "rgba(6, 182, 212, 0.18)", border: "#06b6d4", text: "#22d3ee" },
+  { bg: "rgba(236, 72, 153, 0.18)", border: "#ec4899", text: "#f472b6" },
+  { bg: "rgba(34, 197, 94, 0.18)", border: "#22c55e", text: "#4ade80" },
 ];
 
-// Time slots from 8:00 to 22:00 (business hours)
 const TIME_SLOTS = Array.from({ length: 15 }, (_, i) => i + 8);
 
 function parseTimeToHours(timeStr: string): number {
@@ -48,9 +61,7 @@ function formatTimeLabel(hour: number): string {
   return `${h} ${ampm}`;
 }
 
-export function ScheduleGantt() {
-  const { detailersSchedules, isGettingSchedules } =
-    useGetAllDetailersSchedules();
+export function ScheduleGantt({ role = "admin" }: { role?: "admin" | "secretary" | "detailer" }) {
   const [currentWeekStart, setCurrentWeekStart] = useState(() =>
     startOfWeek(new Date(), { weekStartsOn: 0 }),
   );
@@ -65,12 +76,85 @@ export function ScheduleGantt() {
   } | null>(null);
 
   const [selectedTicketId, setSelectedTicketId] = useState<string | null>(null);
-  const { ticket: selectedTicketDetails, isFetchingTicket } =
-    useGetTicketById(selectedTicketId);
+  const [selectedDetailerId, setSelectedDetailerId] = useState<string>("");
+
+  // ================= DATA FETCHING =================
+
+  // 1. Admin
+  const { data: adminSchedulesData, isPending: isAdminLoading } = useQuery({
+    queryKey: ["allDetailersSchedules", role],
+    queryFn: getAllAdmin,
+    retry: false,
+    enabled: role === "admin",
+  });
+  const adminSchedules = adminSchedulesData?.data;
+
+  // 2. Secretary
+  const { detailers: secDetailers, isFetchingDetailers } = useGetAllDetailersForSecretary(role === "secretary");
+  
+  useEffect(() => {
+    if (role === "secretary" && secDetailers?.length > 0 && !selectedDetailerId) {
+      setSelectedDetailerId(secDetailers[0].id);
+    }
+  }, [role, secDetailers, selectedDetailerId]);
+
+  const { schedule: secSchedule, isGettingDetailerSchedule: isSecLoading } = useGetDetailerScheduleForSecretary(
+    selectedDetailerId || undefined,
+    selectedDay,
+    role === "secretary"
+  );
+
+  // 3. Detailer
+  const { tickets: detTickets, isFetchingTickets: isDetLoading } = useGetTicketsForDetailer(
+    { limit: 1000 },
+    role === "detailer"
+  );
+
+  // Normalize data to DetailerSchedule[]
+  const detailersSchedules = useMemo(() => {
+    if (role === "admin") return adminSchedules;
+    
+    if (role === "secretary") {
+      if (!secSchedule || !selectedDetailerId) return [];
+      const detailer = secDetailers?.find((d: any) => d.id === selectedDetailerId);
+      return [{
+        detailer_id: selectedDetailerId,
+        detailer_name: detailer?.name || "Selected Detailer",
+        schedule: secSchedule
+      }];
+    }
+    
+    if (role === "detailer") {
+      if (!detTickets) return [];
+      return [{
+        detailer_id: "me",
+        detailer_name: "My Schedule",
+        schedule: detTickets.filter((t: any) => t.status === "pending").map((t: any) => ({
+          ticket_id: t.id,
+          date: t.date,
+          start: `${t.date}T${t.start_time}`,
+          end: `${t.date}T${t.end_time}`,
+          interval: `${t.start_time} - ${t.end_time}`
+        }))
+      }];
+    }
+    return [];
+  }, [role, adminSchedules, secSchedule, selectedDetailerId, secDetailers, detTickets]);
+
+  const isGettingSchedules = role === "admin" ? isAdminLoading : role === "secretary" ? (isSecLoading || isFetchingDetailers) : isDetLoading;
+
+  // Fetch individual ticket
+  const { data: ticketData, isPending: isFetchingTicket } = useQuery({
+    queryKey: ["ticket", role, selectedTicketId],
+    queryFn: () => (role === "admin" ? getTicketAdmin(selectedTicketId!) : role === "secretary" ? getTicketSec(selectedTicketId!) : getTicketDet(selectedTicketId!)),
+    enabled: !!selectedTicketId,
+  });
+  const selectedTicketDetails = ticketData?.data;
+
+  // ================= RENDER LOGIC =================
 
   const ganttRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll to current time on mount
   useEffect(() => {
     if (ganttRef.current) {
       const now = new Date();
@@ -89,7 +173,6 @@ export function ScheduleGantt() {
 
   const currentWeekEnd = endOfWeek(currentWeekStart, { weekStartsOn: 0 });
 
-  // Filter data for selected day
   const daySchedules = useMemo(() => {
     if (!detailersSchedules) return [];
     const dateStr = format(selectedDay, "yyyy-MM-dd");
@@ -102,7 +185,6 @@ export function ScheduleGantt() {
       .filter((d) => d.schedule.length > 0);
   }, [detailersSchedules, selectedDay]);
 
-  // All detailers (even with no schedule for the day) for consistent row display
   const allDetailers = useMemo(() => {
     if (!detailersSchedules) return [];
     return (detailersSchedules as DetailerSchedule[]).map((d) => ({
@@ -111,7 +193,6 @@ export function ScheduleGantt() {
     }));
   }, [detailersSchedules]);
 
-  // Get schedule count per day for the week view dots
   const weekScheduleCounts = useMemo(() => {
     if (!detailersSchedules) return {};
     const counts: Record<string, number> = {};
@@ -131,23 +212,31 @@ export function ScheduleGantt() {
     setSelectedDay(today);
   };
 
-  if (isGettingSchedules) return <Loader />;
-
-  if (
-    !detailersSchedules ||
-    (detailersSchedules as DetailerSchedule[]).length === 0
-  ) {
-    return (
-      <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
-        <Calendar className="h-16 w-16 mb-4 opacity-40" />
-        <p className="text-lg font-medium">No detailers found</p>
-        <p className="text-sm">Add detailers to see their schedules here.</p>
-      </div>
-    );
-  }
+  if (isGettingSchedules && !detailersSchedules?.length) return <Loader />;
 
   return (
     <div className="space-y-5">
+      {/* Detailer Selection for Secretary */}
+      {role === "secretary" && secDetailers && secDetailers.length > 0 && (
+        <div className="w-full max-w-sm">
+          <Select
+            value={selectedDetailerId}
+            onValueChange={setSelectedDetailerId}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select a detailer..." />
+            </SelectTrigger>
+            <SelectContent>
+              {secDetailers.map((d: any) => (
+                <SelectItem key={d.id} value={d.id}>
+                  {d.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      )}
+
       {/* Week Navigation Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -237,7 +326,6 @@ export function ScheduleGantt() {
 
       {/* Gantt Timeline */}
       <div className="rounded-xl border bg-card overflow-hidden shadow-sm">
-        {/* Day Header */}
         <div className="flex items-center justify-between px-5 py-3 bg-muted/50 border-b">
           <div className="flex items-center gap-2">
             <Calendar className="h-4 w-4 text-primary" />
@@ -253,9 +341,7 @@ export function ScheduleGantt() {
 
         {allDetailers.length > 0 ? (
           <div className="flex">
-            {/* Detailer Names (sticky left column) */}
             <div className="shrink-0 w-40 border-r bg-card z-10">
-              {/* Empty header to align with time slots */}
               <div className="h-10 border-b bg-muted/30" />
               {allDetailers.map((d, idx) => {
                 const color = DETAILER_COLORS[idx % DETAILER_COLORS.length];
@@ -297,9 +383,7 @@ export function ScheduleGantt() {
               })}
             </div>
 
-            {/* Scrollable Timeline Area */}
             <div ref={ganttRef} className="flex-1 overflow-x-auto relative">
-              {/* Time Slots Header */}
               <div className="flex h-10 border-b bg-muted/30 min-w-225">
                 {TIME_SLOTS.map((hour) => (
                   <div
@@ -311,7 +395,6 @@ export function ScheduleGantt() {
                 ))}
               </div>
 
-              {/* Detailer Rows */}
               {allDetailers.map((d, idx) => {
                 const color = DETAILER_COLORS[idx % DETAILER_COLORS.length];
                 const detailerDay = daySchedules.find(
@@ -324,7 +407,6 @@ export function ScheduleGantt() {
                     key={d.detailer_id}
                     className="relative h-16 border-b min-w-225"
                   >
-                    {/* Grid lines */}
                     <div className="absolute inset-0 flex">
                       {TIME_SLOTS.map((hour) => (
                         <div
@@ -334,7 +416,6 @@ export function ScheduleGantt() {
                       ))}
                     </div>
 
-                    {/* Current time indicator */}
                     {isSameDay(selectedDay, new Date()) &&
                       (() => {
                         const now = new Date();
@@ -354,7 +435,6 @@ export function ScheduleGantt() {
                         return null;
                       })()}
 
-                    {/* Schedule Blocks */}
                     {entries.map((entry) => {
                       const startHours = parseTimeToHours(entry.start);
                       const endHours = parseTimeToHours(entry.end);
@@ -429,11 +509,10 @@ export function ScheduleGantt() {
         ) : (
           <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
             <User className="h-10 w-10 mb-3 opacity-40" />
-            <p className="text-sm font-medium">No detailers available</p>
+            <p className="text-sm font-medium">No schedule available</p>
           </div>
         )}
 
-        {/* Empty day message */}
         {allDetailers.length > 0 && daySchedules.length === 0 && (
           <div className="text-center py-4 text-sm text-muted-foreground bg-muted/20 border-t">
             <Calendar className="h-4 w-4 inline-block mr-1.5 opacity-60" />
@@ -442,7 +521,6 @@ export function ScheduleGantt() {
         )}
       </div>
 
-      {/* Floating Tooltip */}
       {tooltipInfo && (
         <div
           className="fixed z-50 pointer-events-none"
@@ -489,7 +567,6 @@ export function ScheduleGantt() {
               </div>
             </div>
           </div>
-          {/* Tooltip arrow */}
           <div
             className="w-2 h-2 rotate-45 mx-auto -mt-1"
             style={{
@@ -502,26 +579,28 @@ export function ScheduleGantt() {
       )}
 
       {/* Legend */}
-      <div className="flex flex-wrap gap-3 px-1">
-        {allDetailers.map((d, idx) => {
-          const color = DETAILER_COLORS[idx % DETAILER_COLORS.length];
-          return (
-            <div
-              key={d.detailer_id}
-              className="flex items-center gap-1.5 text-xs text-muted-foreground"
-            >
+      {allDetailers.length > 1 && (
+        <div className="flex flex-wrap gap-3 px-1">
+          {allDetailers.map((d, idx) => {
+            const color = DETAILER_COLORS[idx % DETAILER_COLORS.length];
+            return (
               <div
-                className="w-3 h-3 rounded-sm"
-                style={{
-                  backgroundColor: color.bg,
-                  border: `1.5px solid ${color.border}`,
-                }}
-              />
-              <span className="font-medium">{d.detailer_name}</span>
-            </div>
-          );
-        })}
-      </div>
+                key={d.detailer_id}
+                className="flex items-center gap-1.5 text-xs text-muted-foreground"
+              >
+                <div
+                  className="w-3 h-3 rounded-sm"
+                  style={{
+                    backgroundColor: color.bg,
+                    border: `1.5px solid ${color.border}`,
+                  }}
+                />
+                <span className="font-medium">{d.detailer_name}</span>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       {/* Ticket Details Modal */}
       <Dialog
@@ -538,12 +617,9 @@ export function ScheduleGantt() {
             </div>
           ) : selectedTicketDetails ? (
             <BookingDialog
-              role="admin"
+              role={role}
               ticket={selectedTicketDetails}
-              detailers={allDetailers.map((d) => ({
-                id: d.detailer_id,
-                name: d.detailer_name,
-              }))}
+              detailers={role === "secretary" ? (secDetailers || []) : allDetailers.map(d => ({ id: d.detailer_id, name: d.detailer_name }))}
             />
           ) : (
             <div className="py-8 text-center text-muted-foreground">

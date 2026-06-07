@@ -1,5 +1,7 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { BookingsTable } from "@/components/booking/BookingsTable";
+import { ScheduleGantt } from "@/components/booking/ScheduleGantt";
 import { useBookingStore } from "@/stores/useBookingStore";
 import { useGetTicketsForDetailer } from "@/hooks/usedetailer";
 import Loader from "@/components/ui/Loader";
@@ -55,17 +57,37 @@ function DetailerDashboard() {
   return (
     <div className="p-6 space-y-6">
       <h1 className="text-3xl font-bold">BLINK Detailer Dashboard</h1>
-      <Card>
-        <CardContent>
-          <BookingsTable
-            tickets={tickets}
-            selectItems={selectItems}
-            pagination={pagination}
-            isFetchingTickets={isFetchingTickets}
-            role="detailer"
-          />
-        </CardContent>
-      </Card>
+      <Tabs defaultValue="bookings" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="bookings">Bookings</TabsTrigger>
+          <TabsTrigger value="schedules">Schedules</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="bookings">
+          <Card>
+            <CardContent>
+              <BookingsTable
+                tickets={tickets}
+                selectItems={selectItems}
+                pagination={pagination}
+                isFetchingTickets={isFetchingTickets}
+                role="detailer"
+              />
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="schedules">
+          <Card>
+            <CardHeader>
+              <CardTitle>My Schedule</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ScheduleGantt role="detailer" />
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

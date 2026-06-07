@@ -5,6 +5,7 @@ import {
   acceptTicket,
   cancelTicket,
   finishTicket,
+  getTicketById,
 } from "@/api/secretary";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
@@ -24,10 +25,11 @@ export const useGetTicketsForSecretary = (params = {}) => {
   };
 };
 
-export const useGetAllDetailersForSecretary = () => {
+export const useGetAllDetailersForSecretary = (enabled = true) => {
   const { data, isPending: isFetchingDetailers } = useQuery({
     queryKey: ["detailers"],
     queryFn: getAllDetailers,
+    enabled,
   });
 
   return {
@@ -38,7 +40,8 @@ export const useGetAllDetailersForSecretary = () => {
 
 export const useGetDetailerScheduleForSecretary = (
   id?: string,
-  date?: Date
+  date?: Date,
+  enabled = true,
 ) => {
   const formattedDate = date ? format(date, "yyyy-MM-dd") : "";
 
@@ -50,7 +53,7 @@ export const useGetDetailerScheduleForSecretary = (
       }
       return getDetailerSchedule({ id, date: formattedDate });
     },
-    enabled: !!id && !!formattedDate,
+    enabled: !!id && !!formattedDate && enabled,
     retry: false,
   });
 
@@ -113,4 +116,17 @@ export const useFinishTicketForSecretary = () => {
     });
 
   return { finishTicketMutation, isFinishingTicket };
+};
+
+export const useGetTicketByIdForSecretary = (id: string | null) => {
+  const { data, isPending: isFetchingTicket } = useQuery({
+    queryKey: ["ticket", id],
+    queryFn: () => getTicketById(id!),
+    enabled: !!id,
+  });
+
+  return {
+    ticket: data?.data,
+    isFetchingTicket,
+  };
 };

@@ -3,10 +3,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { invalidateTicketRelatedQueries } from "./useTicket";
 
-export const useGetTicketsForDetailer = (params = {}) => {
+export const useGetTicketsForDetailer = (params = {}, enabled = true) => {
   const { data, isPending: isFetchingTickets } = useQuery({
     queryKey: ["ticketsForDetailer", params],
     queryFn: () => getTicketsForDetailer(params),
+    enabled,
   });
 
   return {

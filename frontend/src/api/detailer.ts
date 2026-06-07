@@ -3,7 +3,7 @@ import { axiosInstance } from "./axios";
 export async function getTicketsForDetailer(params = {}) {
   const queryString = new URLSearchParams(params).toString();
   const res = await axiosInstance.get(
-    `/detailer/tickets/filters?${queryString}`
+    `/detailer/tickets/filters?${queryString}`,
   );
   return res.data;
 }
@@ -18,5 +18,10 @@ export async function finishTicket({
   const res = await axiosInstance.post(`/detailer/ticket/finish/${id}`, {
     payment_method,
   });
+  return res.data;
+}
+
+export async function getTicketById(id: string) {
+  const res = await axiosInstance.get(`/detailer/ticket/${id}`);
   return res.data;
 }
