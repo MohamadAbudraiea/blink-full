@@ -12,10 +12,11 @@ import { format } from "date-fns";
 import { toast } from "sonner";
 import { invalidateTicketRelatedQueries } from "./useTicket";
 
-export const useGetTicketsForSecretary = (params = {}) => {
+export const useGetTicketsForSecretary = (params = {}, enabled = true) => {
   const { data, isPending: isFetchingTickets } = useQuery({
     queryKey: ["ticketsForSecretary", params],
     queryFn: () => getTicketsForSecretary(params),
+    enabled,
   });
 
   return {

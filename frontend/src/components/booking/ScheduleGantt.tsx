@@ -4,7 +4,10 @@ import { getTicketById as getTicketAdmin } from "@/api/ticket";
 import { getTicketById as getTicketSec } from "@/api/secretary";
 import { getTicketById as getTicketDet } from "@/api/detailer";
 
-import { useGetAllDetailersForSecretary, useGetDetailerScheduleForSecretary } from "@/hooks/useSecretary";
+import {
+  useGetAllDetailersForSecretary,
+  useGetTicketsForSecretary,
+} from "@/hooks/useSecretary";
 import { useGetTicketsForDetailer } from "@/hooks/usedetailer";
 
 import { useMemo, useState, useRef, useEffect } from "react";
@@ -13,13 +16,6 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Calendar, Clock, User } from "lucide-react";
 import Loader from "@/components/ui/Loader";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 import { BookingDialog } from "../booking/BookingDialog";
 
@@ -61,7 +57,11 @@ function formatTimeLabel(hour: number): string {
   return `${h} ${ampm}`;
 }
 
-export function ScheduleGantt({ role = "admin" }: { role?: "admin" | "secretary" | "detailer" }) {
+export function ScheduleGantt({
+  role = "admin",
+}: {
+  role?: "admin" | "secretary" | "detailer";
+}) {
   const [currentWeekStart, setCurrentWeekStart] = useState(() =>
     startOfWeek(new Date(), { weekStartsOn: 0 }),
   );
@@ -76,7 +76,6 @@ export function ScheduleGantt({ role = "admin" }: { role?: "admin" | "secretary"
   } | null>(null);
 
   const [selectedTicketId, setSelectedTicketId] = useState<string | null>(null);
-  const [selectedDetailerId, setSelectedDetailerId] = useState<string>("");
 
   // ================= DATA FETCHING =================
 
@@ -90,63 +89,81 @@ export function ScheduleGantt({ role = "admin" }: { role?: "admin" | "secretary"
   const adminSchedules = adminSchedulesData?.data;
 
   // 2. Secretary
-  const { detailers: secDetailers, isFetchingDetailers } = useGetAllDetailersForSecretary(role === "secretary");
-  
-  useEffect(() => {
-    if (role === "secretary" && secDetailers?.length > 0 && !selectedDetailerId) {
-      setSelectedDetailerId(secDetailers[0].id);
-    }
-  }, [role, secDetailers, selectedDetailerId]);
-
-  const { schedule: secSchedule, isGettingDetailerSchedule: isSecLoading } = useGetDetailerScheduleForSecretary(
-    selectedDetailerId || undefined,
-    selectedDay,
-    role === "secretary"
-  );
+  const { detailers: secDetailers, isFetchingDetailers } =
+    useGetAllDetailersForSecretary(role === "secretary");
+  const { tickets: secTickets, isFetchingTickets: isSecLoading } =
+    useGetTicketsForSecretary({ limit: 1000 }, role === "secretary");
 
   // 3. Detailer
-  const { tickets: detTickets, isFetchingTickets: isDetLoading } = useGetTicketsForDetailer(
-    { limit: 1000 },
-    role === "detailer"
-  );
+  const { tickets: detTickets, isFetchingTickets: isDetLoading } =
+    useGetTicketsForDetailer({ limit: 1000 }, role === "detailer");
 
   // Normalize data to DetailerSchedule[]
   const detailersSchedules = useMemo(() => {
     if (role === "admin") return adminSchedules;
-    
+
     if (role === "secretary") {
-      if (!secSchedule || !selectedDetailerId) return [];
-      const detailer = secDetailers?.find((d: any) => d.id === selectedDetailerId);
-      return [{
-        detailer_id: selectedDetailerId,
-        detailer_name: detailer?.name || "Selected Detailer",
-        schedule: secSchedule
-      }];
+      if (!secDetailers || !secTickets) return [];
+
+      const pendingTickets = secTickets.filter(
+        (t: any) => t.status === "pending",
+      );
+
+      return secDetailers.map((d: any) => {
+        const detailerTickets = pendingTickets.filter(
+          (t: any) => t.detailer_id === d.id,
+        );
+        return {
+          detailer_id: d.id,
+          detailer_name: d.name,
+          schedule: detailerTickets.map((t: any) => ({
+            ticket_id: t.id,
+            date: t.date,
+            start: `${t.date}T${t.start_time}`,
+            end: `${t.date}T${t.end_time}`,
+            interval: `${t.start_time} - ${t.end_time}`,
+          })),
+        };
+      });
     }
-    
+
     if (role === "detailer") {
       if (!detTickets) return [];
-      return [{
-        detailer_id: "me",
-        detailer_name: "My Schedule",
-        schedule: detTickets.filter((t: any) => t.status === "pending").map((t: any) => ({
-          ticket_id: t.id,
-          date: t.date,
-          start: `${t.date}T${t.start_time}`,
-          end: `${t.date}T${t.end_time}`,
-          interval: `${t.start_time} - ${t.end_time}`
-        }))
-      }];
+      return [
+        {
+          detailer_id: "me",
+          detailer_name: "My Schedule",
+          schedule: detTickets
+            .filter((t: any) => t.status === "pending")
+            .map((t: any) => ({
+              ticket_id: t.id,
+              date: t.date,
+              start: `${t.date}T${t.start_time}`,
+              end: `${t.date}T${t.end_time}`,
+              interval: `${t.start_time} - ${t.end_time}`,
+            })),
+        },
+      ];
     }
     return [];
-  }, [role, adminSchedules, secSchedule, selectedDetailerId, secDetailers, detTickets]);
+  }, [role, adminSchedules, secTickets, secDetailers, detTickets]);
 
-  const isGettingSchedules = role === "admin" ? isAdminLoading : role === "secretary" ? (isSecLoading || isFetchingDetailers) : isDetLoading;
+  const isGettingSchedules =
+    role === "admin"
+      ? isAdminLoading
+      : role === "secretary"
+        ? isSecLoading || isFetchingDetailers
+        : isDetLoading;
 
   // Fetch individual ticket
   const { data: ticketData, isPending: isFetchingTicket } = useQuery({
     queryKey: ["ticket", role, selectedTicketId],
-    queryFn: () => (role === "admin" ? getTicketAdmin(selectedTicketId!) : role === "secretary" ? getTicketSec(selectedTicketId!) : getTicketDet(selectedTicketId!)),
+    queryFn: () =>
+      role === "admin"
+        ? getTicketAdmin(selectedTicketId!)
+        : role === "secretary"
+          ? getTicketSec(selectedTicketId!)
+          : getTicketDet(selectedTicketId!),
     enabled: !!selectedTicketId,
   });
   const selectedTicketDetails = ticketData?.data;
@@ -216,27 +233,6 @@ export function ScheduleGantt({ role = "admin" }: { role?: "admin" | "secretary"
 
   return (
     <div className="space-y-5">
-      {/* Detailer Selection for Secretary */}
-      {role === "secretary" && secDetailers && secDetailers.length > 0 && (
-        <div className="w-full max-w-sm">
-          <Select
-            value={selectedDetailerId}
-            onValueChange={setSelectedDetailerId}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select a detailer..." />
-            </SelectTrigger>
-            <SelectContent>
-              {secDetailers.map((d: any) => (
-                <SelectItem key={d.id} value={d.id}>
-                  {d.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      )}
-
       {/* Week Navigation Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -619,7 +615,14 @@ export function ScheduleGantt({ role = "admin" }: { role?: "admin" | "secretary"
             <BookingDialog
               role={role}
               ticket={selectedTicketDetails}
-              detailers={role === "secretary" ? (secDetailers || []) : allDetailers.map(d => ({ id: d.detailer_id, name: d.detailer_name }))}
+              detailers={
+                role === "secretary"
+                  ? secDetailers || []
+                  : allDetailers.map((d) => ({
+                      id: d.detailer_id,
+                      name: d.detailer_name,
+                    }))
+              }
             />
           ) : (
             <div className="py-8 text-center text-muted-foreground">
