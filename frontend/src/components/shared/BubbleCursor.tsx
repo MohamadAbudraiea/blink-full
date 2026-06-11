@@ -15,7 +15,9 @@ interface Bubble {
 
 export const BubbleCursor: React.FC = () => {
   const [isMobile, setIsMobile] = useState(() =>
-    typeof window !== "undefined" ? window.matchMedia("(max-width: 768px)").matches : false
+    typeof window !== "undefined"
+      ? window.matchMedia("(max-width: 768px)").matches
+      : false,
   );
 
   useEffect(() => {
@@ -90,10 +92,10 @@ export const BubbleCursor: React.FC = () => {
             translateX: "-50%",
             translateY: "-50%",
           }}
-          className="fixed w-8 h-8 rounded-full border-2 border-white/60 bg-linear-to-br from-white/30 via-transparent to-transparent shadow-[inset_-2px_-2px_6px_rgba(255,255,255,0.4),inset_2px_2px_6px_rgba(255,255,255,0.2),0_0_15px_rgba(255,255,255,0.2)]"
+          className="fixed w-8 h-8 rounded-full border-2 border-black/80 dark:border-white/60 bg-linear-to-br from-black/30 dark:from-white/30 via-transparent to-transparent shadow-[inset_-2px_-2px_6px_rgba(0,0,0,0.4),inset_2px_2px_6px_rgba(0,0,0,0.2),0_0_15px_rgba(0,0,0,0.2)] dark:shadow-[inset_-2px_-2px_6px_rgba(255,255,255,0.4),inset_2px_2px_6px_rgba(255,255,255,0.2),0_0_15px_rgba(255,255,255,0.2)]"
         >
           {/* Glossy Reflection */}
-          <div className="absolute top-[20%] left-[20%] w-[25%] h-[25%] bg-white/60 rounded-full blur-[1px]" />
+          <div className="absolute top-[20%] left-[20%] w-[25%] h-[25%] bg-black/80 dark:bg-white/60 rounded-full blur-[1px]" />
         </motion.div>
 
         <AnimatePresence>
@@ -121,9 +123,9 @@ export const BubbleCursor: React.FC = () => {
                 height: bubble.size,
                 position: "fixed",
               }}
-              className="rounded-full border border-white/40 bg-linear-to-br from-white/10 via-transparent to-transparent shadow-[inset_-1px_-1px_3px_rgba(255,255,255,0.2)]"
+              className="rounded-full border border-black/80 dark:border-white/60 bg-linear-to-br from-black/10 dark:from-white/10 via-transparent to-transparent shadow-[inset_-1px_-1px_3px_rgba(0,0,0,0.2)] dark:shadow-[inset_-1px_-1px_3px_rgba(255,255,255,0.2)]"
             >
-              <div className="absolute top-1/4 left-1/4 w-1/4 h-1/4 bg-white/30 rounded-full blur-[0.5px]" />
+              <div className="absolute top-1/4 left-1/4 w-1/4 h-1/4 bg-black/50 dark:bg-white/50 rounded-full blur-[0.5px]" />
             </motion.div>
           ))}
         </AnimatePresence>
