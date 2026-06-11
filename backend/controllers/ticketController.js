@@ -708,7 +708,7 @@ exports.getPendingTickets = async (req, res) => {
     if (req.user.role === "secretary") {
       // secretary
       pendingTickets = await ticket.findAll({
-        where: { status: "pending", secretary_id: req.user.id },
+        where: { status: "pending" },
         include: [
           {
             model: user,
