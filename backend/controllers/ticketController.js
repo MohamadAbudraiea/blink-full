@@ -113,24 +113,19 @@ exports.addPendingTicket = async (req, res) => {
       if (customer_phone) ticketData.customer_phone = customer_phone;
     } else if (isAnonymous) {
       if (!customer_name || !customer_phone) {
-        return res
-          .status(400)
-          .json({
-            status: "failed",
-            message:
-              "Customer name and phone are required for anonymous tickets",
-          });
+        return res.status(400).json({
+          status: "failed",
+          message: "Customer name and phone are required for anonymous tickets",
+        });
       }
       ticketData.customer_name = customer_name;
       ticketData.customer_phone = customer_phone;
     } else {
       if (!user_id) {
-        return res
-          .status(400)
-          .json({
-            status: "failed",
-            message: "User ID is required for non-anonymous tickets",
-          });
+        return res.status(400).json({
+          status: "failed",
+          message: "User ID is required for non-anonymous tickets",
+        });
       }
       ticketData.user_id = user_id;
     }
@@ -622,7 +617,6 @@ exports.getTicketsForStaff = async (req, res) => {
     if (req.user.role === "secretary") {
       whereClause[Op.or] = [
         {
-          secretary_id: req.user.id,
           status: { [Op.in]: ["pending", "finished", "canceled"] },
         },
         { status: "requested" },
