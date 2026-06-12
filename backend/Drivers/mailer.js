@@ -1,17 +1,16 @@
 const dotenv = require("dotenv");
 const path = require("path");
-const axios = require("axios");
-
+const nodemailer = require("nodemailer");
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
-
+const transporter = nodemailer.createTransport({
+  host: "smtp.hostinger.com",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 async function sendEmail(receiver, subject, htmlContent) {
   try {
-    const apiKey = process.env.BREVO_API_KEY;
-
-    if (!apiKey) {
-      throw new Error("BREVO_API_KEY not found in environment variables");
-    }
-
     // Validate required parameters
     if (!receiver) {
       throw new Error("Receiver email is required");
@@ -28,7 +27,7 @@ async function sendEmail(receiver, subject, htmlContent) {
     const emailData = {
       sender: {
         name: "Blink Cars Technical",
-        email: "technical@blink-cars.com",
+        email: `${process.env.EMAIL_USER}`,
       },
       to: [
         {
@@ -44,29 +43,19 @@ async function sendEmail(receiver, subject, htmlContent) {
     console.log("To:", receiver);
     console.log("Subject:", subject);
 
-    const response = await axios.post(
-      "https://api.brevo.com/v3/smtp/email",
-      emailData,
-      {
-        headers: {
-          accept: "application/json",
-          "content-type": "application/json",
-          "api-key": apiKey,
-        },
-      },
-    );
+    await transporter.sendMail({
+      from: emailData.sender.email,
+      to: emailData.to[0].email,
+      subject: emailData.subject,
+      html: emailData.htmlContent,
+    });
 
-    console.log("✅ Email sent successfully!");
-    console.log("Message ID:", response.data.messageId);
+    console.log(`✅ Email sent successfully! to ${receiver}`);
   } catch (error) {
     console.error("❌ Error sending email:");
     console.error("Error:", error.response?.data || error.message);
     throw error;
   }
 }
-
-// Usage examples:
-// sendEmail("user@example.com", "Welcome!", "<h1>Hello</h1>")
-// sendEmail("test@gmail.com", "Test Subject", "<p>Test content</p>")
 
 module.exports = sendEmail;
