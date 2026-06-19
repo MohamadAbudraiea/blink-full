@@ -89,12 +89,15 @@ export function HeroSection() {
                           data-aos-duration="700"
                         >
                           <Zap
-                            className="h-5 w-5 text-primary"
+                            className="h-5 w-5 text-white"
                             fill="currentColor"
                           />
                         </div>
                       )}
-                      <span className="text-primary text-6xl sm:text-7xl lg:text-8xl font-nativera">
+                      <span
+                        className={`text-6xl sm:text-7xl lg:text-8xl font-nativera${part.letter !== "I" ? " text-primary" : ""}`}
+                        style={part.letter === "I" ? { color: "rgb(255,255,255)" } : undefined}
+                      >
                         {part.letter}
                       </span>
                       <span className="text-xs sm:text-sm font-sans font-normal text-muted-foreground mt-1 max-w-[80px] text-center leading-tight">

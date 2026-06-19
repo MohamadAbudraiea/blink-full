@@ -13,9 +13,13 @@ router.get("/ticket/rating/:ticket_id", ratingController.getTicketRating);
 router.post("/ticket/rating", ratingController.rateticket);
 //----------------------------------------------------------------------
 router.get("/ticket/filters", ticketController.getUserTickets);
+// location history (most-used locations from past tickets)
+router.get("/ticket/locations", ticketController.getUserLocations);
 
 // subscriptions
 router.post("/subscription", subscriptionController.createSubscription);
 router.get("/subscription", subscriptionController.getSubscriptions);
+router.post("/subscription/resubscribe/:id/preview", subscriptionController.previewResubscription);
+router.post("/subscription/resubscribe/:id/confirm", subscriptionController.confirmResubscription);
 
 module.exports = router;

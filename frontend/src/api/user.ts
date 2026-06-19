@@ -84,3 +84,8 @@ export async function sendMessage({
   });
   return res.data;
 }
+
+export async function getUserLocations() {
+  const res = await axiosInstance.get("/user/ticket/locations");
+  return res.data;
+}

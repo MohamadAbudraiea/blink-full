@@ -4,6 +4,7 @@ import {
   cancelTicket,
   rateTicket,
   sendMessage,
+  getUserLocations,
 } from "@/api/user";
 import type { Booking } from "@/shared/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -108,4 +109,20 @@ export const useSendMessage = () => {
   });
 
   return { sendMessageMutation, isSendingMessage, isSuccess };
+};
+
+export const useGetUserLocations = (enabled: boolean = false) => {
+  const { data, isPending: isGettingLocations } = useQuery({
+    queryKey: ["userLocations"],
+    queryFn: getUserLocations,
+    staleTime: 1000 * 60 * 5, // 5 min cache
+    enabled, // only fetch when explicitly enabled (user is authenticated)
+    retry: false,
+    throwOnError: false, // never crash the render tree on network errors
+  });
+
+  return {
+    savedLocations: (data?.data ?? []) as string[],
+    isGettingLocations,
+  };
 };

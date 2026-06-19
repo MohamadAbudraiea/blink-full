@@ -11,6 +11,7 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { useAddTicket } from "@/hooks/useUser";
+import { useGetPricing } from "@/hooks/usePricing";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { AnimatePresence, motion } from "framer-motion";
@@ -21,13 +22,12 @@ import {
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
-  Copy,
   Edit2,
   MapPin,
-  Navigation,
   Shield,
   Sparkles,
   Star,
+  Tag,
   Zap,
 } from "lucide-react";
 import { useState } from "react";
@@ -35,6 +35,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import * as z from "zod";
+import { LocationInput } from "@/components/shared/LocationInput";
 
 const serviceTypeOptions: Record<
   string,
@@ -97,6 +98,7 @@ const visualServicesList = [
 
 export default function BookPage() {
   const { addTicketMutation, isAddingTicket } = useAddTicket();
+  const { pricing } = useGetPricing();
   const { t, i18n } = useTranslation();
   const [isLocating, setIsLocating] = useState(false);
   const [googleMapsLink, setGoogleMapsLink] = useState("");
@@ -222,9 +224,12 @@ export default function BookPage() {
   const onSubmit = (data: BookingFormData) => {
     const localISO = data.date
       ? new Date(
-          data.date.getTime() - data.date.getTimezoneOffset() * 60000,
-        ).toISOString()
+        data.date.getTime() - data.date.getTimezoneOffset() * 60000,
+      ).toISOString()
       : undefined;
+
+    const pricingRow = pricing.find((p) => p.service === data.service);
+    const finalPrice = pricingRow ? Math.round(Number(pricingRow.base_price)) : undefined;
 
     addTicketMutation({
       service: data.service,
@@ -234,6 +239,7 @@ export default function BookPage() {
       date: localISO || undefined,
       start_time: data.start_time || undefined,
       end_time: data.end_time || undefined,
+      price: finalPrice,
     });
 
     setCurrentStep(1);
@@ -345,13 +351,12 @@ export default function BookPage() {
                 return (
                   <div key={step} className="flex flex-col items-center gap-2">
                     <div
-                      className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-colors duration-300 ${
-                        isActive
-                          ? "bg-primary text-primary-foreground shadow-[0_0_15px_rgba(var(--primary),0.5)]"
-                          : isPast
-                            ? "bg-primary/20 text-primary border border-primary/50"
-                            : "bg-muted text-muted-foreground border border-border"
-                      }`}
+                      className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-colors duration-300 ${isActive
+                        ? "bg-primary text-primary-foreground shadow-[0_0_15px_rgba(var(--primary),0.5)]"
+                        : isPast
+                          ? "bg-primary/20 text-primary border border-primary/50"
+                          : "bg-muted text-muted-foreground border border-border"
+                        }`}
                     >
                       {isPast ? <Check className="w-5 h-5" /> : step}
                     </div>
@@ -414,6 +419,10 @@ export default function BookPage() {
                           {visualServicesList.map((service) => {
                             const Icon = service.icon;
                             const isSelected = selectedService === service.id;
+                            // Pricing deal: base_price + 10% (rounded) vs base_price
+                            const pricingRow = pricing.find((p) => p.service === service.id);
+                            const basePrice = pricingRow ? Number(pricingRow.base_price) : null;
+                            const beforePrice = basePrice !== null ? Math.round(basePrice * 1.1) : null;
                             return (
                               <div
                                 key={service.id}
@@ -423,11 +432,10 @@ export default function BookPage() {
                                   });
                                   setValue("typeOfService", ""); // Reset type
                                 }}
-                                className={`relative group h-40 rounded-xl overflow-hidden cursor-pointer transition-all duration-300 ${
-                                  isSelected
-                                    ? "ring-2 ring-primary ring-offset-2 ring-offset-background shadow-[0_0_20px_rgba(var(--primary),0.3)]"
-                                    : "hover:ring-2 hover:ring-primary/50"
-                                }`}
+                                className={`relative group h-40 rounded-xl overflow-hidden cursor-pointer transition-all duration-300 ${isSelected
+                                  ? "ring-2 ring-primary ring-offset-2 ring-offset-background shadow-[0_0_20px_rgba(var(--primary),0.3)]"
+                                  : "hover:ring-2 hover:ring-primary/50"
+                                  }`}
                               >
                                 <div
                                   className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
@@ -444,6 +452,16 @@ export default function BookPage() {
                                       {t(`book.form.options.${service.id}`)}
                                     </h3>
                                   </div>
+                                  {/* Deal pricing badge */}
+                                  {basePrice !== null && basePrice > 0 && (
+                                    <div className="flex items-center gap-1.5 mt-1">
+                                      <span className="text-xs line-through text-white/50">{beforePrice} JD</span>
+                                      <span className="text-sm font-bold text-primary">{Math.round(basePrice)} JD</span>
+                                      <span className="text-[10px] bg-primary/80 text-primary-foreground px-1.5 py-0.5 rounded-full font-bold flex items-center gap-0.5">
+                                        <Tag className="w-2.5 h-2.5" /> DEAL
+                                      </span>
+                                    </div>
+                                  )}
                                 </div>
 
                                 {isSelected && (
@@ -487,11 +505,10 @@ export default function BookPage() {
                                     <label
                                       key={option.value}
                                       htmlFor={option.value}
-                                      className={`relative flex w-full gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 ${
-                                        isSelected
-                                          ? "border-primary bg-primary/5 shadow-md"
-                                          : "border-border/50 bg-card hover:border-primary/30 hover:bg-muted/30"
-                                      } ${option.isBest ? "ring-2 ring-primary/20" : ""} ${dir === "rtl" ? "flex-row-reverse" : ""}`}
+                                      className={`relative flex w-full gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 ${isSelected
+                                        ? "border-primary bg-primary/5 shadow-md"
+                                        : "border-border/50 bg-card hover:border-primary/30 hover:bg-muted/30"
+                                        } ${option.isBest ? "ring-2 ring-primary/20" : ""} ${dir === "rtl" ? "flex-row-reverse" : ""}`}
                                     >
                                       {option.isBest && (
                                         <div className="absolute -top-3.5 -right-2 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1 shadow-md">
@@ -551,39 +568,17 @@ export default function BookPage() {
                               <MapPin className="w-5 h-5 text-primary" />{" "}
                               {t("book.form.address")}
                             </Label>
-                            {googleMapsLink && (
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="sm"
-                                className="h-8 px-2 text-xs"
-                                onClick={copyToClipboard}
-                              >
-                                <Copy className="w-3 h-3 mr-1" />{" "}
-                                {t("book.form.copy_link")}
-                              </Button>
-                            )}
                           </div>
-                          <div className="relative">
-                            <Input
-                              id="location"
-                              className="h-12 pl-4 pr-12"
-                              placeholder={t("book.form.address_placeholder")}
-                              {...register("location")}
-                            />
-                            <Button
-                              type="button"
-                              variant="secondary"
-                              size="icon"
-                              className={`absolute top-1.5 ${dir === "ltr" ? "right-1.5" : "left-1.5"} h-9 w-9`}
-                              onClick={getCurrentLocation}
-                              disabled={isLocating}
-                            >
-                              <Navigation
-                                className={`h-4 w-4 text-primary ${isLocating ? "animate-spin" : ""}`}
+                          <Controller
+                            control={control}
+                            name="location"
+                            render={({ field }) => (
+                              <LocationInput
+                                value={field.value}
+                                onChange={field.onChange}
                               />
-                            </Button>
-                          </div>
+                            )}
+                          />
                           {errors.location && (
                             <p className="text-sm text-destructive">
                               {errors.location.message}
@@ -688,6 +683,20 @@ export default function BookPage() {
                                     )}
                                   </div>
                                 )}
+                                {/* Deal price display on review step */}
+                                {(() => {
+                                  const row = pricing.find((p) => p.service === selectedService);
+                                  const base = row ? Number(row.base_price) : null;
+                                  if (!base || base === 0) return null;
+                                  const before = Math.round(base * 1.1);
+                                  return (
+                                    <div className="flex items-center gap-2 mt-2">
+                                      <span className="text-sm line-through text-muted-foreground">{before} JD</span>
+                                      <span className="text-base font-black text-primary">{Math.round(base)} JD</span>
+                                      <span className="text-[10px] bg-primary/15 text-primary px-2 py-0.5 rounded-full font-bold">DEAL</span>
+                                    </div>
+                                  );
+                                })()}
                               </div>
                               <Button
                                 type="button"

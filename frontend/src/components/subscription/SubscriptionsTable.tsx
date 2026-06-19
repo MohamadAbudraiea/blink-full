@@ -27,6 +27,8 @@ import type { Subscription } from "@/shared/types";
 import { useBookingStore } from "@/stores/useBookingStore";
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
+import { RefreshCw } from "lucide-react";
+import { ResubscribeDialog } from "./ResubscribeDialog";
 
 function derivedStatus(sub: Subscription): string {
   const tickets = sub.tickets;
@@ -53,6 +55,7 @@ export function SubscriptionsTable({
 }) {
   const [selectedSub, setSelectedSub] = useState<Subscription | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>("All");
+  const [resubscribeTarget, setResubscribeTarget] = useState<Subscription | null>(null);
   const { cancelSubscriptionMutation, isCancelingSubscription } =
     useCancelSubscription(role);
   const { filter, filterYear, filterMonth } = useBookingStore();
@@ -245,6 +248,18 @@ export function SubscriptionsTable({
                           Cancel
                         </Button>
                       )}
+                    {/* Resubscribe — available for finished subscriptions */}
+                    {(computedStatus === "finished" || computedStatus === "canceled") && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="gap-1 border-primary/30 text-primary hover:bg-primary/5"
+                        onClick={() => setResubscribeTarget(sub)}
+                      >
+                        <RefreshCw className="w-3.5 h-3.5" />
+                        Resubscribe
+                      </Button>
+                    )}
                   </TableCell>
                 </TableRow>
               );
@@ -296,6 +311,17 @@ export function SubscriptionsTable({
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Resubscribe Dialog */}
+      {resubscribeTarget && (
+        <ResubscribeDialog
+          subscriptionId={String(resubscribeTarget.id)}
+          planType={resubscribeTarget.plan_type}
+          role={role}
+          open={!!resubscribeTarget}
+          onOpenChange={(v) => !v && setResubscribeTarget(null)}
+        />
+      )}
     </>
   );
 }

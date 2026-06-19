@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useCreateSubscription } from "@/hooks/useSubscription";
+import { useGetPricing } from "@/hooks/usePricing";
 import { searchUsers } from "@/api/ticket";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
@@ -27,11 +28,11 @@ import {
   Sparkles,
   Check,
   Zap,
-  Navigation,
   MapPin,
   Copy,
   Star,
   Calendar as CalendarIcon,
+  Wand2,
 } from "lucide-react";
 import {
   Popover,
@@ -53,6 +54,7 @@ import { useGetDetailerScheduleByDate } from "@/hooks/useAdmin";
 import { useGetDetailerScheduleForSecretary } from "@/hooks/useSecretary";
 import { format } from "date-fns";
 import { Textarea } from "../ui/textarea";
+import { LocationInput } from "@/components/shared/LocationInput";
 
 interface SearchResult {
   id: string;
@@ -397,7 +399,7 @@ function TicketForm({
       )}
 
       {/* Time */}
-      {isInternal && (
+      {isInternal ? (
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-1">
             <Label>Start Time *</Label>
@@ -426,6 +428,16 @@ function TicketForm({
             />
           </div>
         </div>
+      ) : (
+        <div className="space-y-1">
+          <Label className="text-xs text-muted-foreground">{t("book.form.preferred_time", "Preferred Start Time")}</Label>
+          <Input
+            type="time"
+            value={data.start_time}
+            onChange={(e) => onChange(index, "start_time", e.target.value)}
+            disabled={!data.date}
+          />
+        </div>
       )}
 
       {isInternal && endBeforeStart && (
@@ -448,38 +460,11 @@ function TicketForm({
             <MapPin className="w-4 h-4" />
             {t("book.form.address")}
           </Label>
-          {(googleMapsLink || data.location) && (
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              className="h-8 px-2 text-xs text-muted-foreground flex items-center gap-1"
-              onClick={copyToClipboard}
-            >
-              <Copy className="w-3 h-3" />
-              {t("book.form.copy_link")}
-            </Button>
-          )}
         </div>
-        <div className="relative">
-          <Input
-            placeholder={t("book.form.address_placeholder")}
-            value={data.location}
-            onChange={(e) => onChange(index, "location", e.target.value)}
-          />
-          <Button
-            type="button"
-            variant="outline"
-            size="icon"
-            className={`absolute top-1 ${dir === "ltr" ? "right-2" : "left-2"} h-7 w-7`}
-            onClick={getCurrentLocation}
-            disabled={isLocating}
-          >
-            <Navigation
-              className={`h-4 w-4 ${isLocating ? "animate-spin" : ""}`}
-            />
-          </Button>
-        </div>
+        <LocationInput
+          value={data.location}
+          onChange={(val) => onChange(index, "location", val)}
+        />
       </div>
       <div className="space-y-1">
         <Label>{t("book.form.notes")}</Label>
@@ -542,6 +527,16 @@ export function AddSubscriptionDialog({
 
   const { createSubscriptionMutation, isCreatingSubscription } =
     useCreateSubscription(role);
+  const { pricing } = useGetPricing();
+
+  const firstService = ticketsData[0]?.service || "wash";
+  const servicePricing = pricing.find((p) => p.service === firstService);
+  const planPriceKey = `plan_${planType}_price` as keyof typeof servicePricing;
+  
+  // The database stores the TOTAL price for the entire subscription
+  const userTotalPrice = servicePricing ? Number(servicePricing[planPriceKey]) : 0;
+  // The per-ticket price is the total divided by the number of tickets
+  const userTicketPrice = userTotalPrice / Number(planType);
 
   // Debounced user search
   useEffect(() => {
@@ -597,6 +592,45 @@ export function AddSubscriptionDialog({
     });
   };
 
+  /**
+   * Auto-fill: apply ticket[0] values (service, typeOfService, location, start_time)
+   * to all other tickets, advancing the date by 1 week per ticket.
+   */
+  const autoFillFromFirstTicket = () => {
+    const first = ticketsData[0];
+    if (!first.service) {
+      toast.error("Please fill in Ticket #1 first (at least the service and date).");
+      return;
+    }
+    setTicketsData((prev) =>
+      prev.map((t, i) => {
+        if (i === 0) return t;
+        const baseDateStr = first.date;
+        const newDate = baseDateStr
+          ? (() => {
+              const [y, m, d] = baseDateStr.split("-").map(Number);
+              const dateObj = new Date(y, m - 1, d, 12, 0, 0);
+              dateObj.setDate(dateObj.getDate() + 7 * i);
+              const ny = dateObj.getFullYear();
+              const nm = String(dateObj.getMonth() + 1).padStart(2, "0");
+              const nd = String(dateObj.getDate()).padStart(2, "0");
+              return `${ny}-${nm}-${nd}`;
+            })()
+          : t.date;
+        return {
+          ...t,
+          service: first.service,
+          typeOfService: first.typeOfService,
+          location: first.location,
+          start_time: first.start_time,
+          // Advance date by i weeks
+          date: newDate,
+        };
+      })
+    );
+    toast.success(`Applied Ticket #1 to all ${planType} tickets with weekly date offsets.`);
+  };
+
   const handleUserSelect = (user: SearchResult) => {
     setSelectedUser(user);
     setSearchQuery(user.name);
@@ -622,10 +656,12 @@ export function AddSubscriptionDialog({
       tickets: ticketsData.map((t) => ({
         ...t,
         detailer_id: t.detailer_id || null,
-        // Only internal roles set price per ticket
+        start_time: t.start_time || null,
+        end_time: t.end_time || null,
+        // Internal roles set total price manually, users get it from DB
         ...(isInternal && totalPrice
           ? { price: Number(totalPrice) / Number(planType) }
-          : {}),
+          : { price: userTicketPrice }),
       })),
     };
 
@@ -637,6 +673,8 @@ export function AddSubscriptionDialog({
       } else {
         payload.user_id = selectedUser?.id || null;
       }
+    } else {
+      payload.total_price = userTotalPrice;
     }
     // For users, no user_id needed — the backend uses req.user.id
 
@@ -794,17 +832,48 @@ export function AddSubscriptionDialog({
                 </SelectContent>
               </Select>
             </div>
-            {isInternal && (
+            {isInternal ? (
               <div className="space-y-1">
-                <Label>Total Price</Label>
+                <Label>Total Price (JD)</Label>
                 <Input
                   type="number"
                   value={totalPrice}
                   onChange={(e) => setTotalPrice(e.target.value)}
                 />
               </div>
+            ) : (
+              <div className="space-y-1">
+                <Label>Total Price</Label>
+                <div className="h-10 px-3 py-2 rounded-md border bg-muted/30 text-sm flex items-center font-semibold text-primary">
+                  {userTotalPrice} JD
+                </div>
+              </div>
             )}
           </div>
+
+          {/* Auto-fill banner — shown after ticket 1 has a service set */}
+          {ticketsData[0]?.service && parseInt(planType) > 1 && (
+            <div className="flex items-center justify-between gap-3 p-3 rounded-xl border border-primary/20 bg-primary/5">
+              <div className="text-sm">
+                <p className="font-semibold text-primary flex items-center gap-1.5">
+                  <Wand2 className="w-4 h-4" />
+                  Quick Fill
+                </p>
+                <p className="text-muted-foreground text-xs mt-0.5">
+                  Copy <strong>Ticket #1</strong>'s service & location to all tickets, advancing dates by 1 week each.
+                </p>
+              </div>
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                className="shrink-0 border-primary/30 text-primary hover:bg-primary/10"
+                onClick={autoFillFromFirstTicket}
+              >
+                Apply to All
+              </Button>
+            </div>
+          )}
 
           {/* Per-ticket accordion */}
           <Accordion

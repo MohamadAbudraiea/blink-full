@@ -48,7 +48,7 @@ export function BookingsTableRow({
               {ticket.status}
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-md max-h-screen overflow-y-auto">
+          <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto overflow-x-hidden">
             <BookingDialog role={role} ticket={ticket} detailers={detailers} />
           </DialogContent>
         </Dialog>

@@ -15,6 +15,7 @@ exports.addticket = async (req, res) => {
       location,
       note,
       typeOfService,
+      price,
     } = req.body || {};
     const user_id = req.user.id;
     const status = "requested";
@@ -29,6 +30,7 @@ exports.addticket = async (req, res) => {
       typeOfService,
       start_time,
       end_time,
+      price,
       ...(note ? { note } : {}), // only add note if it exists
     };
 
@@ -1020,9 +1022,57 @@ const isDetailerFree = async (detailer_id, date, start_time, end_time) => {
 // change status functionalites
 exports.acceptTicket = async (req, res) => {
   try {
-    const { date, location, start_time, end_time, price, detailer_id } =
+    const { date, location, start_time, end_time, price, detailer_id, applyToAllSubscriptionTickets } =
       req.body;
     const { ticket_id } = req.params;
+
+    if (applyToAllSubscriptionTickets) {
+      const currentTicket = await ticket.findByPk(ticket_id);
+      if (!currentTicket || !currentTicket.subscription_id) {
+        return res.status(400).json({ status: "failed", message: "Ticket is not part of a subscription" });
+      }
+
+      // Find all 'requested' tickets for this subscription
+      const subscriptionTickets = await ticket.findAll({
+        where: {
+          subscription_id: currentTicket.subscription_id,
+          status: "requested"
+        }
+      });
+
+      // 1️⃣ Check if detailer is free for all these tickets
+      for (const t of subscriptionTickets) {
+        const free = await isDetailerFree(detailer_id, t.date, start_time, end_time);
+        if (!free) {
+          return res.status(400).json({
+            status: "failed",
+            message: `Detailer is busy on ${t.date} at this time`,
+          });
+        }
+      }
+
+      // 2️⃣ If free, update all these tickets
+      for (const t of subscriptionTickets) {
+        await ticket.update(
+          {
+            status: "pending",
+            secretary_id: req.user.id,
+            detailer_id,
+            // Date is intentionally NOT updated so it retains its weekly offset
+            location,
+            start_time,
+            end_time,
+            price,
+          },
+          { where: { id: t.id } }
+        );
+      }
+
+      return res.status(201).json({
+        status: "success",
+        message: "All requested subscription tickets have been accepted",
+      });
+    }
 
     // 1️⃣ Check if detailer is free
     const free = await isDetailerFree(detailer_id, date, start_time, end_time);
@@ -1147,6 +1197,42 @@ exports.finishTicket = async (req, res) => {
   } catch (error) {
     console.error(error.message);
     res.status(500).json({
+      status: "error",
+      message: error.message || "Something went wrong",
+    });
+  }
+};
+
+/**
+ * GET /user/ticket/locations
+ * Returns the most-used distinct locations from the authenticated user's past tickets.
+ * Ordered by usage frequency (descending), limited to 5.
+ */
+exports.getUserLocations = async (req, res) => {
+  try {
+    const user_id = req.user.id;
+
+    const results = await ticket.findAll({
+      where: {
+        user_id,
+        location: { [Op.not]: null },
+      },
+      attributes: [
+        "location",
+        [Sequelize.fn("COUNT", Sequelize.col("location")), "usage_count"],
+      ],
+      group: ["location"],
+      order: [[Sequelize.literal("usage_count"), "DESC"]],
+      limit: 5,
+      raw: true,
+    });
+
+    const locations = results.map((r) => r.location);
+
+    return res.status(200).json({ status: "success", data: locations });
+  } catch (error) {
+    console.error("getUserLocations error:", error);
+    return res.status(500).json({
       status: "error",
       message: error.message || "Something went wrong",
     });

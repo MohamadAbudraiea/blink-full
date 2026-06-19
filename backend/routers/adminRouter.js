@@ -6,6 +6,7 @@ const detailerController = require("../controllers/detailerController");
 const ratingController = require("../controllers/ratingController");
 const subscriptionController = require("../controllers/subscriptionController");
 const financeController = require("../controllers/financeController");
+const pricingController = require("../controllers/pricingController");
 // to get all the secretaries and detailers
 router.get("/user", adminController.getUsers);
 // the user can be secretary or detailer just
@@ -59,6 +60,12 @@ router.post("/ticket/cancel/:ticket_id", ticketController.cancelticket);
 router.post("/subscription", subscriptionController.createSubscription);
 router.get("/subscription", subscriptionController.getSubscriptions);
 router.post("/subscription/cancel/:id", subscriptionController.cancelSubscription);
+router.post("/subscription/resubscribe/:id/preview", subscriptionController.previewResubscription);
+router.post("/subscription/resubscribe/:id/confirm", subscriptionController.confirmResubscription);
+
+// pricing
+router.get("/pricing", pricingController.getPricing);
+router.put("/pricing", pricingController.updatePricing);
 
 // ============ FINANCE ============
 // Accounts

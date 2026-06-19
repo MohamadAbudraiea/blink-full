@@ -20,6 +20,7 @@ import { Loader2 } from "lucide-react";
 import { AccountsManager } from "@/components/admin/finance/AccountsManager";
 import { TransactionsTable } from "@/components/admin/finance/TransactionsTable";
 import { FinanceReports } from "@/components/admin/finance/FinanceReports";
+import { PricingManager } from "@/components/admin/PricingManager";
 
 interface SelectedAccount {
   id: number;
@@ -93,6 +94,7 @@ export default function AdminDashboard() {
           <TabsTrigger value="subscriptions">Subscriptions</TabsTrigger>
           <TabsTrigger value="charts">Charts</TabsTrigger>
           <TabsTrigger value="schedules">Schedules</TabsTrigger>
+          <TabsTrigger value="pricing">Pricing</TabsTrigger>
           <TabsTrigger value="finance">Finance</TabsTrigger>
         </TabsList>
 
@@ -194,17 +196,28 @@ export default function AdminDashboard() {
           </Card>
         </TabsContent>
 
+        {/* Pricing */}
+        <TabsContent value="pricing">
+          <Card>
+            <CardHeader>
+              <CardTitle>Service Pricing</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <PricingManager />
+            </CardContent>
+          </Card>
+        </TabsContent>
+
         {/* Finance */}
         <TabsContent value="finance">
           <div className="space-y-4">
             {/* Sub-navigation */}
             <div className="flex gap-2">
               <button
-                className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-                  financeView === "accounts" || financeView === "transactions"
+                className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${financeView === "accounts" || financeView === "transactions"
                     ? "bg-primary text-primary-foreground"
                     : "bg-muted text-muted-foreground hover:bg-muted/80"
-                }`}
+                  }`}
                 onClick={() => {
                   setFinanceView("accounts");
                   setSelectedAccount(null);
@@ -213,11 +226,10 @@ export default function AdminDashboard() {
                 Accounts & Transactions
               </button>
               <button
-                className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-                  financeView === "reports"
+                className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${financeView === "reports"
                     ? "bg-primary text-primary-foreground"
                     : "bg-muted text-muted-foreground hover:bg-muted/80"
-                }`}
+                  }`}
                 onClick={() => setFinanceView("reports")}
               >
                 Reports & Charts

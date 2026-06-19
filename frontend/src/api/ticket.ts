@@ -37,6 +37,7 @@ export async function acceptTicket({
   end_time,
   price,
   location,
+  applyToAllSubscriptionTickets,
 }: {
   id: string;
   detailer_id: string;
@@ -45,6 +46,7 @@ export async function acceptTicket({
   end_time: string;
   price: number;
   location: string;
+  applyToAllSubscriptionTickets?: boolean;
 }) {
   const res = await axiosInstance.post(`/admin/ticket/accept/${id}`, {
     detailer_id,
@@ -53,6 +55,7 @@ export async function acceptTicket({
     end_time,
     price,
     location,
+    applyToAllSubscriptionTickets,
   });
   return res.data;
 }

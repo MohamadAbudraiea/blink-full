@@ -114,8 +114,6 @@ export function RequestedBooking({
   const handleDetailerChange = (value: string) => {
     setSelectedDetailerId(value || null);
     setDetailerSchedule([]);
-    setStartTime("");
-    setEndTime("");
   };
 
   const hasTimeConflict = () => {
@@ -146,7 +144,7 @@ export function RequestedBooking({
     });
   };
 
-  const handleAcceptBooking = () => {
+  const handleAcceptBooking = (applyToAll: boolean = false) => {
     if (!selectedDetailerId || !selectedDate || !startTime || !endTime) {
       return;
     }
@@ -159,6 +157,7 @@ export function RequestedBooking({
       end_time: endTime,
       price: price,
       location: location,
+      applyToAllSubscriptionTickets: applyToAll,
     });
   };
 
@@ -354,7 +353,7 @@ export function RequestedBooking({
           </Popover>
 
           {/* Time Pickers */}
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <div className="space-y-1">
               <label className="text-xs font-medium">Start Time</label>
               <div className="flex items-center gap-2">
@@ -415,7 +414,7 @@ export function RequestedBooking({
         <Button
           variant="success"
           className="w-full"
-          onClick={handleAcceptBooking}
+          onClick={() => handleAcceptBooking(false)}
           disabled={
             timeConflict ||
             endBeforeStart ||
@@ -428,6 +427,24 @@ export function RequestedBooking({
         >
           {isAcceptingTicket ? "Accepting..." : "Confirm Booking"}
         </Button>
+        {ticket.subscription_id && (
+          <Button
+            variant="default"
+            className="w-full"
+            onClick={() => handleAcceptBooking(true)}
+            disabled={
+              timeConflict ||
+              endBeforeStart ||
+              !selectedDetailerId ||
+              !selectedDate ||
+              !startTime ||
+              !endTime ||
+              isAcceptingTicket
+            }
+          >
+            {isAcceptingTicket ? "Accepting..." : "Accept & Apply to All Subscription Tickets"}
+          </Button>
+        )}
       </DialogFooter>
 
       {/* Cancel Section */}

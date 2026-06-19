@@ -8,9 +8,12 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import type { Subscription } from "@/shared/types";
 import { format } from "date-fns";
-import { CalendarDays } from "lucide-react";
+import { CalendarDays, RefreshCw } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import BookingCard from "./BookingCard";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { ResubscribeDialog } from "@/components/subscription/ResubscribeDialog";
 
 export default function UserSubscriptionCard({
   subscription,
@@ -18,6 +21,7 @@ export default function UserSubscriptionCard({
   subscription: Subscription;
 }) {
   const { t } = useTranslation();
+  const [resubDialogOpen, setResubDialogOpen] = useState(false);
 
   const getDerivedStatus = () => {
     const tickets = subscription.tickets;
@@ -64,6 +68,17 @@ export default function UserSubscriptionCard({
               })}
             </Badge>
           </div>
+          {computedStatus === "finished" && (
+            <Button
+              size="sm"
+              variant="outline"
+              className="ml-auto flex items-center gap-2 text-primary border-primary/20 hover:bg-primary/10"
+              onClick={() => setResubDialogOpen(true)}
+            >
+              <RefreshCw className="w-4 h-4" />
+              Resubscribe
+            </Button>
+          )}
         </div>
       </CardHeader>
       <CardContent className="p-4 space-y-4">
@@ -95,6 +110,14 @@ export default function UserSubscriptionCard({
           </AccordionItem>
         </Accordion>
       </CardContent>
+
+      <ResubscribeDialog
+        subscriptionId={subscription.id}
+        planType={String(subscription.plan_type)}
+        role="user"
+        open={resubDialogOpen}
+        onOpenChange={setResubDialogOpen}
+      />
     </Card>
   );
 }
