@@ -14,6 +14,7 @@ export async function addTicket({
   note,
   start_time,
   end_time,
+  price,
 }: {
   typeOfService: string | undefined;
   service: string;
@@ -22,6 +23,7 @@ export async function addTicket({
   note: string | undefined;
   start_time: string | undefined;
   end_time: string | undefined;
+  price: number | undefined;
 }) {
   const res = await axiosInstance.post("/user/ticket", {
     service,
@@ -31,6 +33,7 @@ export async function addTicket({
     note,
     start_time,
     end_time,
+    price,
   });
   return res.data;
 }
