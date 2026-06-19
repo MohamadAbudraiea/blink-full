@@ -28,7 +28,6 @@ import {
   Pencil,
   Wand2,
 } from "lucide-react";
-import { format } from "date-fns";
 import { LocationInput } from "@/components/shared/LocationInput";
 import { toast } from "sonner";
 
@@ -129,14 +128,14 @@ export function ResubscribeDialog({
         const baseDateStr = first.date;
         const newDate = baseDateStr
           ? (() => {
-              const [y, m, d] = baseDateStr.split("-").map(Number);
-              const dateObj = new Date(y, m - 1, d, 12, 0, 0);
-              dateObj.setDate(dateObj.getDate() + 7 * i);
-              const ny = dateObj.getFullYear();
-              const nm = String(dateObj.getMonth() + 1).padStart(2, "0");
-              const nd = String(dateObj.getDate()).padStart(2, "0");
-              return `${ny}-${nm}-${nd}`;
-            })()
+            const [y, m, d] = baseDateStr.split("-").map(Number);
+            const dateObj = new Date(y, m - 1, d, 12, 0, 0);
+            dateObj.setDate(dateObj.getDate() + 7 * i);
+            const ny = dateObj.getFullYear();
+            const nm = String(dateObj.getMonth() + 1).padStart(2, "0");
+            const nd = String(dateObj.getDate()).padStart(2, "0");
+            return `${ny}-${nm}-${nd}`;
+          })()
           : t.date;
         return {
           ...t,
