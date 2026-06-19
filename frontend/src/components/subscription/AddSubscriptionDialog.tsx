@@ -29,7 +29,6 @@ import {
   Check,
   Zap,
   MapPin,
-  Copy,
   Star,
   Calendar as CalendarIcon,
   Wand2,
@@ -103,60 +102,10 @@ function TicketForm({
 
   const { t, i18n } = useTranslation();
   const dir = i18n.language === "ar" ? "rtl" : "ltr";
-  const [isLocating, setIsLocating] = useState(false);
-  const [googleMapsLink, setGoogleMapsLink] = useState("");
 
-  const getCurrentLocation = () => {
-    if (!navigator.geolocation) {
-      toast.error(t("errors.geolocation_not_supported"));
-      return;
-    }
 
-    setIsLocating(true);
 
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        try {
-          const { latitude, longitude } = position.coords;
-          const mapsLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
-          onChange(index, "location", mapsLink);
-          setGoogleMapsLink(mapsLink);
-        } catch (error) {
-          console.error("Geolocation error:", error);
-          toast.error(t("errors.location_error"));
-        } finally {
-          setIsLocating(false);
-        }
-      },
-      (error) => {
-        setIsLocating(false);
-        switch (error.code) {
-          case error.PERMISSION_DENIED:
-            toast.error(t("errors.location_permission_denied"));
-            break;
-          case error.POSITION_UNAVAILABLE:
-            toast.error(t("errors.location_unavailable"));
-            break;
-          case error.TIMEOUT:
-            toast.error(t("errors.location_timeout"));
-            break;
-          default:
-            toast.error(t("errors.location_unknown"));
-            break;
-        }
-      },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 },
-    );
-  };
 
-  const copyToClipboard = () => {
-    if (googleMapsLink || data.location) {
-      navigator.clipboard
-        .writeText(googleMapsLink || data.location)
-        .then(() => toast.success(t("book.form.link_copied")))
-        .catch(() => toast.error(t("book.form.link_copy_error")));
-    }
-  };
 
   const dateObj = data.date ? new Date(data.date + "T00:00:00") : undefined;
 
@@ -276,13 +225,11 @@ function TicketForm({
                   <label
                     key={option.value}
                     htmlFor={`${index}-${option.value}`}
-                    className={`relative flex w-full gap-3 py-2 rounded-lg border-2 cursor-pointer transition-all ${
-                      data.typeOfService === option.value
-                        ? "border-primary bg-primary/5"
-                        : "border-border bg-card hover:border-primary/50"
-                    } ${option.isBest ? "ring-2 ring-primary/20" : ""} ${
-                      dir === "rtl" ? "flex-row-reverse pl-2" : ""
-                    }`}
+                    className={`relative flex w-full gap-3 py-2 rounded-lg border-2 cursor-pointer transition-all ${data.typeOfService === option.value
+                      ? "border-primary bg-primary/5"
+                      : "border-border bg-card hover:border-primary/50"
+                      } ${option.isBest ? "ring-2 ring-primary/20" : ""} ${dir === "rtl" ? "flex-row-reverse pl-2" : ""
+                      }`}
                   >
                     {option.isBest && (
                       <div className="absolute -top-3.5 -right-2 bg-primary text-primary-foreground text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1 shadow-md">
@@ -297,11 +244,10 @@ function TicketForm({
                     />
                     <div className="flex items-center gap-3">
                       <div
-                        className={`p-2 rounded-lg ${
-                          data.typeOfService === option.value
-                            ? "bg-primary text-primary-foreground"
-                            : "bg-muted text-muted-foreground"
-                        }`}
+                        className={`p-2 rounded-lg ${data.typeOfService === option.value
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted text-muted-foreground"
+                          }`}
                       >
                         <Icon className="w-5 h-5" />
                       </div>
@@ -333,9 +279,8 @@ function TicketForm({
           <PopoverTrigger asChild>
             <Button
               variant="outline"
-              className={`w-full justify-start text-left font-normal ${
-                !data.date && "text-muted-foreground"
-              }`}
+              className={`w-full justify-start text-left font-normal ${!data.date && "text-muted-foreground"
+                }`}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
               {data.date && dateObj
@@ -532,7 +477,7 @@ export function AddSubscriptionDialog({
   const firstService = ticketsData[0]?.service || "wash";
   const servicePricing = pricing.find((p) => p.service === firstService);
   const planPriceKey = `plan_${planType}_price` as keyof typeof servicePricing;
-  
+
   // The database stores the TOTAL price for the entire subscription
   const userTotalPrice = servicePricing ? Number(servicePricing[planPriceKey]) : 0;
   // The per-ticket price is the total divided by the number of tickets
@@ -608,14 +553,14 @@ export function AddSubscriptionDialog({
         const baseDateStr = first.date;
         const newDate = baseDateStr
           ? (() => {
-              const [y, m, d] = baseDateStr.split("-").map(Number);
-              const dateObj = new Date(y, m - 1, d, 12, 0, 0);
-              dateObj.setDate(dateObj.getDate() + 7 * i);
-              const ny = dateObj.getFullYear();
-              const nm = String(dateObj.getMonth() + 1).padStart(2, "0");
-              const nd = String(dateObj.getDate()).padStart(2, "0");
-              return `${ny}-${nm}-${nd}`;
-            })()
+            const [y, m, d] = baseDateStr.split("-").map(Number);
+            const dateObj = new Date(y, m - 1, d, 12, 0, 0);
+            dateObj.setDate(dateObj.getDate() + 7 * i);
+            const ny = dateObj.getFullYear();
+            const nm = String(dateObj.getMonth() + 1).padStart(2, "0");
+            const nd = String(dateObj.getDate()).padStart(2, "0");
+            return `${ny}-${nm}-${nd}`;
+          })()
           : t.date;
         return {
           ...t,

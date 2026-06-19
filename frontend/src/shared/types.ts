@@ -114,6 +114,7 @@ export interface AcceptTicketParams {
   end_time: string;
   price: number;
   location: string;
+  applyToAllSubscriptionTickets?: boolean;
 }
 
 export interface CancelTicketParams {

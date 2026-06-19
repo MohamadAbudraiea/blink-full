@@ -33,7 +33,6 @@ import {
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
 import * as z from "zod";
 import { LocationInput } from "@/components/shared/LocationInput";
 
@@ -100,8 +99,6 @@ export default function BookPage() {
   const { addTicketMutation, isAddingTicket } = useAddTicket();
   const { pricing } = useGetPricing();
   const { t, i18n } = useTranslation();
-  const [isLocating, setIsLocating] = useState(false);
-  const [googleMapsLink, setGoogleMapsLink] = useState("");
 
   const [currentStep, setCurrentStep] = useState(1);
   const [direction, setDirection] = useState(1);
@@ -162,64 +159,6 @@ export default function BookPage() {
   const selectedType = watch("typeOfService");
   const requiresType = ["wash", "dryclean", "polish"].includes(selectedService);
 
-  const getCurrentLocation = () => {
-    if (!navigator.geolocation) {
-      toast.error(t("errors.geolocation_not_supported"));
-      return;
-    }
-
-    setIsLocating(true);
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        try {
-          const { latitude, longitude } = position.coords;
-          const mapsLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
-          setValue("location", mapsLink, { shouldValidate: true });
-          setGoogleMapsLink(mapsLink);
-        } catch (error) {
-          console.error("Geolocation error:", error);
-          toast.error(t("errors.location_error"));
-        } finally {
-          setIsLocating(false);
-        }
-      },
-      (error) => {
-        setIsLocating(false);
-        switch (error.code) {
-          case error.PERMISSION_DENIED:
-            toast.error(t("errors.location_permission_denied"));
-            break;
-          case error.POSITION_UNAVAILABLE:
-            toast.error(t("errors.location_unavailable"));
-            break;
-          case error.TIMEOUT:
-            toast.error(t("errors.location_timeout"));
-            break;
-          default:
-            toast.error(t("errors.location_unknown"));
-            break;
-        }
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0,
-      },
-    );
-  };
-
-  const copyToClipboard = () => {
-    if (googleMapsLink) {
-      navigator.clipboard
-        .writeText(googleMapsLink)
-        .then(() => toast.success(t("book.form.link_copied")))
-        .catch((err) => {
-          console.error("Error copying to clipboard:", err);
-          toast.error(t("book.form.link_copy_error"));
-        });
-    }
-  };
 
   const onSubmit = (data: BookingFormData) => {
     const localISO = data.date
@@ -250,7 +189,6 @@ export default function BookPage() {
     setValue("date", undefined);
     setValue("start_time", "");
     setValue("end_time", "");
-    setGoogleMapsLink("");
   };
 
   const handleNext = async () => {
