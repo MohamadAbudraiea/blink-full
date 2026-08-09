@@ -16,7 +16,32 @@ const AckeeTracker = () => {
     // Ensure server URL has no trailing slashes
     const server = rawServer.replace(/\/+$/, "");
 
-    // Monkey-patch window.fetch to attach required Apollo CSRF preflight headers for Ackee server requests
+    // 1. Intercept XMLHttpRequest (ackee-tracker uses XHR under the hood)
+    const originalXHROpen = XMLHttpRequest.prototype.open;
+    const originalXHRSend = XMLHttpRequest.prototype.send;
+    const originalXHRSetHeader = XMLHttpRequest.prototype.setRequestHeader;
+
+    XMLHttpRequest.prototype.open = function (
+      method: string,
+      url: string | URL,
+      ...rest: any[]
+    ) {
+      const urlString = typeof url === "string" ? url : url.toString();
+      (this as any)._isAckeeRequest = Boolean(server && urlString.includes(server));
+      return originalXHROpen.apply(this, [method, url, ...rest] as any);
+    };
+
+    XMLHttpRequest.prototype.send = function (
+      body?: Document | XMLHttpRequestBodyInit | null
+    ) {
+      if ((this as any)._isAckeeRequest) {
+        originalXHRSetHeader.call(this, "apollo-require-preflight", "true");
+        originalXHRSetHeader.call(this, "x-apollo-operation-name", "AckeeTrack");
+      }
+      return originalXHRSend.call(this, body);
+    };
+
+    // 2. Intercept window.fetch as a fallback
     const originalFetch = window.fetch;
 
     window.fetch = function (input: RequestInfo | URL, init?: RequestInit) {
@@ -32,6 +57,7 @@ const AckeeTracker = () => {
           init?.headers || (input instanceof Request ? input.headers : {})
         );
         headers.set("apollo-require-preflight", "true");
+        headers.set("x-apollo-operation-name", "AckeeTrack");
         headers.set("Content-Type", "application/json");
 
         return originalFetch.call(this, input, {
@@ -43,6 +69,7 @@ const AckeeTracker = () => {
       return originalFetch.call(this, input, init);
     };
 
+    // Create tracker instance & record view
     const instance = ackeeTracker.create(server, {
       detailed: true,
       ignoreLocalhost: true,
@@ -51,7 +78,9 @@ const AckeeTracker = () => {
     const record = instance.record(domainId);
 
     return () => {
-      // Clean up fetch interceptor
+      // Clean up interceptors
+      XMLHttpRequest.prototype.open = originalXHROpen;
+      XMLHttpRequest.prototype.send = originalXHRSend;
       window.fetch = originalFetch;
 
       // Stop tracking
