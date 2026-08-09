@@ -13,12 +13,17 @@ const AckeeTracker = () => {
       return;
     }
 
-    // Ensure server URL has no trailing slashes
+    // Clean server URL (remove trailing slashes)
     const server = rawServer.replace(/\/+$/, "");
+    let serverHost = "";
+    try {
+      serverHost = new URL(server).hostname;
+    } catch {
+      serverHost = server;
+    }
 
-    // 1. Intercept XMLHttpRequest (ackee-tracker uses XHR under the hood)
+    // Intercept XMLHttpRequest (ackee-tracker uses XHR under the hood)
     const originalXHROpen = XMLHttpRequest.prototype.open;
-    const originalXHRSend = XMLHttpRequest.prototype.send;
     const originalXHRSetHeader = XMLHttpRequest.prototype.setRequestHeader;
 
     XMLHttpRequest.prototype.open = function (
@@ -27,21 +32,27 @@ const AckeeTracker = () => {
       ...rest: any[]
     ) {
       const urlString = typeof url === "string" ? url : url.toString();
-      (this as any)._isAckeeRequest = Boolean(server && urlString.includes(server));
-      return originalXHROpen.apply(this, [method, url, ...rest] as any);
-    };
+      const isAckeeRequest = Boolean(
+        (server && urlString.includes(server)) ||
+          (serverHost && urlString.includes(serverHost))
+      );
 
-    XMLHttpRequest.prototype.send = function (
-      body?: Document | XMLHttpRequestBodyInit | null
-    ) {
-      if ((this as any)._isAckeeRequest) {
-        originalXHRSetHeader.call(this, "apollo-require-preflight", "true");
-        originalXHRSetHeader.call(this, "x-apollo-operation-name", "AckeeTrack");
+      const result = originalXHROpen.apply(this, [method, url, ...rest] as any);
+
+      if (isAckeeRequest) {
+        try {
+          originalXHRSetHeader.call(this, "apollo-require-preflight", "true");
+          originalXHRSetHeader.call(this, "x-apollo-operation-name", "AckeeTrack");
+          originalXHRSetHeader.call(this, "Content-Type", "application/json");
+        } catch (err) {
+          console.warn("Could not set Ackee headers on XHR:", err);
+        }
       }
-      return originalXHRSend.call(this, body);
+
+      return result;
     };
 
-    // 2. Intercept window.fetch as a fallback
+    // Intercept window.fetch as fallback
     const originalFetch = window.fetch;
 
     window.fetch = function (input: RequestInfo | URL, init?: RequestInit) {
@@ -52,7 +63,12 @@ const AckeeTracker = () => {
           ? input.toString()
           : input.url;
 
-      if (server && url.includes(server)) {
+      const isAckeeRequest = Boolean(
+        (server && url.includes(server)) ||
+          (serverHost && url.includes(serverHost))
+      );
+
+      if (isAckeeRequest) {
         const headers = new Headers(
           init?.headers || (input instanceof Request ? input.headers : {})
         );
@@ -80,7 +96,6 @@ const AckeeTracker = () => {
     return () => {
       // Clean up interceptors
       XMLHttpRequest.prototype.open = originalXHROpen;
-      XMLHttpRequest.prototype.send = originalXHRSend;
       window.fetch = originalFetch;
 
       // Stop tracking
