@@ -47,7 +47,6 @@ import ProtectedSecretaryRoute from "./components/auth/ProtectedSecretaryRoute";
 import ProtectedDetailerRoute from "./components/auth/ProtectedDetailerRoute";
 
 import ScrollToTop from "./components/ui/ScrollToTop";
-import AckeeTracker from "./components/AckeeTracker";
 import { useCheckAuth } from "./hooks/useAuth";
 import { Toaster } from "./components/ui/sonner";
 import Loader from "./components/ui/Loader";
@@ -58,7 +57,6 @@ function App() {
 
   return (
     <>
-      <AckeeTracker />
       <BubbleCursor />
       <ScrollToTop />
       <Layout>
