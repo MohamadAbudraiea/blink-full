@@ -1,4 +1,4 @@
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect, useRef } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import Layout from "@/layout/Layout";
@@ -6,6 +6,7 @@ import Layout from "@/layout/Layout";
 import HomePage from "@/pages/shared/HomePage";
 import SignupPage from "@/pages/shared/SignUpPage";
 import LoginPage from "@/pages/shared/LoginPage";
+import { sendTestEvent } from "./lib/openpanel";
 
 const AboutPage = lazy(() => import("@/pages/shared/AboutPage"));
 const ContactPage = lazy(() => import("@/pages/shared/ContactPage"));
@@ -54,6 +55,14 @@ import { BubbleCursor } from "./components/shared/BubbleCursor";
 
 function App() {
   const { isAuthenticated } = useCheckAuth();
+  const hasSentTestEvent = useRef(false);
+
+  useEffect(() => {
+    if (!hasSentTestEvent.current) {
+      hasSentTestEvent.current = true;
+      sendTestEvent();
+    }
+  }, []);
 
   return (
     <>
